@@ -13,8 +13,8 @@ Journal submission files are intentionally excluded from the public repository.
 ## Persistent Identifiers
 
 - Source: https://github.com/ErcanErkalkan/confidence-gated-q
-- Existing archived version DOI:
-  https://doi.org/10.5281/zenodo.20578928
+- Current archived version DOI:
+  https://doi.org/10.5281/zenodo.20581705
 - Persistent artifact concept DOI:
   https://doi.org/10.5281/zenodo.20578927
 - ORCID: https://orcid.org/0000-0001-9259-7112
@@ -110,8 +110,8 @@ This repository does not contain or import Berkeley CS188 assignment code.
 ## Citation
 
 > Erkalkan, E. (2026). *Support-Aware Exact-State Memory for Deep Q-Learning:
-> Reproducibility Artifact*. Zenodo.
-> https://doi.org/10.5281/zenodo.20578927
+> Reproducibility Artifact* (Version 1.3.0). Zenodo.
+> https://doi.org/10.5281/zenodo.20581705
 
 ## Author
 

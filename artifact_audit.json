@@ -14,13 +14,13 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sha256": "cb025314c01787c25766dffc4d1a16295917a1e82e136d0f49c5718c0a0d9f58",
-      "bytes": 2390
+      "sha256": "91ed34d94dd92421dec1feb38f46b19cef6c4023c0038bcc92812b0c073bc9d9",
+      "bytes": 2481
     },
     {
       "path": "CITATION.cff",
-      "sha256": "197dc7d92a4491eacf62057029090290549ca78f8d0012e4cf886d0fd4f89d25",
-      "bytes": 852
+      "sha256": "223e8059b8da17a979934118c019cad14eb5d7a14cc1b4a8c55ddfdd32a8b57f",
+      "bytes": 973
     },
     {
       "path": "configs/confirmatory.json",
@@ -114,8 +114,8 @@
     },
     {
       "path": "PROVENANCE.md",
-      "sha256": "11c0d8804f5e0bea442ae5533fb65561a3e952e5223e844a8d4db735696daee8",
-      "bytes": 2532
+      "sha256": "d38914a11d9b5883e7cd5a9d320630fb4abb233d6d758525c3725cdc1697fabf",
+      "bytes": 2592
     },
     {
       "path": "pyproject.toml",
@@ -124,8 +124,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "cfced89ce80c679add8c6b2ded677054e620813c1fa998b67a4308dfe117cba7",
-      "bytes": 4878
+      "sha256": "3fd0b120915a450025ef06442ad8d8f2969215c65079d63dd20aa500687eb94b",
+      "bytes": 4886
     },
     {
       "path": "REPRODUCIBILITY.md",

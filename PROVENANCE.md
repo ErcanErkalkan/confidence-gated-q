@@ -13,8 +13,9 @@ be copied into a release or supplement.
 ## Persistent Identifiers
 
 - Repository: https://github.com/ErcanErkalkan/confidence-gated-q
-- Existing version DOI: https://doi.org/10.5281/zenodo.20578928
+- Current version DOI: https://doi.org/10.5281/zenodo.20581705
 - Concept DOI: https://doi.org/10.5281/zenodo.20578927
+- Previous version DOI: https://doi.org/10.5281/zenodo.20578928
 
 ## MLWA Result Lineage
 

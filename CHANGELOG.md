@@ -15,6 +15,8 @@
 - Expanded the test suite from 13 to 22 tests.
 - Added lossless compressed raw-CSV support for public hosting.
 - Regenerated the manuscript, tables, vector figures, and submission package.
+- Archived the v1.3.0 reproducibility artifact at
+  https://doi.org/10.5281/zenodo.20581705.
 
 ## 1.2.0 - 2026-06-06
 
