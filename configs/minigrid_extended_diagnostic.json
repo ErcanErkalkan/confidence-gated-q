@@ -1,5 +1,5 @@
 {
-  "experiment_name": "mlwa_minigrid_extended_diagnostic",
+  "experiment_name": "asoc_minigrid_extended_diagnostic",
   "output_dir": "results/minigrid_extended_diagnostic",
   "runtime": {"torch_threads": 1, "torch_interop_threads": 1, "workers": 8},
   "seeds": [500, 501, 502, 503, 504, 505, 506, 507, 508, 509],

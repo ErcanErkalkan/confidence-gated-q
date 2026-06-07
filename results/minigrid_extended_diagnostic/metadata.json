@@ -60,7 +60,7 @@
     "torch": "2.11.0"
   },
   "config": {
-    "experiment_name": "mlwa_minigrid_extended_diagnostic",
+    "experiment_name": "asoc_minigrid_extended_diagnostic",
     "output_dir": "results/minigrid_extended_diagnostic",
     "runtime": {
       "torch_threads": 1,

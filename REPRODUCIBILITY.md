@@ -2,7 +2,7 @@
 
 ## Environment
 
-The completed MLWA revision used:
+The completed ASOC revision used:
 
 - Python 3.14.3
 - PyTorch 2.11.0 CPU
@@ -103,7 +103,7 @@ training time.
 From the complete local submission workspace:
 
 ```powershell
-python scripts/generate_mlwa_assets.py
+python scripts/generate_asoc_assets.py
 ```
 
 This writes vector figures and LaTeX tables under `paper/figures/` and

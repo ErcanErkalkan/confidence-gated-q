@@ -48,7 +48,7 @@
     "torch": "2.11.0"
   },
   "config": {
-    "experiment_name": "mlwa_support_abstention_replication",
+    "experiment_name": "asoc_support_abstention_replication",
     "output_dir": "results/support_abstention_replication",
     "runtime": {
       "torch_threads": 1,

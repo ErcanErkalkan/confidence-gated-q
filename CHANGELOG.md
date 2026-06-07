@@ -4,7 +4,7 @@
 
 - Removed ten superseded exploratory and sensitivity result families that are
   not used by the manuscript, figures, tables, or current reproduction flow.
-- Reduced the public reproduction and audit workflow to the five frozen MLWA
+- Reduced the public reproduction and audit workflow to the five frozen ASOC
   evidence families.
 
 ## 1.3.0 - 2026-06-07

@@ -14,7 +14,7 @@ CONFIGS = (
 )
 
 
-def test_mlwa_configs_load_with_unique_environment_and_agent_names():
+def test_asoc_configs_load_with_unique_environment_and_agent_names():
     for name in CONFIGS:
         config = json.loads(
             (ROOT / "configs" / name).read_text(encoding="utf-8")

@@ -23,7 +23,7 @@ PROHIBITED_IMPORT = re.compile(
 )
 
 BUILD_SUFFIXES = {".aux", ".bbl", ".blg", ".log", ".out", ".spl"}
-MLWA_RESULT_SETS = (
+ASOC_RESULT_SETS = (
     "dqn_tuning_development",
     "dqn_strong_validation",
     "confirmatory_extended_compact",
@@ -39,17 +39,17 @@ EXCLUDED_PARTS = {
     "paper",
     "release",
     "runs",
-    "submission_clean_mlwa",
+    "submission_clean_asoc",
 }
 EXCLUDED_FILES = {
     "FINAL_SUBMISSION_CHECK.md",
     "artifact_audit.json",
     "submission_audit.json",
     "submission_audit.md",
-    "submission_clean_mlwa.zip",
-    "submission_clean_mlwa.zip.sha256",
+    "submission_clean_asoc.zip",
+    "submission_clean_asoc.zip.sha256",
     "scripts/audit_submission.py",
-    "scripts/generate_mlwa_assets.py",
+    "scripts/generate_asoc_assets.py",
     "scripts/package_release.py",
 }
 
@@ -99,12 +99,12 @@ def audit(root: Path) -> dict:
         "src/hybrid_q/agents.py",
         "scripts/reproduce_all.py",
         "tests/test_agents.py",
-        *[f"results/{name}/audit.json" for name in MLWA_RESULT_SETS],
+        *[f"results/{name}/audit.json" for name in ASOC_RESULT_SETS],
     ]
     for name in required:
         if not (root / name).exists():
             violations.append(f"missing required file: {name}")
-    for name in MLWA_RESULT_SETS:
+    for name in ASOC_RESULT_SETS:
         result_dir = root / "results" / name
         if not (
             (result_dir / "raw.csv").exists()

@@ -17,7 +17,7 @@ be copied into a release or supplement.
 - Concept DOI: https://doi.org/10.5281/zenodo.20578927
 - Previous version DOI: https://doi.org/10.5281/zenodo.20578928
 
-## MLWA Result Lineage
+## ASOC Result Lineage
 
 | Result directory | Config | Seeds | Status | Generation commit |
 |---|---|---|---|---|
@@ -38,6 +38,6 @@ Per-run shards are omitted after aggregation because the committed
 `raw.csv.gz` files preserve every public row needed for reaggregation and
 auditing. Aggregation and audit scripts read compressed files directly.
 
-Only the five frozen MLWA evidence directories are retained in the current
+Only the five frozen ASOC evidence directories are retained in the current
 artifact. Superseded exploratory and sensitivity families remain recoverable
 from the archived `v1.3.0` release and Git history.

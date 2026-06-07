@@ -72,7 +72,7 @@
     "torch": "2.11.0"
   },
   "config": {
-    "experiment_name": "mlwa_dqn_strong_validation",
+    "experiment_name": "asoc_dqn_strong_validation",
     "output_dir": "results/dqn_strong_validation",
     "runtime": {
       "torch_threads": 1,

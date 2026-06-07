@@ -1,5 +1,5 @@
 {
-  "experiment_name": "mlwa_dqn_strong_validation",
+  "experiment_name": "asoc_dqn_strong_validation",
   "output_dir": "results/dqn_strong_validation",
   "runtime": {"torch_threads": 1, "torch_interop_threads": 1, "workers": 8},
   "seeds": [600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629],

@@ -66,7 +66,7 @@
     "torch": "2.11.0"
   },
   "config": {
-    "experiment_name": "mlwa_confirmatory_extended_compact",
+    "experiment_name": "asoc_confirmatory_extended_compact",
     "output_dir": "results/confirmatory_extended_compact",
     "runtime": {
       "torch_threads": 1,

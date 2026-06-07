@@ -1,5 +1,5 @@
 {
-  "experiment_name": "mlwa_dqn_tuning_development",
+  "experiment_name": "asoc_dqn_tuning_development",
   "output_dir": "results/dqn_tuning_development",
   "runtime": {
     "torch_threads": 1,
