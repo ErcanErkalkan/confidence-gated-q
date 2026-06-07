@@ -99,6 +99,78 @@ def test_support_abstain_reverts_to_count_gate_after_visit():
     assert np.isclose(agent.gate("seen"), 1.0 / 6.0)
 
 
+def test_fuzzy_gate_is_bounded_and_increases_with_support():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(
+            gate_min=0.0,
+            gate_max=1.0,
+            fuzzy_tau_support=5.0,
+        ),
+        gate_kind="fuzzy_support_adaptive",
+    )
+    unseen_alpha, unseen_support, _ = agent.fuzzy_gate_components("s")
+    agent.counts["s"] = 50
+    seen_alpha, seen_support, _ = agent.fuzzy_gate_components("s")
+    assert unseen_alpha == 0.0
+    assert unseen_support == 0.0
+    assert 0.0 <= seen_alpha <= 1.0
+    assert seen_support > 0.99
+    assert seen_alpha > unseen_alpha
+
+
+def test_fuzzy_gate_favors_memory_when_neural_uncertainty_increases():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(
+            gate_min=0.0,
+            gate_max=1.0,
+            fuzzy_tau_support=5.0,
+            reliability_prior_strength=0.0,
+        ),
+        gate_kind="fuzzy_support_adaptive",
+    )
+    agent.counts["s"] = 20
+    agent.error_counts["s"] = 20
+    agent.neural_error["s"] = 0.01
+    low_uncertainty_alpha, _, _ = agent.fuzzy_gate_components("s")
+    agent.neural_error["s"] = 100.0
+    high_uncertainty_alpha, _, _ = agent.fuzzy_gate_components("s")
+    assert high_uncertainty_alpha > low_uncertainty_alpha
+
+
+def test_fuzzy_gate_can_use_neural_fallback_outside_exact_support():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(fuzzy_abstain_zero_support=False),
+        gate_kind="fuzzy_support_adaptive",
+    )
+    state = np.array([1.0, 0.0], dtype=np.float32)
+    agent.q_values(state, "unseen")
+    decision = agent.decision_diagnostics()
+    assert decision["unsupported_state"] == 1.0
+    assert decision["neural_branch_weight"] == 1.0
+    assert decision["abstention"] == 0.0
+
+
+def test_support_abstention_can_select_a_declared_safe_action():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=5,
+        seed=0,
+        config=AgentConfig(abstain_action=4),
+        gate_kind="support_abstain",
+    )
+    state = np.array([1.0, 0.0], dtype=np.float32)
+    assert agent.act(state, "unseen", epsilon=0.0) == 4
+
+
 class FixedQNetwork(nn.Module):
     def __init__(self, values):
         super().__init__()

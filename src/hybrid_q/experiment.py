@@ -62,6 +62,23 @@ FIELDNAMES = [
     "global_tabular_error",
     "global_neural_error",
     "visited_states",
+    "failure_rate",
+    "collision_rate",
+    "risk_zone_rate",
+    "unsupported_state_ratio",
+    "memory_branch_usage_ratio",
+    "neural_branch_usage_ratio",
+    "abstention_ratio",
+    "adaptive_alpha_mean",
+    "adaptive_alpha_iqr",
+    "support_score_mean",
+    "uncertainty_score_mean",
+    "inference_time_us_per_decision_mean",
+    "inference_time_us_per_decision_median",
+    "selected_branch",
+    "memory_cost_states",
+    "memory_cost_entries",
+    "memory_cost_bytes_estimated",
 ]
 
 
@@ -108,13 +125,21 @@ def run_episode(
     final_reward = 0.0
     terminated = False
     truncated = False
+    trace = _new_decision_trace()
 
     for length in range(1, max_steps + 1):
         epsilon = (
             epsilon_at(agent.environment_steps, epsilon_params) if training else 0.0
         )
+        decision_started = time.perf_counter_ns()
         action = agent.act(encoded.vector, encoded.key, epsilon)
-        next_observation, reward, terminated, truncated, _ = env.step(action)
+        decision_ns = time.perf_counter_ns() - decision_started
+        next_observation, reward, terminated, truncated, info = env.step(
+            action
+        )
+        _append_decision_trace(
+            trace, agent.decision_diagnostics(), decision_ns, info
+        )
         next_encoded = encoder.encode(next_observation)
         done = bool(terminated or truncated)
         if training:
@@ -140,6 +165,98 @@ def run_episode(
         "return": total_return,
         "length": length,
         "success": float(success),
+        **_summarize_decision_trace(trace, success),
+    }
+
+
+def _new_decision_trace() -> dict[str, list]:
+    return {
+        "unsupported_state": [],
+        "memory_branch_weight": [],
+        "neural_branch_weight": [],
+        "abstention": [],
+        "adaptive_alpha": [],
+        "support_score": [],
+        "uncertainty_score": [],
+        "selected_branch": [],
+        "inference_ns": [],
+        "collision": [],
+        "risk_zone": [],
+    }
+
+
+def _append_decision_trace(
+    trace: dict[str, list],
+    decision: dict[str, float | str],
+    inference_ns: int,
+    info: dict[str, Any],
+) -> None:
+    for key in (
+        "unsupported_state",
+        "memory_branch_weight",
+        "neural_branch_weight",
+        "abstention",
+        "adaptive_alpha",
+        "support_score",
+        "uncertainty_score",
+        "selected_branch",
+    ):
+        trace[key].append(decision[key])
+    trace["inference_ns"].append(float(inference_ns))
+    trace["collision"].append(float(bool(info.get("collision", False))))
+    trace["risk_zone"].append(float(bool(info.get("risk_zone", False))))
+
+
+def _finite_mean(values: list) -> float:
+    array = np.asarray(values, dtype=float)
+    finite = array[np.isfinite(array)]
+    return float(finite.mean()) if finite.size else float("nan")
+
+
+def _summarize_decision_trace(
+    trace: dict[str, list], success: bool
+) -> dict[str, float | str]:
+    branches = trace["selected_branch"]
+    selected_branch = "none"
+    if branches:
+        counts = {
+            branch: branches.count(branch) for branch in set(branches)
+        }
+        selected_branch = max(sorted(counts), key=counts.get)
+    alpha = np.asarray(trace["adaptive_alpha"], dtype=float)
+    alpha = alpha[np.isfinite(alpha)]
+    inference_us = np.asarray(trace["inference_ns"], dtype=float) / 1_000.0
+    return {
+        "failure_rate": float(not success),
+        "collision_rate": _finite_mean(trace["collision"]),
+        "risk_zone_rate": _finite_mean(trace["risk_zone"]),
+        "unsupported_state_ratio": _finite_mean(
+            trace["unsupported_state"]
+        ),
+        "memory_branch_usage_ratio": _finite_mean(
+            trace["memory_branch_weight"]
+        ),
+        "neural_branch_usage_ratio": _finite_mean(
+            trace["neural_branch_weight"]
+        ),
+        "abstention_ratio": _finite_mean(trace["abstention"]),
+        "adaptive_alpha_mean": (
+            float(alpha.mean()) if alpha.size else float("nan")
+        ),
+        "adaptive_alpha_iqr": (
+            float(np.quantile(alpha, 0.75) - np.quantile(alpha, 0.25))
+            if alpha.size
+            else float("nan")
+        ),
+        "support_score_mean": _finite_mean(trace["support_score"]),
+        "uncertainty_score_mean": _finite_mean(
+            trace["uncertainty_score"]
+        ),
+        "inference_time_us_per_decision_mean": float(inference_us.mean()),
+        "inference_time_us_per_decision_median": float(
+            np.median(inference_us)
+        ),
+        "selected_branch": selected_branch,
     }
 
 
@@ -158,6 +275,7 @@ def evaluate(
     gate_queries = getattr(agent, "gate_queries", None)
     support_queries = getattr(agent, "support_queries", None)
     support_abstentions = getattr(agent, "support_abstentions", None)
+    last_decision = copy.deepcopy(agent._last_decision)
     try:
         for episode in range(episodes):
             eval_seed = (
@@ -187,6 +305,7 @@ def evaluate(
             agent.support_queries = support_queries
         if support_abstentions is not None:
             agent.support_abstentions = support_abstentions
+        agent._last_decision = last_decision
         env.close()
     return rows
 
@@ -311,6 +430,15 @@ def _write_row(
             ),
             "global_neural_error": diagnostics.get("global_neural_error", ""),
             "visited_states": diagnostics.get("visited_states", ""),
+            "memory_cost_states": diagnostics.get(
+                "memory_cost_states", ""
+            ),
+            "memory_cost_entries": diagnostics.get(
+                "memory_cost_entries", ""
+            ),
+            "memory_cost_bytes_estimated": diagnostics.get(
+                "memory_cost_bytes_estimated", ""
+            ),
         }
     )
 
@@ -366,6 +494,7 @@ def _run_single(
                 final_reward = 0.0
                 terminated = False
                 truncated = False
+                trace = _new_decision_trace()
                 max_steps = min(
                     int(env_spec["max_steps"]),
                     training_steps - agent.environment_steps,
@@ -375,11 +504,25 @@ def _run_single(
                         agent.environment_steps,
                         agent_spec.get("params", {}),
                     )
+                    decision_started = time.perf_counter_ns()
                     action = agent.act(
                         encoded.vector, encoded.key, epsilon
                     )
-                    next_observation, reward, terminated, truncated, _ = (
-                        env.step(action)
+                    decision_ns = (
+                        time.perf_counter_ns() - decision_started
+                    )
+                    (
+                        next_observation,
+                        reward,
+                        terminated,
+                        truncated,
+                        info,
+                    ) = env.step(action)
+                    _append_decision_trace(
+                        trace,
+                        agent.decision_diagnostics(),
+                        decision_ns,
+                        info,
                     )
                     next_encoded = encoder.encode(next_observation)
                     done = bool(terminated or truncated)
@@ -442,15 +585,17 @@ def _run_single(
                 metrics = {
                     "return": total_return,
                     "length": length,
-                    "success": float(
-                        episode_succeeded(
-                            env_spec.get(
-                                "success_mode", "positive_terminal"
-                            ),
-                            terminated,
-                            truncated,
-                            final_reward,
-                        )
+                    "success": float(success := episode_succeeded(
+                        env_spec.get(
+                            "success_mode", "positive_terminal"
+                        ),
+                        terminated,
+                        truncated,
+                        final_reward,
+                    )),
+                    **_summarize_decision_trace(
+                        trace,
+                        success,
                     ),
                 }
                 _write_row(
