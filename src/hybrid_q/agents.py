@@ -20,6 +20,7 @@ class AgentConfig:
     target_update_interval: int = 250
     train_frequency: int = 1
     hidden_size: int = 128
+    double_dqn: bool = True
     tau: float = 20.0
     fixed_gate: float = 0.5
     reliability_beta: float = 0.05
@@ -193,9 +194,8 @@ class DQNAgent(BaseAgent):
             if done:
                 bootstrap = 0.0
             else:
-                next_action = self.online(next_state_t).argmax(dim=1, keepdim=True)
                 bootstrap = float(
-                    self.target(next_state_t).gather(1, next_action).squeeze(1)
+                    self._next_values(next_state_t).squeeze(0)
                 )
         target = reward + self.config.gamma * bootstrap
         return target - prediction
@@ -209,6 +209,16 @@ class DQNAgent(BaseAgent):
 
     def q_values(self, state: np.ndarray, key: Hashable) -> np.ndarray:
         return self.neural_q_values(state)
+
+    def _next_values(self, next_states: torch.Tensor) -> torch.Tensor:
+        if self.config.double_dqn:
+            next_actions = self.online(next_states).argmax(
+                dim=1, keepdim=True
+            )
+            return self.target(next_states).gather(
+                1, next_actions
+            ).squeeze(1)
+        return self.target(next_states).max(dim=1).values
 
     def observe(
         self,
@@ -246,10 +256,7 @@ class DQNAgent(BaseAgent):
 
         predicted = self.online(states_t).gather(1, actions_t[:, None]).squeeze(1)
         with torch.no_grad():
-            next_actions = self.online(next_states_t).argmax(dim=1, keepdim=True)
-            next_values = self.target(next_states_t).gather(
-                1, next_actions
-            ).squeeze(1)
+            next_values = self._next_values(next_states_t)
             targets = rewards_t + (1.0 - dones_t) * self.config.gamma * next_values
 
         loss = nn.functional.smooth_l1_loss(predicted, targets)
@@ -423,6 +430,9 @@ def create_agent(
     if kind == "tabular":
         return TabularQAgent(action_dim, seed, config)
     if kind == "dqn":
+        return DQNAgent(input_dim, action_dim, seed, config)
+    if kind == "double_dqn":
+        config.double_dqn = True
         return DQNAgent(input_dim, action_dim, seed, config)
     if kind == "fixed_hybrid":
         return HybridQAgent(input_dim, action_dim, seed, config, gate_kind="fixed")

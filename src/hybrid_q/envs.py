@@ -7,6 +7,13 @@ import numpy as np
 from gymnasium import spaces
 
 
+ENV_ID_COMPATIBILITY = {
+    # Gymnasium 1.3 renamed Taxi-v3 to Taxi-v4. The dynamics remain exposed
+    # through TaxiEnv; metadata records both the requested and resolved IDs.
+    "Taxi-v3": "Taxi-v4",
+}
+
+
 class StructuredFourRoomsEnv(gym.Env):
     metadata = {"render_modes": []}
 
@@ -121,6 +128,15 @@ class StructuredFourRoomsEnv(gym.Env):
         return self._observation(), reward, terminated, truncated, {}
 
 
+def resolve_env_id(env_id: str) -> str:
+    if env_id in gym.registry:
+        return env_id
+    compatible = ENV_ID_COMPATIBILITY.get(env_id)
+    if compatible and compatible in gym.registry:
+        return compatible
+    return env_id
+
+
 def make_env(spec: dict[str, Any], evaluation: bool = False) -> gym.Env:
     env_id = spec["id"]
     kwargs = dict(spec.get("kwargs", {}))
@@ -134,7 +150,7 @@ def make_env(spec: dict[str, Any], evaluation: bool = False) -> gym.Env:
         import minigrid  # noqa: F401 - registers MiniGrid environments
         from minigrid.wrappers import FullyObsWrapper, ImgObsWrapper
 
-    env = gym.make(env_id, **kwargs)
+    env = gym.make(resolve_env_id(env_id), **kwargs)
 
     if spec.get("observation") == "fully_observable_image":
         env = FullyObsWrapper(env)

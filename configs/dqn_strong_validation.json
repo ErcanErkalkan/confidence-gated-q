@@ -1,0 +1,29 @@
+{
+  "experiment_name": "mlwa_dqn_strong_validation",
+  "output_dir": "results/dqn_strong_validation",
+  "runtime": {"torch_threads": 1, "torch_interop_threads": 1, "workers": 8},
+  "seeds": [600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629],
+  "evaluation": {"interval_steps": 2500, "episodes": 30},
+  "analysis": {
+    "primary_metric": "return_auc",
+    "analysis_status": "independent_validation_after_development_selection",
+    "selection_rule": "validated_dqn is exactly vanilla_dqn_buffer100k, selected on development seeds 0-4 by the frozen rule in configs/dqn_tuning_development.json; no validation seed informed the choice.",
+    "planned_contrasts": [
+      {"name": "validated_vs_original_dqn", "left": "validated_dqn", "right": "original_selected_dqn", "metric": "return_auc"}
+    ]
+  },
+  "envs": [
+    {"name": "FrozenLake-4x4-slippery", "id": "FrozenLake-v1", "kwargs": {"map_name": "4x4", "is_slippery": true}, "training_steps": 10000, "max_steps": 100, "success_mode": "positive_terminal"},
+    {"name": "FrozenLake-8x8-slippery", "id": "FrozenLake-v1", "kwargs": {"map_name": "8x8", "is_slippery": true}, "training_steps": 20000, "max_steps": 300, "success_mode": "positive_terminal"},
+    {"name": "CliffWalking-v1", "id": "CliffWalking-v1", "training_steps": 10000, "max_steps": 500, "success_mode": "terminated"},
+    {"name": "Taxi-v3-compatible", "id": "Taxi-v3", "training_steps": 20000, "max_steps": 300, "success_mode": "positive_terminal"},
+    {"name": "FourRooms-7-unseen-goals", "id": "StructuredFourRooms-v0", "kwargs": {"size": 7, "goal_split": "train", "slip_probability": 0.0, "max_steps": 100}, "eval_kwargs": {"goal_split": "test"}, "training_steps": 8000, "max_steps": 100, "success_mode": "positive_terminal"},
+    {"name": "FourRooms-9-slip-unseen-goals", "id": "StructuredFourRooms-v0", "kwargs": {"size": 9, "goal_split": "train", "slip_probability": 0.1, "max_steps": 160}, "eval_kwargs": {"goal_split": "test"}, "training_steps": 12000, "max_steps": 160, "success_mode": "positive_terminal"},
+    {"name": "FourRooms-11-slip-unseen-goals", "id": "StructuredFourRooms-v0", "kwargs": {"size": 11, "goal_split": "train", "slip_probability": 0.1, "max_steps": 220}, "eval_kwargs": {"goal_split": "test"}, "training_steps": 16000, "max_steps": 220, "success_mode": "positive_terminal"},
+    {"name": "MiniGrid-Empty-5x5-validation", "id": "MiniGrid-Empty-5x5-v0", "observation": "fully_observable_image", "seeds": [700, 701, 702, 703, 704, 705, 706, 707, 708, 709], "training_steps": 20000, "max_steps": 200, "success_mode": "positive_terminal"}
+  ],
+  "agents": [
+    {"name": "original_selected_dqn", "kind": "double_dqn", "params": {"double_dqn": true, "learning_rate": 0.001, "batch_size": 32, "replay_capacity": 50000, "replay_warmup": 256, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 32, "epsilon_decay_steps": 12000}},
+    {"name": "validated_dqn", "kind": "dqn", "params": {"double_dqn": false, "learning_rate": 0.0003, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "epsilon_decay_steps": 12000}}
+  ]
+}

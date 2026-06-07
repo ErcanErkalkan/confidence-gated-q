@@ -9,8 +9,13 @@ import pandas as pd
 
 
 REQUIRED_COLUMNS = {
+    "experiment_name",
     "experiment",
+    "config_file",
     "environment",
+    "environment_id",
+    "resolved_environment_id",
+    "observation_representation",
     "agent",
     "seed",
     "phase",
@@ -24,6 +29,13 @@ REQUIRED_COLUMNS = {
     "elapsed_seconds",
     "training_elapsed_seconds",
     "evaluation_elapsed_seconds",
+    "git_commit_hash",
+    "package_version",
+    "python_version",
+    "torch_version",
+    "numpy_version",
+    "gymnasium_version",
+    "minigrid_version",
 }
 
 
@@ -59,8 +71,9 @@ def audit(config_path: Path, result_dir: Path) -> dict:
     if temporary_files:
         violations.append(f"incomplete run shards: {len(temporary_files)}")
 
-    expected_runs = (
-        len(config["envs"]) * len(config["agents"]) * len(config["seeds"])
+    expected_runs = sum(
+        len(spec.get("seeds", config["seeds"])) * len(config["agents"])
+        for spec in config["envs"]
     )
     shards = list((result_dir / "runs").glob("*.csv"))
     if len(shards) != expected_runs:
@@ -105,9 +118,11 @@ def audit(config_path: Path, result_dir: Path) -> dict:
         spec.get("name", spec["id"]): spec for spec in config["envs"]
     }
     expected_agents = {agent["name"] for agent in config["agents"]}
-    expected_seeds = {int(seed) for seed in config["seeds"]}
     for environment, env_spec in env_by_name.items():
         env_data = raw[raw["environment"] == environment]
+        expected_seeds = {
+            int(seed) for seed in env_spec.get("seeds", config["seeds"])
+        }
         if set(env_data["agent"].unique()) != expected_agents:
             violations.append(f"{environment}: method coverage mismatch")
         budget = int(env_spec["training_steps"])
@@ -149,6 +164,8 @@ def audit(config_path: Path, result_dir: Path) -> dict:
         "summary.csv",
         "pairwise.csv",
         "planned_contrasts.csv",
+        "heavy_tail_diagnostics.csv",
+        "cross_environment.csv",
         "metadata.json",
     ):
         path = result_dir / name

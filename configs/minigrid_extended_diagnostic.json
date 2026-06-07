@@ -1,0 +1,34 @@
+{
+  "experiment_name": "mlwa_minigrid_extended_diagnostic",
+  "output_dir": "results/minigrid_extended_diagnostic",
+  "runtime": {"torch_threads": 1, "torch_interop_threads": 1, "workers": 8},
+  "seeds": [500, 501, 502, 503, 504, 505, 506, 507, 508, 509],
+  "evaluation": {"interval_steps": 5000, "episodes": 30},
+  "analysis": {
+    "primary_metric": "return_auc",
+    "analysis_status": "post_hoc_extended_minigrid_diagnostic",
+    "observation_representation": "FullyObsWrapper followed by ImgObsWrapper for every environment",
+    "planned_contrasts": [
+      {"name": "count_vs_validated_dqn", "left": "count_gated_tau_20", "right": "validated_dqn", "metric": "return_auc"},
+      {"name": "count_vs_tabular", "left": "count_gated_tau_20", "right": "tabular", "metric": "return_auc"},
+      {"name": "support_abstain_vs_count", "left": "support_abstain_tau_20", "right": "count_gated_tau_20", "metric": "return_auc"}
+    ]
+  },
+  "envs": [
+    {"name": "MiniGrid-Empty-5x5", "id": "MiniGrid-Empty-5x5-v0", "observation": "fully_observable_image", "training_steps": 20000, "max_steps": 200, "success_mode": "positive_terminal"},
+    {"name": "MiniGrid-Empty-6x6", "id": "MiniGrid-Empty-6x6-v0", "observation": "fully_observable_image", "training_steps": 25000, "max_steps": 250, "success_mode": "positive_terminal"},
+    {"name": "MiniGrid-Empty-8x8", "id": "MiniGrid-Empty-8x8-v0", "observation": "fully_observable_image", "training_steps": 30000, "max_steps": 300, "success_mode": "positive_terminal"},
+    {"name": "MiniGrid-DoorKey-5x5", "id": "MiniGrid-DoorKey-5x5-v0", "observation": "fully_observable_image", "training_steps": 30000, "max_steps": 300, "success_mode": "positive_terminal"},
+    {"name": "MiniGrid-DoorKey-6x6", "id": "MiniGrid-DoorKey-6x6-v0", "observation": "fully_observable_image", "training_steps": 40000, "max_steps": 400, "success_mode": "positive_terminal"},
+    {"name": "MiniGrid-FourRooms", "id": "MiniGrid-FourRooms-v0", "observation": "fully_observable_image", "training_steps": 40000, "max_steps": 400, "success_mode": "positive_terminal"}
+  ],
+  "agents": [
+    {"name": "random", "kind": "random", "params": {"epsilon_decay_steps": 1}},
+    {"name": "tabular", "kind": "tabular", "params": {"tabular_learning_rate": 0.2, "epsilon_decay_steps": 24000}},
+    {"name": "validated_dqn", "kind": "dqn", "params": {"double_dqn": false, "learning_rate": 0.0003, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "epsilon_decay_steps": 24000}},
+    {"name": "fixed_hybrid", "kind": "fixed_hybrid", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "fixed_gate": 0.5, "epsilon_decay_steps": 24000}},
+    {"name": "count_gated_tau_20", "kind": "count_gated", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "tau": 20, "epsilon_decay_steps": 24000}},
+    {"name": "reliability_gated", "kind": "reliability_gated", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "reliability_beta": 0.05, "reliability_prior_strength": 10, "epsilon_decay_steps": 24000}},
+    {"name": "support_abstain_tau_20", "kind": "support_abstain_gate", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "tau": 20, "epsilon_decay_steps": 24000}}
+  ]
+}

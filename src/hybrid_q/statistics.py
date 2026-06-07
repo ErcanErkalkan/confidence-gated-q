@@ -48,6 +48,8 @@ def bootstrap_mean_interval(
     samples: int = 10_000,
 ) -> tuple[float, float]:
     values = np.asarray(values, dtype=float)
+    if values.ndim != 1 or values.size == 0 or not np.isfinite(values).all():
+        raise ValueError("bootstrap values must be a finite, non-empty vector")
     rng = np.random.default_rng(seed)
     draws = rng.choice(values, size=(samples, values.size), replace=True).mean(axis=1)
     low, high = np.quantile(draws, [0.025, 0.975])
@@ -65,6 +67,77 @@ def holm_adjust(p_values: list[float]) -> list[float]:
         running = max(running, candidate)
         adjusted[index] = min(1.0, running)
     return adjusted.tolist()
+
+
+def win_loss_tie(
+    differences: np.ndarray,
+    tolerance: float = 1e-12,
+) -> tuple[int, int, int]:
+    differences = np.asarray(differences, dtype=float)
+    if differences.ndim != 1 or not np.isfinite(differences).all():
+        raise ValueError("differences must be a finite one-dimensional vector")
+    wins = int((differences > tolerance).sum())
+    losses = int((differences < -tolerance).sum())
+    ties = int(differences.size - wins - losses)
+    return wins, losses, ties
+
+
+def paired_differences(
+    left_values: pd.DataFrame,
+    right_values: pd.DataFrame,
+    metric: str,
+) -> np.ndarray:
+    for label, values in (("left", left_values), ("right", right_values)):
+        if values["seed"].duplicated().any():
+            raise ValueError(f"{label} paired input contains duplicate seeds")
+        if values[metric].isna().any():
+            raise ValueError(f"{label} paired input contains missing values")
+    left_seeds = set(left_values["seed"])
+    right_seeds = set(right_values["seed"])
+    if left_seeds != right_seeds:
+        raise ValueError("paired inputs must contain identical seed sets")
+    if len(left_seeds) < 2:
+        raise ValueError("paired tests require at least two matched seeds")
+    paired = left_values.merge(
+        right_values, on="seed", suffixes=("_left", "_right"), validate="one_to_one"
+    ).sort_values("seed")
+    return (
+        paired[f"{metric}_left"] - paired[f"{metric}_right"]
+    ).to_numpy(dtype=float)
+
+
+def robust_outlier_counts(values: np.ndarray) -> tuple[int, int]:
+    values = np.asarray(values, dtype=float)
+    median = float(np.median(values))
+    mad = float(np.median(np.abs(values - median)))
+    if mad > 1e-12:
+        scale = 1.4826 * mad
+        return (
+            int((values < median - 6.0 * scale).sum()),
+            int((values > median + 6.0 * scale).sum()),
+        )
+    q25, q75 = np.quantile(values, [0.25, 0.75])
+    iqr = float(q75 - q25)
+    if iqr <= 1e-12:
+        return 0, 0
+    return (
+        int((values < q25 - 3.0 * iqr).sum()),
+        int((values > q75 + 3.0 * iqr).sum()),
+    )
+
+
+def sample_skew(values: np.ndarray) -> float:
+    values = np.asarray(values, dtype=float)
+    if values.size < 3 or np.allclose(values, values[0]):
+        return 0.0
+    return float(stats.skew(values, bias=False))
+
+
+def sample_excess_kurtosis(values: np.ndarray) -> float:
+    values = np.asarray(values, dtype=float)
+    if values.size < 4 or np.allclose(values, values[0]):
+        return 0.0
+    return float(stats.kurtosis(values, bias=False))
 
 
 def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
@@ -105,25 +178,63 @@ def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
         .sort_values(["environment", "agent", "seed", "checkpoint"])
     )
-    def normalized_auc(group: pd.DataFrame) -> float:
+    def normalized_auc(group: pd.DataFrame, metric: str) -> float:
         checkpoints = group["checkpoint"].to_numpy(dtype=float)
-        values = group["mean_return"].to_numpy(dtype=float)
+        values = group[metric].to_numpy(dtype=float)
         width = checkpoints[-1] - checkpoints[0]
         return float(np.trapezoid(values, checkpoints) / width) if width > 0 else float(values[-1])
 
-    auc = (
+    return_auc = (
         grouped.groupby(["environment", "agent", "seed"])
-        .apply(normalized_auc, include_groups=False)
+        .apply(normalized_auc, "mean_return", include_groups=False)
         .rename("return_auc")
         .reset_index()
     )
+    success_auc = (
+        grouped.groupby(["environment", "agent", "seed"])
+        .apply(normalized_auc, "success_rate", include_groups=False)
+        .rename("success_rate_auc")
+        .reset_index()
+    )
     final = grouped.groupby(["environment", "agent", "seed"]).tail(1).copy()
+    final["eval_checkpoint"] = final["checkpoint"]
+    final["eval_return"] = final["mean_return"]
+    final["train_steps"] = final["environment_steps"]
     final["seconds_per_1000_steps"] = (
         1000.0
         * final["training_elapsed_seconds"]
         / final["environment_steps"]
     )
-    return final.merge(auc, on=["environment", "agent", "seed"])
+    result = final.merge(
+        return_auc, on=["environment", "agent", "seed"]
+    ).merge(success_auc, on=["environment", "agent", "seed"])
+    provenance_columns = [
+        "experiment_name",
+        "config_file",
+        "environment_id",
+        "resolved_environment_id",
+        "observation_representation",
+        "git_commit_hash",
+        "package_version",
+        "python_version",
+        "torch_version",
+        "numpy_version",
+        "gymnasium_version",
+        "minigrid_version",
+    ]
+    available = [column for column in provenance_columns if column in evaluation]
+    if available:
+        provenance = (
+            evaluation.groupby(["environment", "agent", "seed"], dropna=False)[
+                available
+            ]
+            .first()
+            .reset_index()
+        )
+        result = result.merge(
+            provenance, on=["environment", "agent", "seed"], how="left"
+        )
+    return result
 
 
 def summarize(seed_metrics: pd.DataFrame) -> pd.DataFrame:
@@ -135,6 +246,7 @@ def summarize(seed_metrics: pd.DataFrame) -> pd.DataFrame:
             "mean_return",
             "success_rate",
             "return_auc",
+            "success_rate_auc",
             "seconds_per_1000_steps",
             "gradient_updates",
             "mean_gate",
@@ -178,14 +290,9 @@ def _comparison_row(
 ) -> dict | None:
     left_values = env_group[env_group["agent"] == left][["seed", metric]]
     right_values = env_group[env_group["agent"] == right][["seed", metric]]
-    paired = left_values.merge(
-        right_values, on="seed", suffixes=("_left", "_right")
-    )
-    differences = (
-        paired[f"{metric}_left"] - paired[f"{metric}_right"]
-    ).to_numpy()
-    if len(differences) < 2:
+    if left_values.empty or right_values.empty:
         return None
+    differences = paired_differences(left_values, right_values, metric)
     difference_std = differences.std(ddof=1)
     if np.allclose(differences, 0):
         paired_t_p = 1.0
@@ -195,24 +302,20 @@ def _comparison_row(
         wilcoxon_p = float(stats.wilcoxon(differences).pvalue)
     else:
         paired_t_p = float(
-            stats.ttest_rel(
-                paired[f"{metric}_left"],
-                paired[f"{metric}_right"],
-            ).pvalue
+            stats.ttest_1samp(differences, popmean=0.0).pvalue
         )
         try:
             wilcoxon_p = float(stats.wilcoxon(differences).pvalue)
         except ValueError:
             wilcoxon_p = 1.0
-    wins = int((differences > 0).sum())
-    losses = int((differences < 0).sum())
-    ties = int(len(differences) - wins - losses)
+    wins, losses, ties = win_loss_tie(differences)
     sign_test_p = (
         float(stats.binomtest(wins, wins + losses, p=0.5).pvalue)
         if wins + losses
         else 1.0
     )
     ci_low, ci_high = bootstrap_mean_interval(differences)
+    catastrophic_low, catastrophic_high = robust_outlier_counts(differences)
     return {
         "environment": environment,
         "metric": metric,
@@ -231,6 +334,10 @@ def _comparison_row(
         "wins": wins,
         "losses": losses,
         "ties": ties,
+        "difference_skew": sample_skew(differences),
+        "difference_excess_kurtosis": sample_excess_kurtosis(differences),
+        "catastrophic_low_outliers": catastrophic_low,
+        "catastrophic_high_outliers": catastrophic_high,
         "win_rate_non_ties": (
             wins / (wins + losses) if wins + losses else 0.5
         ),
@@ -306,6 +413,72 @@ def planned_contrasts(
     return pd.DataFrame(rows)
 
 
+def heavy_tail_diagnostics(seed_metrics: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for (environment, agent), group in seed_metrics.groupby(
+        ["environment", "agent"]
+    ):
+        for metric in ("return_auc", "mean_return"):
+            values = group[metric].to_numpy(dtype=float)
+            values = values[np.isfinite(values)]
+            if values.size < 2:
+                continue
+            low_outliers, high_outliers = robust_outlier_counts(values)
+            rows.append(
+                {
+                    "environment": environment,
+                    "agent": agent,
+                    "metric": metric,
+                    "n_seeds": values.size,
+                    "minimum": values.min(),
+                    "maximum": values.max(),
+                    "median": np.median(values),
+                    "mad": np.median(np.abs(values - np.median(values))),
+                    "skew": sample_skew(values),
+                    "excess_kurtosis": sample_excess_kurtosis(values),
+                    "catastrophic_low_outliers": low_outliers,
+                    "catastrophic_high_outliers": high_outliers,
+                    "heavy_tail_flag": bool(
+                        low_outliers
+                        or high_outliers
+                        or (
+                            values.size >= 4
+                            and abs(sample_excess_kurtosis(values)) > 3
+                        )
+                    ),
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def cross_environment_summary(seed_metrics: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for metric in ("return_auc", "success_rate_auc", "mean_return"):
+        means = (
+            seed_metrics.groupby(["environment", "agent"])[metric]
+            .mean()
+            .reset_index()
+        )
+        means["environment_rank"] = means.groupby("environment")[metric].rank(
+            ascending=False, method="average"
+        )
+        for agent, group in means.groupby("agent"):
+            rows.append(
+                {
+                    "agent": agent,
+                    "metric": metric,
+                    "n_environments": group["environment"].nunique(),
+                    "mean_environment_rank": group["environment_rank"].mean(),
+                    "median_environment_rank": group[
+                        "environment_rank"
+                    ].median(),
+                    "best_environment_rank": group["environment_rank"].min(),
+                    "worst_environment_rank": group["environment_rank"].max(),
+                }
+            )
+    return pd.DataFrame(rows)
+
+
 def plot_learning_curves(raw: pd.DataFrame, output_dir: Path) -> None:
     display_order = [
         "tabular",
@@ -374,6 +547,12 @@ def aggregate(input_path: str | Path, output_dir: str | Path) -> None:
     seed_metrics.to_csv(output_dir / "seed_metrics.csv", index=False)
     summarize(seed_metrics).to_csv(output_dir / "summary.csv", index=False)
     pairwise(seed_metrics).to_csv(output_dir / "pairwise.csv", index=False)
+    heavy_tail_diagnostics(seed_metrics).to_csv(
+        output_dir / "heavy_tail_diagnostics.csv", index=False
+    )
+    cross_environment_summary(seed_metrics).to_csv(
+        output_dir / "cross_environment.csv", index=False
+    )
     metadata_path = input_path.parent / "metadata.json"
     if metadata_path.exists():
         import json
@@ -382,7 +561,11 @@ def aggregate(input_path: str | Path, output_dir: str | Path) -> None:
         contrasts = metadata.get("config", {}).get("analysis", {}).get(
             "planned_contrasts", []
         )
-        planned_contrasts(seed_metrics, contrasts).to_csv(
-            output_dir / "planned_contrasts.csv", index=False
+        planned = planned_contrasts(seed_metrics, contrasts)
+        analysis_status = metadata.get("config", {}).get("analysis", {}).get(
+            "analysis_status", "unspecified"
         )
+        if not planned.empty:
+            planned["analysis_status"] = analysis_status
+        planned.to_csv(output_dir / "planned_contrasts.csv", index=False)
     plot_learning_curves(raw, output_dir)

@@ -6,7 +6,7 @@ import pandas as pd
 from hybrid_q.agents import AgentConfig, HybridQAgent
 from hybrid_q.encoding import ObservationEncoder
 from hybrid_q.envs import StructuredFourRoomsEnv
-from hybrid_q.envs import make_env
+from hybrid_q.envs import make_env, resolve_env_id
 from hybrid_q.experiment import evaluate, run_config
 
 
@@ -129,3 +129,48 @@ def test_evaluation_restores_support_abstention_diagnostics():
     assert agent.support_queries == 0
     assert agent.support_abstentions == 0
     env.close()
+
+
+def test_compact_environment_variants_reset_and_encode():
+    specs = [
+        {
+            "id": "FrozenLake-v1",
+            "kwargs": {"map_name": "4x4", "is_slippery": True},
+        },
+        {
+            "id": "FrozenLake-v1",
+            "kwargs": {"map_name": "8x8", "is_slippery": True},
+        },
+        {"id": "CliffWalking-v1"},
+        {"id": "Taxi-v3"},
+    ]
+    for spec in specs:
+        env = make_env(spec)
+        observation, _ = env.reset(seed=3)
+        encoded = ObservationEncoder(env.observation_space).encode(observation)
+        assert encoded.vector.ndim == 1
+        assert encoded.vector.size > 0
+        env.close()
+    assert resolve_env_id("Taxi-v3") == "Taxi-v4"
+
+
+def test_minigrid_variants_use_explicit_fully_observable_images():
+    for env_id in (
+        "MiniGrid-Empty-5x5-v0",
+        "MiniGrid-Empty-6x6-v0",
+        "MiniGrid-DoorKey-5x5-v0",
+        "MiniGrid-DoorKey-6x6-v0",
+        "MiniGrid-FourRooms-v0",
+    ):
+        env = make_env(
+            {
+                "id": env_id,
+                "observation": "fully_observable_image",
+            }
+        )
+        observation, _ = env.reset(seed=4)
+        assert isinstance(observation, np.ndarray)
+        assert observation.ndim == 3
+        encoded = ObservationEncoder(env.observation_space).encode(observation)
+        assert encoded.vector.size == int(np.prod(observation.shape))
+        env.close()

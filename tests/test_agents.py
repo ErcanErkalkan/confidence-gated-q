@@ -1,4 +1,6 @@
 import numpy as np
+import torch
+from torch import nn
 
 from hybrid_q.agents import AgentConfig, DQNAgent, HybridQAgent, TabularQAgent
 
@@ -95,3 +97,40 @@ def test_support_abstain_reverts_to_count_gate_after_visit():
     next_state = np.array([0.0, 1.0], dtype=np.float32)
     agent.observe(state, "seen", 0, 1.0, next_state, "next", True)
     assert np.isclose(agent.gate("seen"), 1.0 / 6.0)
+
+
+class FixedQNetwork(nn.Module):
+    def __init__(self, values):
+        super().__init__()
+        self.register_buffer(
+            "values", torch.tensor(values, dtype=torch.float32)
+        )
+
+    def forward(self, states):
+        return self.values.repeat(states.shape[0], 1)
+
+
+def test_double_dqn_separates_online_selection_from_target_evaluation():
+    agent = DQNAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(double_dqn=True),
+    )
+    agent.online = FixedQNetwork([1.0, 2.0])
+    agent.target = FixedQNetwork([10.0, 0.0])
+    values = agent._next_values(torch.zeros((1, 2)))
+    assert values.item() == 0.0
+
+
+def test_vanilla_dqn_uses_target_network_maximum():
+    agent = DQNAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(double_dqn=False),
+    )
+    agent.online = FixedQNetwork([1.0, 2.0])
+    agent.target = FixedQNetwork([10.0, 0.0])
+    values = agent._next_values(torch.zeros((1, 2)))
+    assert values.item() == 10.0

@@ -1,3 +1,3 @@
 """Confidence-gated tabular-neural Q-learning research package."""
 
-__version__ = "1.0.0"
+__version__ = "1.3.0.dev0"

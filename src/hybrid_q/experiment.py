@@ -9,6 +9,7 @@ import json
 import os
 import platform
 import re
+import subprocess
 import time
 from pathlib import Path
 from typing import Any
@@ -17,17 +18,26 @@ import gymnasium
 import numpy as np
 import torch
 
+from . import __version__ as PACKAGE_VERSION
 from .agents import BaseAgent, create_agent
 from .encoding import ObservationEncoder
-from .envs import episode_succeeded, make_env
+from .envs import episode_succeeded, make_env, resolve_env_id
 
 
 FIELDNAMES = [
+    "experiment_name",
     "experiment",
+    "config_file",
     "environment",
+    "environment_id",
+    "resolved_environment_id",
+    "observation_representation",
     "agent",
     "seed",
     "phase",
+    "train_steps",
+    "eval_checkpoint",
+    "eval_return",
     "checkpoint",
     "episode",
     "return",
@@ -38,12 +48,40 @@ FIELDNAMES = [
     "elapsed_seconds",
     "training_elapsed_seconds",
     "evaluation_elapsed_seconds",
+    "wall_clock_training_time",
+    "wall_clock_evaluation_time",
+    "git_commit_hash",
+    "package_version",
+    "python_version",
+    "torch_version",
+    "numpy_version",
+    "gymnasium_version",
+    "minigrid_version",
     "mean_gate",
     "support_abstention_rate",
     "global_tabular_error",
     "global_neural_error",
     "visited_states",
 ]
+
+
+def git_commit_hash() -> str:
+    try:
+        return subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return "unknown"
+
+
+def package_version(name: str) -> str:
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        return "not-installed"
 
 
 def epsilon_at(step: int, params: dict[str, Any]) -> float:
@@ -153,7 +191,12 @@ def evaluate(
     return rows
 
 
-def write_metadata(config: dict[str, Any], output_dir: Path) -> None:
+def write_metadata(
+    config: dict[str, Any],
+    output_dir: Path,
+    config_file: str,
+    commit_hash: str,
+) -> None:
     config_text = json.dumps(config, sort_keys=True).encode("utf-8")
     packages = {}
     for name in (
@@ -180,6 +223,20 @@ def write_metadata(config: dict[str, Any], output_dir: Path) -> None:
         "cpu_count": os.cpu_count(),
         "processor": platform.processor(),
         "config_sha256": hashlib.sha256(config_text).hexdigest(),
+        "config_file": config_file,
+        "git_commit_hash": commit_hash,
+        "package_version": PACKAGE_VERSION,
+        "environment_observations": [
+            {
+                "name": spec.get("name", spec["id"]),
+                "requested_id": spec["id"],
+                "resolved_id": resolve_env_id(spec["id"]),
+                "representation": spec.get(
+                    "observation", "native_gymnasium_observation"
+                ),
+            }
+            for spec in config["envs"]
+        ],
         "packages": packages,
         "config": config,
     }
@@ -208,23 +265,43 @@ def _write_row(
 ) -> None:
     diagnostics = agent.diagnostics()
     elapsed_seconds = time.perf_counter() - started
+    training_elapsed_seconds = elapsed_seconds - evaluation_elapsed_seconds
+    is_evaluation = phase == "eval"
+    provenance = config["_provenance"]
     writer.writerow(
         {
+            "experiment_name": config["experiment_name"],
             "experiment": config["experiment_name"],
+            "config_file": config["_config_file"],
             "environment": env_spec.get("name", env_spec["id"]),
+            "environment_id": env_spec["id"],
+            "resolved_environment_id": resolve_env_id(env_spec["id"]),
+            "observation_representation": env_spec.get(
+                "observation", "native_gymnasium_observation"
+            ),
             "agent": agent_spec["name"],
             "seed": seed,
             "phase": phase,
+            "train_steps": agent.environment_steps,
+            "eval_checkpoint": checkpoint if is_evaluation else "",
+            "eval_return": metrics["return"] if is_evaluation else "",
             "checkpoint": checkpoint,
             "episode": episode,
             **metrics,
             "environment_steps": agent.environment_steps,
             "gradient_updates": agent.gradient_updates,
             "elapsed_seconds": elapsed_seconds,
-            "training_elapsed_seconds": (
-                elapsed_seconds - evaluation_elapsed_seconds
-            ),
+            "training_elapsed_seconds": training_elapsed_seconds,
             "evaluation_elapsed_seconds": evaluation_elapsed_seconds,
+            "wall_clock_training_time": training_elapsed_seconds,
+            "wall_clock_evaluation_time": evaluation_elapsed_seconds,
+            "git_commit_hash": provenance["git_commit_hash"],
+            "package_version": provenance["package_version"],
+            "python_version": provenance["python_version"],
+            "torch_version": provenance["torch_version"],
+            "numpy_version": provenance["numpy_version"],
+            "gymnasium_version": provenance["gymnasium_version"],
+            "minigrid_version": provenance["minigrid_version"],
             "mean_gate": diagnostics.get("mean_gate", ""),
             "support_abstention_rate": diagnostics.get(
                 "support_abstention_rate", ""
@@ -468,6 +545,18 @@ def _combine_shards(shards: list[Path], raw_path: Path) -> None:
 def run_config(config_path: str | Path) -> Path:
     config_path = Path(config_path)
     config = json.loads(config_path.read_text(encoding="utf-8"))
+    config_file = config_path.as_posix()
+    commit_hash = git_commit_hash()
+    config["_config_file"] = config_file
+    config["_provenance"] = {
+        "git_commit_hash": commit_hash,
+        "package_version": PACKAGE_VERSION,
+        "python_version": platform.python_version(),
+        "torch_version": torch.__version__,
+        "numpy_version": np.__version__,
+        "gymnasium_version": gymnasium.__version__,
+        "minigrid_version": package_version("minigrid"),
+    }
     runtime = config.get("runtime", {})
     torch.set_num_threads(int(runtime.get("torch_threads", 1)))
     try:
@@ -480,8 +569,11 @@ def run_config(config_path: str | Path) -> Path:
     runs_dir = output_dir / "runs"
     runs_dir.mkdir(parents=True, exist_ok=True)
     metadata_path = output_dir / "metadata.json"
+    public_config = {
+        key: value for key, value in config.items() if not key.startswith("_")
+    }
     config_sha256 = hashlib.sha256(
-        json.dumps(config, sort_keys=True).encode("utf-8")
+        json.dumps(public_config, sort_keys=True).encode("utf-8")
     ).hexdigest()
     if metadata_path.exists() and any(runs_dir.glob("*.csv")):
         previous = json.loads(metadata_path.read_text(encoding="utf-8"))
@@ -490,13 +582,14 @@ def run_config(config_path: str | Path) -> Path:
                 "Configuration changed for an output directory containing "
                 "completed runs. Use a new output_dir."
             )
-    write_metadata(config, output_dir)
+    write_metadata(public_config, output_dir, config_file, commit_hash)
 
     shards = []
     pending = []
     for env_spec in config["envs"]:
+        env_seeds = env_spec.get("seeds", config["seeds"])
         for agent_spec in config["agents"]:
-            for seed_value in config["seeds"]:
+            for seed_value in env_seeds:
                 seed = int(seed_value)
                 shard = runs_dir / (
                     f"{_slug(env_spec.get('name', env_spec['id']))}__"
