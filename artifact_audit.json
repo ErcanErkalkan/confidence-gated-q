@@ -14,38 +14,13 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sha256": "2f6b80ec37938ca7c7483c1a5040a4f6f8c60e74977ba82beb4623663f1fe949",
-      "bytes": 2703
+      "sha256": "e7a349cfcbf668c541543ba1eadcc17727557bd7d71119cee37375e079cb187e",
+      "bytes": 2861
     },
     {
       "path": "CITATION.cff",
       "sha256": "223e8059b8da17a979934118c019cad14eb5d7a14cc1b4a8c55ddfdd32a8b57f",
       "bytes": 973
-    },
-    {
-      "path": "LICENSE",
-      "sha256": "97a5dbd2ee28152232b0d4ce6dc8298479b497cf090a99200590ea0e73203657",
-      "bytes": 1237
-    },
-    {
-      "path": "PROVENANCE.md",
-      "sha256": "c424a398982dafc4e9c9749bc5494019bbb43115506d887ce341f6e71d44ed81",
-      "bytes": 2328
-    },
-    {
-      "path": "README.md",
-      "sha256": "81c0615724f973f35f0a1945b5c79159a9930ffe9777026f7b1628e4fa9c18a9",
-      "bytes": 4965
-    },
-    {
-      "path": "REPRODUCIBILITY.md",
-      "sha256": "446acecf3cc938fb261bdce42fa54af904994618b237e0d3adb2eaf69989c21c",
-      "bytes": 3881
-    },
-    {
-      "path": "REVISION_LOG_ASOC.md",
-      "sha256": "8682448cefd9905cceae423d07d1b172ab90d7527e3ef831df7ab0ce97c68185",
-      "bytes": 8149
     },
     {
       "path": "configs/confirmatory_extended_compact.json",
@@ -78,9 +53,29 @@
       "bytes": 118
     },
     {
+      "path": "LICENSE",
+      "sha256": "97a5dbd2ee28152232b0d4ce6dc8298479b497cf090a99200590ea0e73203657",
+      "bytes": 1237
+    },
+    {
+      "path": "PROVENANCE.md",
+      "sha256": "c424a398982dafc4e9c9749bc5494019bbb43115506d887ce341f6e71d44ed81",
+      "bytes": 2328
+    },
+    {
       "path": "pyproject.toml",
       "sha256": "b54a3c18055f020d5f68c664b66976c9aabe2f38c13a34bb87181659600be010",
       "bytes": 1005
+    },
+    {
+      "path": "README.md",
+      "sha256": "81c0615724f973f35f0a1945b5c79159a9930ffe9777026f7b1628e4fa9c18a9",
+      "bytes": 4965
+    },
+    {
+      "path": "REPRODUCIBILITY.md",
+      "sha256": "446acecf3cc938fb261bdce42fa54af904994618b237e0d3adb2eaf69989c21c",
+      "bytes": 3881
     },
     {
       "path": "requirements-tested.txt",
@@ -476,6 +471,11 @@
       "path": "results/support_abstention_replication/summary.csv",
       "sha256": "04511407640f0064870a8e9e5e3b67d4fc33e37e33af9e9796d62db85243c4c1",
       "bytes": 47974
+    },
+    {
+      "path": "REVISION_LOG_ASOC.md",
+      "sha256": "d30f4397c53c3c41fb47cc6045e90e4f33bd43f4d747f98a7e6c3fc5017fba8f",
+      "bytes": 8151
     },
     {
       "path": "scripts/aggregate_results.py",

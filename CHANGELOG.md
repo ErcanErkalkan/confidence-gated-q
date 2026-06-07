@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Retargeted the journal-specific manuscript assets and submission package to
+  *Applied Soft Computing* and removed superseded journal names and duplicates.
 - Removed ten superseded exploratory and sensitivity result families that are
   not used by the manuscript, figures, tables, or current reproduction flow.
 - Reduced the public reproduction and audit workflow to the five frozen ASOC

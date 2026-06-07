@@ -3,7 +3,7 @@
 ## Baseline
 
 - Started: `2026-06-07T13:29:05+03:00`
-- Working branch: `asoc-major-revision`
+- Target journal: *Applied Soft Computing*
 - Baseline commit: `2cd433eb1437f1fce6686ea7a7e234737086d01d`
 - Baseline worktree: clean
 - Baseline tests: 13 passed
@@ -175,4 +175,3 @@ Total revision runs: 3,415 method-environment-seed runs.
 - Strengthened the Introduction with an explicit soft-computing motivation.
 - Added a reliability-under-partial-support framing for count gating, DQN extrapolation, and support abstention.
 - Added a foundational soft-computing citation.
-
