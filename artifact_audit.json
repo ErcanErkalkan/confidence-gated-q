@@ -59,8 +59,8 @@
     },
     {
       "path": "PROVENANCE.md",
-      "sha256": "8d54aee9250d2f5fb61227edcb73f4aa112733a6b1f0b0a249c7e515292c3bda",
-      "bytes": 2662
+      "sha256": "9760aa84b4a30d3799b08d5fe877ceb66fb206b6d9b188196e1ab7e1d0773566",
+      "bytes": 2360
     },
     {
       "path": "pyproject.toml",

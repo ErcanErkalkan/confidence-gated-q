@@ -41,10 +41,3 @@ auditing. Aggregation and audit scripts read compressed files directly.
 Only the five frozen MLWA evidence directories are retained in the current
 artifact. Superseded exploratory and sensitivity families remain recoverable
 from the archived `v1.3.0` release and Git history.
-
-## Generative AI Disclosure
-
-Generative AI-assisted tools supported language editing, code review, and
-artifact organization. The human author remains responsible for the research
-questions, implementation, experiment execution, statistical interpretation,
-citation checking, and final claims.
