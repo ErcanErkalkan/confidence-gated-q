@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "config": "configs\\dqn_tuning_development.json",
+  "result_dir": "results\\dqn_tuning_development",
+  "expected_runs": 245,
+  "observed_runs": 245,
+  "raw_rows": 92690,
+  "violations": [],
+  "files": {
+    "raw.csv": {
+      "sha256": "69e67e90c4484d4118590ff644eaa74d77a556ab46eeadd76a77f2f4f2ec0cb1",
+      "bytes": 39966077
+    },
+    "seed_metrics.csv": {
+      "sha256": "d908b38f910f1d8a004af4fa88b6528138c4e01f360c29900c2192f6fca3f948",
+      "bytes": 106572
+    },
+    "summary.csv": {
+      "sha256": "1691b4f00c859e338fbb947ea537aa7a2c7190573133d934c207ac37cee0486c",
+      "bytes": 53713
+    },
+    "pairwise.csv": {
+      "sha256": "4d7c86a5e7fc03f686620db71acdd1f01b7bd8a193aecacfbfca6fc2c176954b",
+      "bytes": 107050
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "8493532a6c236c25405b3464f9d1861269def91351653b825e9008b508c4b056",
+      "bytes": 15301
+    },
+    "cross_environment.csv": {
+      "sha256": "e9098c216606eb5984cf5bee15b20ef1669f152d0f414e50cf9e2bff4afb6c76",
+      "bytes": 1497
+    },
+    "metadata.json": {
+      "sha256": "14a4ca4f8bc2d0b3529e98c922874d2bb2b2b0ff64b43c111e2fd2be894c2b03",
+      "bytes": 8292
+    }
+  }
+}

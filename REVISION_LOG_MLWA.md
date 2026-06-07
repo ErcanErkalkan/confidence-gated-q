@@ -27,11 +27,20 @@ Pending. This section will be finalized after implementation.
 
 ## Experiments Added
 
-Pending. Configurations will be listed after validation.
+- `configs/dqn_tuning_development.json`
+- `configs/dqn_strong_validation.json`
+- `configs/confirmatory_extended_compact.json`
+- `configs/support_abstention_replication.json`
+- `configs/minigrid_extended_diagnostic.json`
 
 ## Experiments Rerun
 
-Pending. Full and smoke runs will be distinguished explicitly.
+- `dqn_tuning_development`: **completed**, 245/245 run shards, development
+  seeds `0-4`, 92,690 raw rows, audit `PASS`.
+- The frozen selection rule chose `vanilla_dqn_buffer100k` with mean
+  environment rank `2.785714`. No validation or confirmatory seed informed
+  this choice.
+- Remaining full experiment families are in progress.
 
 ## Results Regenerated
 

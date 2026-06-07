@@ -28,6 +28,11 @@
       "bytes": 3473
     },
     {
+      "path": "configs/confirmatory_extended_compact.json",
+      "sha256": "af04fd001c4f0c5b972f5c55370fc7f3ca3b9726946b2abe1ff03076433c92d9",
+      "bytes": 4611
+    },
+    {
       "path": "configs/development.json",
       "sha256": "dc9208f4c5803459aca8aebef3f6420db831a1811306bffd57c3b1c3abdd7e42",
       "bytes": 3179
@@ -41,6 +46,16 @@
       "path": "configs/dqn_sensitivity_minigrid.json",
       "sha256": "086cb7f67fead45c3857e1f495e483fdd40e8f6c19c3ed70bfe8148e6d79f2ed",
       "bytes": 1860
+    },
+    {
+      "path": "configs/dqn_strong_validation.json",
+      "sha256": "cd6ae6ae5976f91c0309e442240ebcad4c33b84899504dd6b1acc1649b775bc0",
+      "bytes": 3270
+    },
+    {
+      "path": "configs/dqn_tuning_development.json",
+      "sha256": "edc280c94a02f661541eb69557f03a3430283718a8d923442048b5328ca3fca0",
+      "bytes": 4651
     },
     {
       "path": "configs/dqn_validation_confirmatory.json",
@@ -58,6 +73,11 @@
       "bytes": 1928
     },
     {
+      "path": "configs/minigrid_extended_diagnostic.json",
+      "sha256": "a674766a300366b8b674544c532bcb034765a05a5c1cab4a5557e06d473a703e",
+      "bytes": 3961
+    },
+    {
       "path": "configs/minigrid_supplemental.json",
       "sha256": "7bfe20888ba6b6f192901f25e6998a65cd1ce6d117e941a6150ff87cb3bc34bc",
       "bytes": 1632
@@ -66,6 +86,11 @@
       "path": "configs/support_abstention_confirmatory.json",
       "sha256": "6734ad59d1d45a53eba3e103767113f8e494895dbaf1010d21bc147db8f8aaf0",
       "bytes": 2056
+    },
+    {
+      "path": "configs/support_abstention_replication.json",
+      "sha256": "bdaf65ec0b681ead4ef58a3b061ca70a13e8f210244062698831bf7cc74fa245",
+      "bytes": 4300
     },
     {
       "path": "configs/tau_sensitivity_compact.json",
@@ -94,8 +119,8 @@
     },
     {
       "path": "pyproject.toml",
-      "sha256": "6911a270fe40e812f185363bff18507f013cbcc4056fca65a1448251b35cf903",
-      "bytes": 955
+      "sha256": "71c164946f3ec46593dc44ae08ab358c763142306283bcb08a21136a798c77df",
+      "bytes": 960
     },
     {
       "path": "README.md",
@@ -266,6 +291,11 @@
       "path": "results/dqn_sensitivity_minigrid/summary.csv",
       "sha256": "9a0e00aca7dcee6aa624fe16334e38c3005d8ef48938da14dd74684d65096a75",
       "bytes": 3171
+    },
+    {
+      "path": "results/dqn_tuning_development/metadata.json",
+      "sha256": "14a4ca4f8bc2d0b3529e98c922874d2bb2b2b0ff64b43c111e2fd2be894c2b03",
+      "bytes": 8292
     },
     {
       "path": "results/dqn_validation_confirmatory/audit.json",
@@ -593,6 +623,11 @@
       "bytes": 8915
     },
     {
+      "path": "REVISION_LOG_MLWA.md",
+      "sha256": "1e348400c2c0688b8abc3731a25de61ce2460bb8ad4e6d110f751350e3453954",
+      "bytes": 1787
+    },
+    {
       "path": "scripts/aggregate_results.py",
       "sha256": "0e603be57915fefb886e9e5a8afa56eeeb5d11cddc2b71f1ecf91a3a0043e1db",
       "bytes": 367
@@ -604,8 +639,8 @@
     },
     {
       "path": "scripts/audit_results.py",
-      "sha256": "64d50d320758f8ce9613cad80664b0bfc05713b61cd5ee2b2c6eedbaec12ea8f",
-      "bytes": 6086
+      "sha256": "eaa810bed1f8c62c996a7cb8796fb701dbde84ae1dd4f8da6d437351510f69d7",
+      "bytes": 6529
     },
     {
       "path": "scripts/reproduce_all.py",
@@ -619,13 +654,13 @@
     },
     {
       "path": "src/hybrid_q/__init__.py",
-      "sha256": "1d0e99a5e04551cf4fe1adf4580e6d088a4c495df9b770d3c1fdbd3140f73c48",
-      "bytes": 90
+      "sha256": "c266f19962fec160c7f9e2bd8b083ffc38bec5242ed156341105b86c61a5dba3",
+      "bytes": 95
     },
     {
       "path": "src/hybrid_q/agents.py",
-      "sha256": "b9ffb6fdb85bf5d41d8cccbb2755ee30b0fab3f6726f2287512aa4f6b2c16f90",
-      "bytes": 15207
+      "sha256": "dd8d52af5b699857bde347c589610d6e8e9c0d7da8c98af2bf2afec8e8706b41",
+      "bytes": 15500
     },
     {
       "path": "src/hybrid_q/cli.py",
@@ -639,33 +674,38 @@
     },
     {
       "path": "src/hybrid_q/envs.py",
-      "sha256": "2858e2b93f00878f6af45d326e6f2f6a5d0f3db8b23f591f511de32d29124be5",
-      "bytes": 5013
+      "sha256": "4834836746cfd328f0da6d8adc5150b13fa1241702b8127f384abdc52ad352c8",
+      "bytes": 5476
     },
     {
       "path": "src/hybrid_q/experiment.py",
-      "sha256": "2c307eea8b3ceab1595eb78cd9ac7e16e4a43e3121f2bcc8a01747e89a257e30",
-      "bytes": 18117
+      "sha256": "695392d4578dfd67b4e8263cd09dbd585513a40b1b0c638a58079eb6abd7820e",
+      "bytes": 21566
     },
     {
       "path": "src/hybrid_q/statistics.py",
-      "sha256": "39209ef6c501316c0c70178665bf5590779d9a400b7b29ead17fa8bbe5ea2118",
-      "bytes": 13558
+      "sha256": "74a4a09b29d7ba18da7cf28947a54a4af070a2de9239610a6dcc10e517f67c76",
+      "bytes": 20713
     },
     {
       "path": "tests/test_agents.py",
-      "sha256": "4e728c74dc8063f500fa67db9b874e1978ea7942e8bba975bec94ae20e0f9e0f",
-      "bytes": 3051
+      "sha256": "d93c2036c8ccdddc87b7cd15c4ac8dc42579102c8d5ab56c26784a2fca439cd9",
+      "bytes": 4115
+    },
+    {
+      "path": "tests/test_configs.py",
+      "sha256": "22bf2a23ccbbb4f8b53759a274b882443fddc9e86dd2df5f208770f01e465863",
+      "bytes": 1634
     },
     {
       "path": "tests/test_envs.py",
-      "sha256": "4823c09030b866e77db6ee571e2c6157bee79b13f603246f0144dfa7b797a6b3",
-      "bytes": 3912
+      "sha256": "47dd1602cb5f60a1647a7846581b0210ecb369bf841a75abb1e1829fc082eeea",
+      "bytes": 5349
     },
     {
       "path": "tests/test_statistics.py",
-      "sha256": "c85c65ce767060cb0a653c9cb4c4f68b4436bc2e7a6af86472b956209b8b5264",
-      "bytes": 1172
+      "sha256": "e463fe924621238d599a8f44e233774771ec79935b5ac977d47302e9e09c4eb1",
+      "bytes": 2850
     }
   ]
 }
