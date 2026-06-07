@@ -1,9 +1,9 @@
 {
   "title": "Support-Aware Exact-State Memory for Deep Q-Learning: Reproducibility Artifact",
-  "description": "Code, exact-step results, post hoc support and sensitivity analyses, and integrity audits for a reproducible boundary study of tabular-neural Q-learning gates.",
+  "description": "Code, exact-step results, independent DQN validation, confirmatory task expansion, support-abstention replication, extended MiniGrid diagnostics, and integrity audits for a reproducible boundary analysis of tabular-neural Q-learning gates.",
   "upload_type": "software",
-  "publication_date": "2026-06-06",
-  "version": "1.2.0",
+  "publication_date": "2026-06-07",
+  "version": "1.3.0",
   "license": "MIT",
   "creators": [
     {
@@ -17,6 +17,11 @@
       "identifier": "https://github.com/ErcanErkalkan/confidence-gated-q",
       "relation": "isSupplementTo",
       "scheme": "url"
+    },
+    {
+      "identifier": "10.5281/zenodo.20578928",
+      "relation": "isNewVersionOf",
+      "scheme": "doi"
     }
   ],
   "keywords": [
@@ -24,6 +29,8 @@
     "Q-learning",
     "deep Q-network",
     "episodic memory",
+    "support shift",
+    "abstention",
     "negative results",
     "reproducibility"
   ]

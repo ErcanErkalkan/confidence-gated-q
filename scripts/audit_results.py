@@ -67,7 +67,8 @@ def audit(config_path: Path, result_dir: Path) -> dict:
     if metadata.get("config_sha256") != config_hash:
         violations.append("metadata config hash does not match config")
 
-    temporary_files = list((result_dir / "runs").glob("*.tmp"))
+    runs_dir = result_dir / "runs"
+    temporary_files = list(runs_dir.glob("*.tmp"))
     if temporary_files:
         violations.append(f"incomplete run shards: {len(temporary_files)}")
 
@@ -75,14 +76,27 @@ def audit(config_path: Path, result_dir: Path) -> dict:
         len(spec.get("seeds", config["seeds"])) * len(config["agents"])
         for spec in config["envs"]
     )
-    shards = list((result_dir / "runs").glob("*.csv"))
-    if len(shards) != expected_runs:
+    shards = list(runs_dir.glob("*.csv"))
+    if (shards or temporary_files) and len(shards) != expected_runs:
         violations.append(
             f"run shard count {len(shards)} != expected {expected_runs}"
         )
 
     raw_path = result_dir / "raw.csv"
+    if not raw_path.exists():
+        raw_path = result_dir / "raw.csv.gz"
+    if not raw_path.exists():
+        raise FileNotFoundError(
+            f"Missing raw.csv or raw.csv.gz in {result_dir}"
+        )
     raw = pd.read_csv(raw_path)
+    observed_runs = len(
+        raw[["environment", "agent", "seed"]].drop_duplicates()
+    )
+    if observed_runs != expected_runs:
+        violations.append(
+            f"raw run coverage {observed_runs} != expected {expected_runs}"
+        )
     missing_columns = REQUIRED_COLUMNS - set(raw.columns)
     if missing_columns:
         violations.append(
@@ -159,7 +173,6 @@ def audit(config_path: Path, result_dir: Path) -> dict:
 
     result_files = {}
     for name in (
-        "raw.csv",
         "seed_metrics.csv",
         "summary.csv",
         "pairwise.csv",
@@ -176,13 +189,18 @@ def audit(config_path: Path, result_dir: Path) -> dict:
                 "sha256": sha256(path),
                 "bytes": path.stat().st_size,
             }
+    result_files[raw_path.name] = {
+        "sha256": sha256(raw_path),
+        "bytes": raw_path.stat().st_size,
+    }
 
     return {
         "status": "PASS" if not violations else "FAIL",
         "config": str(config_path),
         "result_dir": str(result_dir),
         "expected_runs": expected_runs,
-        "observed_runs": len(shards),
+        "observed_runs": observed_runs,
+        "run_shards_present": len(shards),
         "raw_rows": len(raw),
         "violations": violations,
         "files": result_files,

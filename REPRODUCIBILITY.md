@@ -1,65 +1,130 @@
 # Reproducibility Guide
 
-## Persistent Identifiers
+## Environment
 
-- Archived artifact: https://doi.org/10.5281/zenodo.20578928
-- Source repository: https://github.com/ErcanErkalkan/confidence-gated-q
-- Artifact version: `1.2.0`
-- Author ORCID: https://orcid.org/0000-0001-9259-7112
+The completed MLWA revision used:
 
-## Tested environment
+- Python 3.14.3
+- PyTorch 2.11.0 CPU
+- NumPy 2.4.3
+- pandas 3.0.1
+- SciPy 1.17.1
+- Gymnasium 1.3.0
+- MiniGrid 3.1.0
 
-See `requirements-tested.txt` and each result set's `metadata.json`.
-Experiments were run on CPU with one PyTorch compute thread and one inter-op
-thread per independent run. Eight independent runs were scheduled in parallel.
-Deterministic PyTorch algorithms were enabled.
+Install with `requirements.txt` or `environment.yml`. Exact tested versions are
+listed in `requirements-tested.txt` and every result directory's
+`metadata.json`.
 
-## Result sets
-
-- `results/confirmatory`: primary evidence, seeds 100-129
-- `results/external_minigrid`: bounded MiniGrid diagnostic, seeds 200-209
-- `results/support_abstention_confirmatory`: post hoc mechanism test
-- `results/minigrid_supplemental`: missing MiniGrid baselines and abstention
-- `results/tau_sensitivity_*`: development-seed count-scale sweep
-- `results/dqn_sensitivity_*`: development-seed DQN sweep
-- `results/dqn_validation_*`: validation of the development-selected DQN
-
-Each directory contains:
-
-- `raw.csv`: combined immutable run output
-- `seed_metrics.csv`: one row per method/environment/seed
-- `summary.csv`: descriptive estimates and intervals
-- `pairwise.csv`: exploratory all-pairs comparisons
-- `planned_contrasts.csv`: predefined comparisons
-- `metadata.json`: configuration and platform metadata
-- `audit.json`: integrity and coverage audit
-- learning-curve figures
-
-The local `runs/` subdirectories are resumable shards and are excluded from the
-release ZIP because `raw.csv` contains the same records.
-
-## Determinism
-
-Environment resets, action selection, replay sampling, and PyTorch
-initialization are seed-controlled. Exact bitwise identity across operating
-systems or PyTorch builds is not guaranteed; statistical reproduction should
-use the frozen package versions and seed sets.
-
-Evaluation is read-only. It runs in a separate environment, does not insert
-unseen table/count keys, restores the agent RNG state, and records evaluation
-time separately from training time.
-
-## Reanalysis without retraining
+## Quick Reanalysis
 
 ```powershell
 python scripts/reproduce_all.py --quick
 ```
 
-## Full reproduction
+Expected outputs for every result family:
+
+- `raw.csv` or lossless `raw.csv.gz`
+- `seed_metrics.csv`
+- `summary.csv`
+- `pairwise.csv`
+- `planned_contrasts.csv`
+- `heavy_tail_diagnostics.csv`
+- `cross_environment.csv`
+- `metadata.json`
+- `audit.json`
+- per-environment learning-curve PNG files
+
+## Revision Experiment Commands
 
 ```powershell
-python scripts/reproduce_all.py --full
+python scripts/run_benchmark.py --config configs/dqn_tuning_development.json
+python scripts/run_benchmark.py --config configs/dqn_strong_validation.json
+python scripts/run_benchmark.py --config configs/confirmatory_extended_compact.json
+python scripts/run_benchmark.py --config configs/support_abstention_replication.json
+python scripts/run_benchmark.py --config configs/minigrid_extended_diagnostic.json
 ```
 
-The quick path takes about 3-5 minutes on the development machine. A full CPU
-rerun typically takes 2-4 hours and resumes completed method/seed shards.
+Aggregate and audit one family:
+
+```powershell
+python scripts/aggregate_results.py `
+  --input results/confirmatory_extended_compact/raw.csv.gz `
+  --output results/confirmatory_extended_compact
+
+python scripts/audit_results.py `
+  --config configs/confirmatory_extended_compact.json `
+  --result-dir results/confirmatory_extended_compact `
+  --output results/confirmatory_extended_compact/audit.json
+```
+
+## Analysis Classes
+
+- `development_model_selection`: DQN selection using seeds `0-4`.
+- `independent_validation_after_development_selection`: untouched validation
+  seeds.
+- `confirmatory_task_expansion`: planned compact-task comparisons.
+- `confirmatory_replication_after_diagnostic_discovery`: new support-abstention
+  seeds after the mechanism was discovered.
+- `post_hoc_extended_minigrid_diagnostic`: broader diagnostic evidence.
+
+These labels are stored in config and result metadata and are not inferred from
+outcomes.
+
+## Compute
+
+Measured cumulative training time across independent runs:
+
+| Family | Run-hours | Median run | Maximum run |
+|---|---:|---:|---:|
+| DQN tuning | 0.53 h | 7.57 s | 20.15 s |
+| DQN validation | 1.47 h | 10.52 s | 45.41 s |
+| compact expansion | 4.95 h | 9.82 s | 60.67 s |
+| abstention replication | 4.21 h | 13.91 s | 80.89 s |
+| MiniGrid expansion | 6.75 h | 46.68 s | 165.42 s |
+
+Eight independent runs were normally scheduled in parallel. Wall time depends
+on CPU contention and storage.
+
+## Determinism
+
+Environment resets, action selection, replay sampling, and PyTorch
+initialization are seed controlled. PyTorch deterministic algorithms are
+enabled. Exact bitwise identity across operating systems, processors, or
+library builds is not guaranteed; statistical reproduction should use the
+recorded versions and seed sets.
+
+Evaluation is read-only. It runs in a separate environment, restores the agent
+RNG, does not insert unseen keys, and records evaluation time separately from
+training time.
+
+## Manuscript Assets
+
+From the complete local submission workspace:
+
+```powershell
+python scripts/generate_mlwa_assets.py
+```
+
+This writes vector figures and LaTeX tables under `paper/figures/` and
+`paper/generated/`, including `verified_claims.csv`.
+
+Compile:
+
+```powershell
+Set-Location paper
+pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex
+bibtex manuscript
+pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex
+pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex
+```
+
+## Audits
+
+```powershell
+python scripts/audit_artifact.py --root . --output artifact_audit.json
+python scripts/package_release.py
+python scripts/audit_submission.py
+```
+
+The public artifact excludes journal-only paper and portal files.

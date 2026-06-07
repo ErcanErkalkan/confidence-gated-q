@@ -1,49 +1,51 @@
-# Confidence-Gated Tabular-Neural Q-Learning
+# Support-Aware Exact-State Memory for Deep Q-Learning
 
-This repository contains the public code, configurations, tests, seed-level
-results, and integrity audits for a controlled study of exact-state memory
-combined with deep Q-learning.
+This repository contains the public code, configurations, seed-level results,
+tests, and audits for a reproducible boundary analysis of exact-state memory
+combined with DQN.
 
-The repository intentionally excludes journal submission files.
+The method is **not** a generally superior reinforcement-learning algorithm.
+Count gating is useful only when exact states recur. It is not a
+generalization mechanism and can fail under support shift.
 
-## Artifact and Citation
+Journal submission files are intentionally excluded from the public repository.
 
-- Zenodo: https://doi.org/10.5281/zenodo.20578928
-- GitHub: https://github.com/ErcanErkalkan/confidence-gated-q
+## Persistent Identifiers
+
+- Source: https://github.com/ErcanErkalkan/confidence-gated-q
+- Existing archived version DOI:
+  https://doi.org/10.5281/zenodo.20578928
+- Persistent artifact concept DOI:
+  https://doi.org/10.5281/zenodo.20578927
 - ORCID: https://orcid.org/0000-0001-9259-7112
 
-Recommended citation:
+## Main Evidence
 
-> Erkalkan, E. (2026). *Support-Aware Exact-State Memory for Deep Q-Learning:
-> Reproducibility Artifact* (Version 1.2.0). Zenodo.
-> https://doi.org/10.5281/zenodo.20578928
+- Count gating improves the validated DQN on FrozenLake 4x4, FrozenLake 8x8,
+  and CliffWalking after Holm correction.
+- It does not generally outperform tabular Q-learning or fixed mixing.
+- On three held-out-goal FourRooms sizes, count gating delegates unsupported
+  states to harmful neural extrapolation.
+- New independent seeds confirm that support abstention repairs that specific
+  failure, with all 30 pairs favoring abstention in each FourRooms task.
+- Six MiniGrid diagnostics remain heterogeneous; tabular Q-learning has the
+  best descriptive cross-task rank.
 
-## Main Finding
+## Analysis Families
 
-A visitation-count gate can protect action selection from the selected DQN
-configuration when compact states recur. It does not consistently outperform
-tabular Q-learning and is not a reliable generalization mechanism.
+| Family | Config | Seeds | Interpretation |
+|---|---|---:|---|
+| DQN selection | `configs/dqn_tuning_development.json` | 0-4 | development only |
+| DQN validation | `configs/dqn_strong_validation.json` | 600-629; 700-709 | independent validation |
+| compact expansion | `configs/confirmatory_extended_compact.json` | 500-529 | confirmatory task expansion |
+| abstention replication | `configs/support_abstention_replication.json` | 300-329; 400-429 | confirmation after diagnostic discovery |
+| MiniGrid expansion | `configs/minigrid_extended_diagnostic.json` | 500-509 | post hoc diagnostic |
 
-On held-out-goal FourRooms tasks, low exact-state support causes standard gates
-to delegate to harmful neural extrapolation. A post hoc support-abstention
-baseline repairs that specific failure by reverting unsupported states to
-random tie-breaking, but it does not become a broadly superior method.
-
-## Repository Contents
-
-- `src/hybrid_q/`: tabular, DQN, fixed-mixture, count-gated,
-  TD-reliability-gated, and support-abstention agents.
-- `configs/`: confirmatory, diagnostic, and sensitivity protocols.
-- `results/`: current raw outputs, seed metrics, summaries, comparisons,
-  metadata, learning curves, and audits.
-- `scripts/`: experiment, aggregation, reproduction, and audit commands.
-- `tests/`: unit and integration tests.
-
-This repository does not contain or import Berkeley CS188 assignment code.
+Earlier frozen and sensitivity families remain available for provenance.
 
 ## Install
 
-Python `>=3.10` is required. The recorded environment used Python `3.14.3`.
+Python `>=3.10` is required.
 
 ```powershell
 python -m venv .venv
@@ -53,21 +55,15 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ```
 
-Conda users can instead run:
-
-```powershell
-conda env create -f environment.yml
-conda activate confidence-gated-q
-```
-
-## Verify Existing Results
+## Quick Verification
 
 ```powershell
 python scripts/reproduce_all.py --quick
 ```
 
-This runs the tests, regenerates summaries from the committed raw data, checks
-every current result set, and executes the public artifact audit.
+This runs all tests, regenerates summaries from committed `raw.csv` or
+`raw.csv.gz` files, audits every result family, and executes the artifact
+audit.
 
 ## Full Reproduction
 
@@ -75,38 +71,57 @@ every current result set, and executes the public artifact audit.
 python scripts/reproduce_all.py --full
 ```
 
-The full command reruns all experiments before executing the same checks.
-Completed method/seed shards are resumable and excluded from Git because each
-result directory already contains the combined `raw.csv`.
+Individual revision families can be rerun with:
 
-## Evaluation Controls
+```powershell
+python scripts/run_benchmark.py --config configs/dqn_tuning_development.json
+python scripts/run_benchmark.py --config configs/dqn_strong_validation.json
+python scripts/run_benchmark.py --config configs/confirmatory_extended_compact.json
+python scripts/run_benchmark.py --config configs/support_abstention_replication.json
+python scripts/run_benchmark.py --config configs/minigrid_extended_diagnostic.json
+```
 
-- Development and confirmatory seeds are separated.
+Completed run shards are resumable and ignored by Git. Committed compressed
+CSV files are lossless and read directly by pandas.
+
+## Reproducibility Controls
+
+- Development, validation, confirmation, replication, and diagnostic seeds are
+  separated.
 - Evaluation occurs at exact environment-step checkpoints.
-- Evaluation uses an isolated environment and random-number stream.
-- Evaluation does not mutate replay, estimators, or exact-state support.
-- Training and evaluation time are recorded separately.
-- All configured seeds are retained.
+- Evaluation uses an isolated environment and restored agent RNG.
+- Evaluation does not update replay, estimators, or exact-state support.
+- Observation representation and resolved environment IDs are recorded.
+- Every raw row includes code, package, Python, PyTorch, NumPy, Gymnasium, and
+  MiniGrid provenance.
+- Paired effects, bootstrap intervals, Holm correction, Wilcoxon sensitivity,
+  win/loss/tie counts, and heavy-tail diagnostics are generated.
 
-## Verification Status
+## Repository Contents
 
-- Unit and integration tests: 13 passed.
-- Current result-set audits: 10 passed.
-- Public artifact audit: PASS.
+- `src/hybrid_q/`: environments, encoding, agents, experiments, statistics.
+- `configs/`: frozen JSON protocols.
+- `results/`: raw data, summaries, comparisons, diagnostics, metadata, audits.
+- `scripts/`: execution, aggregation, reproduction, and audit commands.
+- `tests/`: unit and integration tests.
 
-See `REPRODUCIBILITY.md` for result-set details and deterministic-execution
-limits.
+This repository does not contain or import Berkeley CS188 assignment code.
 
-## License
+## Citation
 
-The independent research implementation is released under the MIT License.
+> Erkalkan, E. (2026). *Support-Aware Exact-State Memory for Deep Q-Learning:
+> Reproducibility Artifact*. Zenodo.
+> https://doi.org/10.5281/zenodo.20578927
 
 ## Author
 
-- Name: Ercan Erkalkan
-- Affiliation: Vocational School of Technical Sciences, Department of
-  Electronics and Automation, Artificial Intelligence Operator Program,
-  Marmara University
-- Address: Mehmet Genç Campus, 34865 Kartal, Istanbul, Turkey
-- Email: ercan.erkalkan@marmara.edu.tr
-- ORCID: https://orcid.org/0000-0001-9259-7112
+- Ercan Erkalkan
+- Vocational School of Technical Sciences, Department of Electronics and
+  Automation, Artificial Intelligence Operator Program, Marmara University
+- Mehmet Genç Campus, 34865 Kartal, Istanbul, Turkey
+- ercan.erkalkan@marmara.edu.tr
+- https://orcid.org/0000-0001-9259-7112
+
+## License
+
+MIT

@@ -1,0 +1,4 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+support_abstain_tau_20,return_auc,4,1.0,1.0,1.0,1.0
+support_abstain_tau_20,success_rate_auc,4,1.0,1.0,1.0,1.0
+support_abstain_tau_20,mean_return,4,1.0,1.0,1.0,1.0

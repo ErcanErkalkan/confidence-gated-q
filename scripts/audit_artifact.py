@@ -23,6 +23,13 @@ PROHIBITED_IMPORT = re.compile(
 )
 
 BUILD_SUFFIXES = {".aux", ".bbl", ".blg", ".log", ".out", ".spl"}
+MLWA_RESULT_SETS = (
+    "dqn_tuning_development",
+    "dqn_strong_validation",
+    "confirmatory_extended_compact",
+    "support_abstention_replication",
+    "minigrid_extended_diagnostic",
+)
 EXCLUDED_PARTS = {
     ".git",
     ".pytest_cache",
@@ -102,10 +109,18 @@ def audit(root: Path) -> dict:
         "results/dqn_sensitivity_minigrid/audit.json",
         "results/dqn_validation_confirmatory/audit.json",
         "results/dqn_validation_minigrid/audit.json",
+        *[f"results/{name}/audit.json" for name in MLWA_RESULT_SETS],
     ]
     for name in required:
         if not (root / name).exists():
             violations.append(f"missing required file: {name}")
+    for name in MLWA_RESULT_SETS:
+        result_dir = root / "results" / name
+        if not (
+            (result_dir / "raw.csv").exists()
+            or (result_dir / "raw.csv.gz").exists()
+        ):
+            violations.append(f"{name}: missing raw.csv or raw.csv.gz")
 
     return {
         "status": "PASS" if not violations else "FAIL",

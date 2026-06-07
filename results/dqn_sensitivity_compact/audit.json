@@ -4,32 +4,41 @@
   "result_dir": "results\\dqn_sensitivity_compact",
   "expected_runs": 100,
   "observed_runs": 100,
+  "run_shards_present": 100,
   "raw_rows": 41223,
   "violations": [],
   "files": {
-    "raw.csv": {
-      "sha256": "0e112bfff11227ba4460aba85b5b54c5a6445f07ea202c898cf6a0d2714bb6d7",
-      "bytes": 6863137
-    },
     "seed_metrics.csv": {
-      "sha256": "539676aa77ba939cfe6ad70c37fead324db9f7c93903e0157e5a3da9314d595d",
-      "bytes": 17445
+      "sha256": "21f016fcdb27eb8152b3e8faf8632ebcf30f16cff9a5a4f6175006951ce693fb",
+      "bytes": 42839
     },
     "summary.csv": {
-      "sha256": "fba0287cd996dc7f2e4c1b054337a788658089edf270a3c5f520b1fa92fd604a",
-      "bytes": 17372
+      "sha256": "f71579adf60fb9d4c1babc29b6207bf9b5051ccb5b83eec1efc52359d3f1f328",
+      "bytes": 20682
     },
     "pairwise.csv": {
-      "sha256": "bbd5fadc4ad6abc0edfd6eb7b5ea41544cddd17be279468dc8c20640530d3c21",
-      "bytes": 24479
+      "sha256": "789a4757378cb99c8de973ce4070b6c36bc47fd1ddf4043b94e45df19eed69e1",
+      "bytes": 29059
     },
     "planned_contrasts.csv": {
       "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
       "bytes": 2
     },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "37e723189f30161c1703559cb4225089940f4e743764404a56f185efe8b6f349",
+      "bytes": 6076
+    },
+    "cross_environment.csv": {
+      "sha256": "aee2ffc1a8b5f20f6a3093355b057ecc4389ed461bbbad8118e957730defee32",
+      "bytes": 877
+    },
     "metadata.json": {
-      "sha256": "22d25c1098e0a7fc439cc8782e5f12744f295bdd70d199071d346f66e08c36f5",
-      "bytes": 4280
+      "sha256": "610b17261b88b54c14829bfe30ecbce3872ae4eec41bd0f41e404a3660bc6846",
+      "bytes": 4579
+    },
+    "raw.csv.gz": {
+      "sha256": "21721c21206798fd7508c774709ea098fa8617ea99cb327d28d17366f6658cd9",
+      "bytes": 1461020
     }
   }
 }

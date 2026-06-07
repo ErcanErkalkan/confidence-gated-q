@@ -1,0 +1,263 @@
+{
+  "created_utc": "2026-06-07T12:19:53Z",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.3",
+  "gymnasium": "1.3.0",
+  "numpy": "2.4.3",
+  "torch": "2.11.0+cpu",
+  "torch_threads": 1,
+  "cpu_count": 12,
+  "processor": "Intel64 Family 6 Model 165 Stepping 3, GenuineIntel",
+  "config_sha256": "2bf8c098df3d38ffe10f6def7cfca7454fbbdac15ef4bece9ccc33e386319322",
+  "config_file": "configs/minigrid_extended_diagnostic.json",
+  "git_commit_hash": "a867c4bd9a5206204e82b235e92cf9a3500d38ba",
+  "package_version": "1.3.0.dev0",
+  "environment_observations": [
+    {
+      "name": "MiniGrid-Empty-5x5",
+      "requested_id": "MiniGrid-Empty-5x5-v0",
+      "resolved_id": "MiniGrid-Empty-5x5-v0",
+      "representation": "fully_observable_image"
+    },
+    {
+      "name": "MiniGrid-Empty-6x6",
+      "requested_id": "MiniGrid-Empty-6x6-v0",
+      "resolved_id": "MiniGrid-Empty-6x6-v0",
+      "representation": "fully_observable_image"
+    },
+    {
+      "name": "MiniGrid-Empty-8x8",
+      "requested_id": "MiniGrid-Empty-8x8-v0",
+      "resolved_id": "MiniGrid-Empty-8x8-v0",
+      "representation": "fully_observable_image"
+    },
+    {
+      "name": "MiniGrid-DoorKey-5x5",
+      "requested_id": "MiniGrid-DoorKey-5x5-v0",
+      "resolved_id": "MiniGrid-DoorKey-5x5-v0",
+      "representation": "fully_observable_image"
+    },
+    {
+      "name": "MiniGrid-DoorKey-6x6",
+      "requested_id": "MiniGrid-DoorKey-6x6-v0",
+      "resolved_id": "MiniGrid-DoorKey-6x6-v0",
+      "representation": "fully_observable_image"
+    },
+    {
+      "name": "MiniGrid-FourRooms",
+      "requested_id": "MiniGrid-FourRooms-v0",
+      "resolved_id": "MiniGrid-FourRooms-v0",
+      "representation": "fully_observable_image"
+    }
+  ],
+  "packages": {
+    "gymnasium": "1.3.0",
+    "minigrid": "3.1.0",
+    "numpy": "2.4.3",
+    "pandas": "3.0.1",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.8",
+    "torch": "2.11.0"
+  },
+  "config": {
+    "experiment_name": "mlwa_minigrid_extended_diagnostic",
+    "output_dir": "results/minigrid_extended_diagnostic",
+    "runtime": {
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "workers": 8
+    },
+    "seeds": [
+      500,
+      501,
+      502,
+      503,
+      504,
+      505,
+      506,
+      507,
+      508,
+      509
+    ],
+    "evaluation": {
+      "interval_steps": 5000,
+      "episodes": 30
+    },
+    "analysis": {
+      "primary_metric": "return_auc",
+      "analysis_status": "post_hoc_extended_minigrid_diagnostic",
+      "observation_representation": "FullyObsWrapper followed by ImgObsWrapper for every environment",
+      "planned_contrasts": [
+        {
+          "name": "count_vs_validated_dqn",
+          "left": "count_gated_tau_20",
+          "right": "validated_dqn",
+          "metric": "return_auc"
+        },
+        {
+          "name": "count_vs_tabular",
+          "left": "count_gated_tau_20",
+          "right": "tabular",
+          "metric": "return_auc"
+        },
+        {
+          "name": "support_abstain_vs_count",
+          "left": "support_abstain_tau_20",
+          "right": "count_gated_tau_20",
+          "metric": "return_auc"
+        }
+      ]
+    },
+    "envs": [
+      {
+        "name": "MiniGrid-Empty-5x5",
+        "id": "MiniGrid-Empty-5x5-v0",
+        "observation": "fully_observable_image",
+        "training_steps": 20000,
+        "max_steps": 200,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "MiniGrid-Empty-6x6",
+        "id": "MiniGrid-Empty-6x6-v0",
+        "observation": "fully_observable_image",
+        "training_steps": 25000,
+        "max_steps": 250,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "MiniGrid-Empty-8x8",
+        "id": "MiniGrid-Empty-8x8-v0",
+        "observation": "fully_observable_image",
+        "training_steps": 30000,
+        "max_steps": 300,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "MiniGrid-DoorKey-5x5",
+        "id": "MiniGrid-DoorKey-5x5-v0",
+        "observation": "fully_observable_image",
+        "training_steps": 30000,
+        "max_steps": 300,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "MiniGrid-DoorKey-6x6",
+        "id": "MiniGrid-DoorKey-6x6-v0",
+        "observation": "fully_observable_image",
+        "training_steps": 40000,
+        "max_steps": 400,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "MiniGrid-FourRooms",
+        "id": "MiniGrid-FourRooms-v0",
+        "observation": "fully_observable_image",
+        "training_steps": 40000,
+        "max_steps": 400,
+        "success_mode": "positive_terminal"
+      }
+    ],
+    "agents": [
+      {
+        "name": "random",
+        "kind": "random",
+        "params": {
+          "epsilon_decay_steps": 1
+        }
+      },
+      {
+        "name": "tabular",
+        "kind": "tabular",
+        "params": {
+          "tabular_learning_rate": 0.2,
+          "epsilon_decay_steps": 24000
+        }
+      },
+      {
+        "name": "validated_dqn",
+        "kind": "dqn",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 24000
+        }
+      },
+      {
+        "name": "fixed_hybrid",
+        "kind": "fixed_hybrid",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "fixed_gate": 0.5,
+          "epsilon_decay_steps": 24000
+        }
+      },
+      {
+        "name": "count_gated_tau_20",
+        "kind": "count_gated",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "epsilon_decay_steps": 24000
+        }
+      },
+      {
+        "name": "reliability_gated",
+        "kind": "reliability_gated",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "reliability_beta": 0.05,
+          "reliability_prior_strength": 10,
+          "epsilon_decay_steps": 24000
+        }
+      },
+      {
+        "name": "support_abstain_tau_20",
+        "kind": "support_abstain_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "epsilon_decay_steps": 24000
+        }
+      }
+    ]
+  }
+}

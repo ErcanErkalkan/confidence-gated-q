@@ -1,34 +1,48 @@
 # Provenance and Public-Release Boundary
 
-## Independently authored material
+## Independent Implementation
 
-All executable files under `research/src`, `research/scripts`, and
-`research/tests` were created for this research artifact. They use public
-Gymnasium, MiniGrid, NumPy, SciPy, pandas, Matplotlib, and PyTorch APIs.
+All executable files under `src/`, `scripts/`, and `tests/` were created for
+this research artifact using public Gymnasium, MiniGrid, NumPy, pandas, SciPy,
+Matplotlib, and PyTorch APIs.
 
-The public artifact is archived at
-https://doi.org/10.5281/zenodo.20578928 and maintained at
-https://github.com/ErcanErkalkan/confidence-gated-q.
+The parent workspace contains a Berkeley CS188 teaching project. It is not part
+of this artifact, is not covered by this repository's MIT license, and must not
+be copied into a release or supplement.
 
-## Excluded material
+## Persistent Identifiers
 
-The parent directory contains a Berkeley CS188 teaching project and completed
-assignment code. It is not part of this artifact, is not covered by the MIT
-license in `research/LICENSE`, and must not be copied into a public repository,
-supplement, archive, or model-training dataset.
+- Repository: https://github.com/ErcanErkalkan/confidence-gated-q
+- Existing version DOI: https://doi.org/10.5281/zenodo.20578928
+- Concept DOI: https://doi.org/10.5281/zenodo.20578927
 
-## Research origin
+## MLWA Result Lineage
 
-The initial observation was that a teaching implementation appeared successful
-while its behavior policy actually used a tabular fallback rather than its
-neural estimator. That implementation is not evidence for this study. It only
-motivated a new, independently implemented and explicitly defined hybrid
-research question.
+| Result directory | Config | Seeds | Status | Generation commit |
+|---|---|---|---|---|
+| `results/dqn_tuning_development` | `configs/dqn_tuning_development.json` | 0-4 | rerun; PASS | `050aa5196aa8789a1a06cd3bd9bef41fcc20b784` |
+| `results/dqn_strong_validation` | `configs/dqn_strong_validation.json` | 600-629; 700-709 | rerun; PASS | `a867c4bd9a5206204e82b235e92cf9a3500d38ba` |
+| `results/confirmatory_extended_compact` | `configs/confirmatory_extended_compact.json` | 500-529 | rerun; PASS | `a867c4bd9a5206204e82b235e92cf9a3500d38ba` |
+| `results/support_abstention_replication` | `configs/support_abstention_replication.json` | 300-329; 400-429 | rerun; PASS | `a867c4bd9a5206204e82b235e92cf9a3500d38ba` |
+| `results/minigrid_extended_diagnostic` | `configs/minigrid_extended_diagnostic.json` | 500-509 | rerun; PASS | `a867c4bd9a5206204e82b235e92cf9a3500d38ba` |
 
-## Generative AI disclosure
+Each `metadata.json` records the complete config, config SHA-256, requested and
+resolved environment IDs, observation representation, platform, package
+versions, and generation commit. Each raw row repeats the key software and
+experiment provenance.
 
-The repository structure, implementation scaffold, protocol text, and initial
-manuscript draft were developed with assistance from generative AI-assisted
-tools. The human author remains responsible for validating the code, selecting
-hypotheses, running experiments, interpreting results, checking citations, and
-disclosing tool use according to the venue's policy.
+## Result Preservation
+
+Per-run shards are retained locally for resumability and ignored by Git.
+Combined public raw data are stored as lossless `raw.csv.gz` files where plain
+CSV size would exceed practical hosting limits. Aggregation and audit scripts
+read compressed files directly.
+
+Existing pre-revision result directories are retained and are not overwritten.
+
+## Generative AI Disclosure
+
+Generative AI-assisted tools supported language editing, code review, and
+artifact organization. The human author remains responsible for the research
+questions, implementation, experiment execution, statistical interpretation,
+citation checking, and final claims.

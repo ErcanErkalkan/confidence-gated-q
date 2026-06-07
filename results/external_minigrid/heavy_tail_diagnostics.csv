@@ -1,0 +1,9 @@
+environment,agent,metric,n_seeds,minimum,maximum,median,mad,skew,excess_kurtosis,catastrophic_low_outliers,catastrophic_high_outliers,heavy_tail_flag
+MiniGrid-Empty-5x5,count_gated_tau_20,return_auc,10,0.0,0.473,0.07883333333333334,0.07883333333333334,0.8551732731129579,-0.5510423930226693,0,0,False
+MiniGrid-Empty-5x5,count_gated_tau_20,mean_return,10,0.0,0.955,0.473,0.473,0.00010303428398541659,-2.571222213366028,0,0,False
+MiniGrid-Empty-5x5,dqn,return_auc,10,0.0,0.0,0.0,0.0,0.0,0.0,0,0,False
+MiniGrid-Empty-5x5,dqn,mean_return,10,0.0,0.0,0.0,0.0,0.0,0.0,0,0,False
+MiniGrid-Empty-5x5,reliability_gated,return_auc,10,0.0,0.31833333333333336,0.0,0.0,2.276596265448444,4.765020820939919,0,0,True
+MiniGrid-Empty-5x5,reliability_gated,mean_return,10,0.0,0.955,0.0,0.0,1.7787811838447136,1.40625,0,0,False
+MiniGrid-Empty-5x5,tabular,return_auc,10,0.0,0.4775,0.15916666666666668,0.15841666666666668,0.34947327132591827,-1.2138429544698177,0,0,False
+MiniGrid-Empty-5x5,tabular,mean_return,10,0.0,0.955,0.473,0.473,0.00015357401784573757,-2.5711225413601824,0,0,False

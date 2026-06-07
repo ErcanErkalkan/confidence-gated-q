@@ -4,13 +4,10 @@
   "result_dir": "results\\dqn_tuning_development",
   "expected_runs": 245,
   "observed_runs": 245,
+  "run_shards_present": 245,
   "raw_rows": 92690,
   "violations": [],
   "files": {
-    "raw.csv": {
-      "sha256": "69e67e90c4484d4118590ff644eaa74d77a556ab46eeadd76a77f2f4f2ec0cb1",
-      "bytes": 39966077
-    },
     "seed_metrics.csv": {
       "sha256": "d908b38f910f1d8a004af4fa88b6528138c4e01f360c29900c2192f6fca3f948",
       "bytes": 106572
@@ -38,6 +35,10 @@
     "metadata.json": {
       "sha256": "14a4ca4f8bc2d0b3529e98c922874d2bb2b2b0ff64b43c111e2fd2be894c2b03",
       "bytes": 8292
+    },
+    "raw.csv.gz": {
+      "sha256": "9057906593e18ff22e08ea83778fae883a93cde2882f4b07543ab9168b487be8",
+      "bytes": 3132780
     }
   }
 }

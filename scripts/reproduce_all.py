@@ -9,6 +9,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = [
+    "dqn_tuning_development.json",
+    "dqn_strong_validation.json",
+    "confirmatory_extended_compact.json",
+    "support_abstention_replication.json",
+    "minigrid_extended_diagnostic.json",
     "confirmatory.json",
     "external_minigrid.json",
     "support_abstention_confirmatory.json",
@@ -33,6 +38,17 @@ def result_dir(config_path: Path) -> Path:
     return ROOT / config["output_dir"]
 
 
+def raw_result(output: Path) -> Path:
+    for name in ("raw.csv", "raw.csv.gz"):
+        candidate = output / name
+        if candidate.exists():
+            return candidate
+    raise FileNotFoundError(
+        f"Missing raw.csv or raw.csv.gz in {output}. "
+        "Run with --full to create experiment data."
+    )
+
+
 def run_experiments() -> None:
     for name in CONFIGS:
         run(
@@ -46,11 +62,7 @@ def aggregate_and_audit() -> None:
     for name in CONFIGS:
         config_path = ROOT / "configs" / name
         output = result_dir(config_path)
-        raw = output / "raw.csv"
-        if not raw.exists():
-            raise FileNotFoundError(
-                f"Missing {raw}. Run with --full to create experiment data."
-            )
+        raw = raw_result(output)
         run(
             "scripts/aggregate_results.py",
             "--input",

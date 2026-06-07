@@ -1,0 +1,13 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+count_gated_tau_20,return_auc,1,2.0,2.0,2.0,2.0
+dqn,return_auc,1,4.0,4.0,4.0,4.0
+reliability_gated,return_auc,1,3.0,3.0,3.0,3.0
+tabular,return_auc,1,1.0,1.0,1.0,1.0
+count_gated_tau_20,success_rate_auc,1,2.0,2.0,2.0,2.0
+dqn,success_rate_auc,1,4.0,4.0,4.0,4.0
+reliability_gated,success_rate_auc,1,3.0,3.0,3.0,3.0
+tabular,success_rate_auc,1,1.0,1.0,1.0,1.0
+count_gated_tau_20,mean_return,1,2.0,2.0,2.0,2.0
+dqn,mean_return,1,4.0,4.0,4.0,4.0
+reliability_gated,mean_return,1,3.0,3.0,3.0,3.0
+tabular,mean_return,1,1.0,1.0,1.0,1.0

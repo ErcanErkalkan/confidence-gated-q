@@ -1,0 +1,4 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+development_selected_dqn,return_auc,4,1.0,1.0,1.0,1.0
+development_selected_dqn,success_rate_auc,4,1.0,1.0,1.0,1.0
+development_selected_dqn,mean_return,4,1.0,1.0,1.0,1.0

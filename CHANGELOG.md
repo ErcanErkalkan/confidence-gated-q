@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.3.0 - 2026-06-07
+
+- Reframed the work as a reproducible boundary analysis rather than a broad
+  algorithmic superiority claim.
+- Added seven-task development-only DQN tuning and independent validation.
+- Added a 30-seed, seven-task confirmatory compact expansion.
+- Added independently seeded support-abstention replication on three
+  held-out-goal FourRooms sizes and MiniGrid Empty-5x5.
+- Added six fully observable MiniGrid diagnostics.
+- Added explicit vanilla and Double-DQN behavior with target-selection tests.
+- Added Taxi version compatibility, environment and observation provenance,
+  success-rate AUC, robust outlier diagnostics, and cross-environment ranks.
+- Expanded the test suite from 13 to 22 tests.
+- Added lossless compressed raw-CSV support for public hosting.
+- Regenerated the manuscript, tables, vector figures, and submission package.
+
 ## 1.2.0 - 2026-06-06
 
 - Published the reproducibility artifact on Zenodo:

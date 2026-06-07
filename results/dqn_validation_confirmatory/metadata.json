@@ -134,5 +134,13 @@
         }
       }
     ]
+  },
+  "schema_migration": {
+    "source_file": "raw.csv",
+    "output_file": "raw.csv.gz",
+    "numeric_results_changed": false,
+    "provenance_commit": "d0f2751beb1165d2082e649cf6e5966325ad6bf0",
+    "package_version": "1.2.0",
+    "config_file": "configs/dqn_validation_confirmatory.json"
   }
 }
