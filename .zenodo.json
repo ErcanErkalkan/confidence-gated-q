@@ -7,7 +7,16 @@
   "license": "MIT",
   "creators": [
     {
-      "name": "Erkalkan, Ercan"
+      "name": "Erkalkan, Ercan",
+      "affiliation": "Vocational School of Technical Sciences, Department of Electronics and Automation, Artificial Intelligence Operator Program, Marmara University",
+      "orcid": "0000-0001-9259-7112"
+    }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/ErcanErkalkan/confidence-gated-q",
+      "relation": "isSupplementTo",
+      "scheme": "url"
     }
   ],
   "keywords": [

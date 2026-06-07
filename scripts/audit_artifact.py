@@ -35,7 +35,7 @@ EXCLUDED_PARTS = {
     "submission_clean_mlwa",
 }
 EXCLUDED_FILES = {
-    "FINAL_SUBMISSION_TODO.md",
+    "FINAL_SUBMISSION_CHECK.md",
     "artifact_audit.json",
     "submission_audit.json",
     "submission_audit.md",

@@ -1,10 +1,16 @@
 cff-version: 1.2.0
-message: "If you use this artifact, cite the associated paper and software release."
+message: "If you use this artifact, cite this software release."
 title: "Support-Aware Exact-State Memory for Deep Q-Learning: Reproducibility Artifact"
 type: software
 authors:
   - family-names: "Erkalkan"
     given-names: "Ercan"
+    affiliation: "Vocational School of Technical Sciences, Department of Electronics and Automation, Artificial Intelligence Operator Program, Marmara University"
+    email: "ercan.erkalkan@marmara.edu.tr"
+    orcid: "https://orcid.org/0000-0001-9259-7112"
 version: 1.2.0
 date-released: 2026-06-06
 license: MIT
+doi: "10.5281/zenodo.20578928"
+repository-code: "https://github.com/ErcanErkalkan/confidence-gated-q"
+url: "https://doi.org/10.5281/zenodo.20578928"

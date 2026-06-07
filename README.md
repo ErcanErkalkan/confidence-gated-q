@@ -6,6 +6,18 @@ combined with deep Q-learning.
 
 The repository intentionally excludes journal submission files.
 
+## Artifact and Citation
+
+- Zenodo: https://doi.org/10.5281/zenodo.20578928
+- GitHub: https://github.com/ErcanErkalkan/confidence-gated-q
+- ORCID: https://orcid.org/0000-0001-9259-7112
+
+Recommended citation:
+
+> Erkalkan, E. (2026). *Support-Aware Exact-State Memory for Deep Q-Learning:
+> Reproducibility Artifact* (Version 1.2.0). Zenodo.
+> https://doi.org/10.5281/zenodo.20578928
+
 ## Main Finding
 
 A visitation-count gate can protect action selection from the selected DQN
@@ -88,3 +100,13 @@ limits.
 ## License
 
 The independent research implementation is released under the MIT License.
+
+## Author
+
+- Name: Ercan Erkalkan
+- Affiliation: Vocational School of Technical Sciences, Department of
+  Electronics and Automation, Artificial Intelligence Operator Program,
+  Marmara University
+- Address: Mehmet Genç Campus, 34865 Kartal, Istanbul, Turkey
+- Email: ercan.erkalkan@marmara.edu.tr
+- ORCID: https://orcid.org/0000-0001-9259-7112

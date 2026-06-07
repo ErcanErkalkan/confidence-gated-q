@@ -4,23 +4,23 @@
   "files": [
     {
       "path": ".gitignore",
-      "sha256": "7e6d39b15eeff528da4a17b22961aa91f813a1130911d12eb4b3dc9a825a98db",
-      "bytes": 346
+      "sha256": "2992bc0893b96e19549bfb2ac493db24421727b38b19db00c088d9e217e11dfe",
+      "bytes": 347
     },
     {
       "path": ".zenodo.json",
-      "sha256": "29d9853afbc1fb67c6e3d73be753e4479619b70336cb7b163cc59616502970c8",
-      "bytes": 608
+      "sha256": "f420d903b8caa4b7f4a2a3fdf31809780cf1aef4b995ebb0d4c27fcd37383365",
+      "bytes": 991
     },
     {
       "path": "CHANGELOG.md",
-      "sha256": "891324410f5c9bc632999599ef08398e900936ca75e13d9c041fd940468a25ee",
-      "bytes": 1053
+      "sha256": "3970a769ced63a794270510944d9c3b9577341d7efb3ede8dd47e3b903660dd6",
+      "bytes": 1475
     },
     {
       "path": "CITATION.cff",
-      "sha256": "3f3d66730dabffaede2cdf7e753083a76c74f387837f362a135be2ab54ab000f",
-      "bytes": 324
+      "sha256": "af3f1081fc497110236edfe041c3bd555b0555ea1944a92c01ec8fded3134f40",
+      "bytes": 710
     },
     {
       "path": "configs/confirmatory.json",
@@ -84,33 +84,33 @@
     },
     {
       "path": "LICENSE",
-      "sha256": "dfc405aebb13d15ad7cb304ac4dbcd56158037b630f3b20f18a9e6516c5369a6",
-      "bytes": 1238
+      "sha256": "97a5dbd2ee28152232b0d4ce6dc8298479b497cf090a99200590ea0e73203657",
+      "bytes": 1237
     },
     {
       "path": "PROVENANCE.md",
-      "sha256": "36302ce7f58ecd1becd013c8478ca9e1d4358b9c2a472ba030ff247ae84755e4",
-      "bytes": 1337
+      "sha256": "7de6945f96d503915cbd7261bb724bd26556e423cca4640964a0ebcb76096059",
+      "bytes": 1484
     },
     {
       "path": "pyproject.toml",
-      "sha256": "95c546463757245bbabb52ac349726171552067db692a43d037d5e735b80f24d",
-      "bytes": 665
+      "sha256": "6911a270fe40e812f185363bff18507f013cbcc4056fca65a1448251b35cf903",
+      "bytes": 955
     },
     {
       "path": "README.md",
-      "sha256": "f55445a0149e3ac54932f033e072accab4f14440351c27b5541c2beb26fd0041",
-      "bytes": 2928
+      "sha256": "a0f69405807efed8bf297c8f7744d9a48bdebe99d94dfee71c8a3905f57ed54f",
+      "bytes": 3658
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "540fea3483a9af9cd524b36799c260fff2b42338e6b4d2258434a79dd1289f48",
-      "bytes": 2159
+      "sha256": "67fd337bc437b0d16ee5c07b97928dd6bd4fbfc53df8111fa3d900f4b5bc9a97",
+      "bytes": 2403
     },
     {
       "path": "requirements-tested.txt",
-      "sha256": "908f96497595c671ce63e466ab26fee308c53af547ed766141501f58536c036c",
-      "bytes": 108
+      "sha256": "c407cf4fe135c251b9c6d09f912348da40903a194c0416a2ac1aa19049a7b9e4",
+      "bytes": 107
     },
     {
       "path": "requirements.txt",
@@ -594,13 +594,13 @@
     },
     {
       "path": "scripts/aggregate_results.py",
-      "sha256": "2685c41576d0003c0115e17ecfbf7123fdaf47c8fb5ce7fc5af204bd20dc0ba4",
-      "bytes": 368
+      "sha256": "0e603be57915fefb886e9e5a8afa56eeeb5d11cddc2b71f1ecf91a3a0043e1db",
+      "bytes": 367
     },
     {
       "path": "scripts/audit_artifact.py",
-      "sha256": "ce376107fe495cded1fe61bc3ea19ee8c640dacf20ed98cca9b6319ff7e8e60c",
-      "bytes": 3814
+      "sha256": "b9506f28be667c69c668201538428e37e95c100f8bca1646bf2367c6280d01ad",
+      "bytes": 3815
     },
     {
       "path": "scripts/audit_results.py",
@@ -614,8 +614,8 @@
     },
     {
       "path": "scripts/run_benchmark.py",
-      "sha256": "52667e06b87d6981f55919d7144c97997cd13196dc0d2f6878b1b25006b67f53",
-      "bytes": 335
+      "sha256": "1ee08e042f6c46621cf679335460c75d286f6100a4934f418b7d7fbd631ca4d6",
+      "bytes": 334
     },
     {
       "path": "src/hybrid_q/__init__.py",
@@ -629,13 +629,13 @@
     },
     {
       "path": "src/hybrid_q/cli.py",
-      "sha256": "727de3556c7fdd12d100920bc8abe699b8514d9d0f6231000aa69f198b18b52e",
-      "bytes": 547
+      "sha256": "f80a74e36e0e881b036e1d46243951b727450be88cf28cf569943a4e0790ad37",
+      "bytes": 546
     },
     {
       "path": "src/hybrid_q/encoding.py",
-      "sha256": "14c20b132e7a506444bbb3198b6718cd2e6e7a8867ce0e866b83aab904d5ffc1",
-      "bytes": 1350
+      "sha256": "a91cce2bc721653b46583a4cc1271753734e9888211a726927e7c9211b742d9f",
+      "bytes": 1349
     },
     {
       "path": "src/hybrid_q/envs.py",

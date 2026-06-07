@@ -1,5 +1,12 @@
 # Reproducibility Guide
 
+## Persistent Identifiers
+
+- Archived artifact: https://doi.org/10.5281/zenodo.20578928
+- Source repository: https://github.com/ErcanErkalkan/confidence-gated-q
+- Artifact version: `1.2.0`
+- Author ORCID: https://orcid.org/0000-0001-9259-7112
+
 ## Tested environment
 
 See `requirements-tested.txt` and each result set's `metadata.json`.

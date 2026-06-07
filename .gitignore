@@ -12,7 +12,7 @@ submission_clean_mlwa.zip
 submission_clean_mlwa.zip.sha256
 submission_audit.json
 submission_audit.md
-FINAL_SUBMISSION_TODO.md
+FINAL_SUBMISSION_CHECK.md
 scripts/audit_submission.py
 scripts/generate_mlwa_assets.py
 scripts/package_release.py

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0 - 2026-06-06
+
+- Published the reproducibility artifact on Zenodo:
+  https://doi.org/10.5281/zenodo.20578928.
+- Published the source repository:
+  https://github.com/ErcanErkalkan/confidence-gated-q.
+- Added complete author affiliation, email, and ORCID metadata.
+- Added post hoc support-abstention, count-scale, and DQN sensitivity results.
+- Released the final exact-step, RNG-isolated result sets and audits.
+
 ## 1.1.0 - 2026-06-06
 
 - Fixed nominal evaluation-checkpoint overshoot.
