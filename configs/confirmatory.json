@@ -1,0 +1,90 @@
+{
+  "experiment_name": "confirmatory_simple_gating",
+  "output_dir": "results/confirmatory",
+  "runtime": {
+    "torch_threads": 1,
+    "torch_interop_threads": 1,
+    "workers": 8
+  },
+  "seeds": [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129],
+  "evaluation": {
+    "interval_steps": 2000,
+    "episodes": 30
+  },
+  "analysis": {
+    "primary_metric": "return_auc",
+    "planned_contrasts": [
+      {"name": "count_vs_dqn", "left": "count_gated_tau_20", "right": "dqn", "metric": "return_auc"},
+      {"name": "count_vs_fixed", "left": "count_gated_tau_20", "right": "fixed_hybrid", "metric": "return_auc"},
+      {"name": "reliability_vs_dqn", "left": "reliability_gated", "right": "dqn", "metric": "return_auc"},
+      {"name": "reliability_vs_count", "left": "reliability_gated", "right": "count_gated_tau_20", "metric": "return_auc"}
+    ]
+  },
+  "envs": [
+    {
+      "name": "FourRooms-7-unseen-goals",
+      "id": "StructuredFourRooms-v0",
+      "kwargs": {"size": 7, "goal_split": "train", "slip_probability": 0.0, "max_steps": 100},
+      "eval_kwargs": {"goal_split": "test"},
+      "training_steps": 8000,
+      "max_steps": 100,
+      "success_mode": "positive_terminal"
+    },
+    {
+      "name": "FourRooms-9-slip-unseen-goals",
+      "id": "StructuredFourRooms-v0",
+      "kwargs": {"size": 9, "goal_split": "train", "slip_probability": 0.1, "max_steps": 160},
+      "eval_kwargs": {"goal_split": "test"},
+      "training_steps": 12000,
+      "max_steps": 160,
+      "success_mode": "positive_terminal"
+    },
+    {
+      "name": "FrozenLake-v1",
+      "id": "FrozenLake-v1",
+      "kwargs": {"is_slippery": true},
+      "training_steps": 10000,
+      "max_steps": 100,
+      "success_mode": "positive_terminal"
+    },
+    {
+      "name": "CliffWalking-v1",
+      "id": "CliffWalking-v1",
+      "training_steps": 10000,
+      "max_steps": 500,
+      "success_mode": "terminated"
+    }
+  ],
+  "agents": [
+    {
+      "name": "random",
+      "kind": "random",
+      "params": {"epsilon_decay_steps": 1}
+    },
+    {
+      "name": "tabular",
+      "kind": "tabular",
+      "params": {"tabular_learning_rate": 0.2, "epsilon_decay_steps": 8000}
+    },
+    {
+      "name": "dqn",
+      "kind": "dqn",
+      "params": {"learning_rate": 0.001, "batch_size": 32, "replay_warmup": 256, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 32, "epsilon_decay_steps": 8000}
+    },
+    {
+      "name": "fixed_hybrid",
+      "kind": "fixed_hybrid",
+      "params": {"learning_rate": 0.001, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_warmup": 256, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 32, "fixed_gate": 0.5, "epsilon_decay_steps": 8000}
+    },
+    {
+      "name": "count_gated_tau_20",
+      "kind": "count_gated",
+      "params": {"learning_rate": 0.001, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_warmup": 256, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 32, "tau": 20, "epsilon_decay_steps": 8000}
+    },
+    {
+      "name": "reliability_gated",
+      "kind": "reliability_gated",
+      "params": {"learning_rate": 0.001, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_warmup": 256, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 32, "reliability_beta": 0.05, "reliability_prior_strength": 10, "epsilon_decay_steps": 8000}
+    }
+  ]
+}

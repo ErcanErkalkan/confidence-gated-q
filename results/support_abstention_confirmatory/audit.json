@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "config": "configs\\support_abstention_confirmatory.json",
+  "result_dir": "results\\support_abstention_confirmatory",
+  "expected_runs": 120,
+  "observed_runs": 120,
+  "raw_rows": 53867,
+  "violations": [],
+  "files": {
+    "raw.csv": {
+      "sha256": "119a210e6f64806aaceafa61c847fe44a440591799dd3d4e77f9e3ee4489e40d",
+      "bytes": 11935665
+    },
+    "seed_metrics.csv": {
+      "sha256": "844ae7049b8e6758b26fccc9672f61b0d86226722cf18b4593edd90036592c83",
+      "bytes": 29051
+    },
+    "summary.csv": {
+      "sha256": "117b7ea02206a8aefe082f41d9fe227da431f223e1340943dc488ba348725b1f",
+      "bytes": 7362
+    },
+    "pairwise.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "metadata.json": {
+      "sha256": "c552a614f528011163061ea5f1fd3845edb5328fdedd3123bb59cb84fd57f1b2",
+      "bytes": 3258
+    }
+  }
+}

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "confidence-gated-q"
+version = "1.2.0"
+description = "Reproducible tabular-neural Q-learning experiments"
+requires-python = ">=3.10"
+dependencies = [
+  "gymnasium>=1.0",
+  "minigrid>=3.0",
+  "numpy>=2.0",
+  "pandas>=2.2",
+  "scipy>=1.13",
+  "matplotlib>=3.9",
+  "torch>=2.4",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[project.scripts]
+hybrid-q-run = "hybrid_q.cli:run_main"
+hybrid-q-aggregate = "hybrid_q.cli:aggregate_main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

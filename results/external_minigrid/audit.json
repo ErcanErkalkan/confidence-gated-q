@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "config": "configs\\external_minigrid.json",
+  "result_dir": "results\\external_minigrid",
+  "expected_runs": 40,
+  "observed_runs": 40,
+  "raw_rows": 23285,
+  "violations": [],
+  "files": {
+    "raw.csv": {
+      "sha256": "e9e2884f6ed9ad9721f898d54eb8d8ebc25e6f80ec4110ea2dcd943968841d46",
+      "bytes": 4158735
+    },
+    "seed_metrics.csv": {
+      "sha256": "6375233041d0154a13ddc230627b8f786fc346a383cc0be95725c295755d1036",
+      "bytes": 7240
+    },
+    "summary.csv": {
+      "sha256": "7b665b5836cdbcc45732e6041d9a65d4a06f3593aca1e21e5a75bc829c0d622b",
+      "bytes": 4463
+    },
+    "pairwise.csv": {
+      "sha256": "69ae41e803f0827a115e2d6455a1c6cd11133cefa33f339b1e69175efa1563ff",
+      "bytes": 3927
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7918213d012b99cc85ccb7454908db85dd7a5bc4f66a5c25e77989053556e744",
+      "bytes": 708
+    },
+    "metadata.json": {
+      "sha256": "d46eebd73be0348653dcedde8be6cd679ecb9952d9cc6a0acb0f87e4c5470110",
+      "bytes": 3222
+    }
+  }
+}

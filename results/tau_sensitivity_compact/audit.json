@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "config": "configs\\tau_sensitivity_compact.json",
+  "result_dir": "results\\tau_sensitivity_compact",
+  "expected_runs": 120,
+  "observed_runs": 120,
+  "raw_rows": 47376,
+  "violations": [],
+  "files": {
+    "raw.csv": {
+      "sha256": "9313a5ba14f00135d0d33747ef1985ad47ebf3b27be847cd9aa0938eadf586d3",
+      "bytes": 9430247
+    },
+    "seed_metrics.csv": {
+      "sha256": "e007f4be37f566cb412be721d44ea0b8746934e092464a04ae6d7c066f7f8dc0",
+      "bytes": 24909
+    },
+    "summary.csv": {
+      "sha256": "2482b5af51f77b140d77264a76361be1c3af5438346e377264184a27b18dc183",
+      "bytes": 36617
+    },
+    "pairwise.csv": {
+      "sha256": "a3256c519ce5e8722785261af5a6a29e92afa1d1bb555c3ab7a76dab63c90da0",
+      "bytes": 37661
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "metadata.json": {
+      "sha256": "9560d61617b26117816538c2adb5608ab43e4febef2efbe8d96511f712ddc001",
+      "bytes": 5061
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "experiment_name": "posthoc_minigrid_supplemental_baselines",
+  "output_dir": "results/minigrid_supplemental",
+  "runtime": {
+    "torch_threads": 1,
+    "torch_interop_threads": 1,
+    "workers": 8
+  },
+  "seeds": [200, 201, 202, 203, 204, 205, 206, 207, 208, 209],
+  "evaluation": {
+    "interval_steps": 5000,
+    "episodes": 30
+  },
+  "analysis": {
+    "primary_metric": "return_auc",
+    "analysis_status": "post_hoc_baseline_completion",
+    "planned_contrasts": []
+  },
+  "envs": [
+    {
+      "name": "MiniGrid-Empty-5x5",
+      "id": "MiniGrid-Empty-5x5-v0",
+      "observation": "fully_observable_image",
+      "training_steps": 20000,
+      "max_steps": 200,
+      "success_mode": "positive_terminal"
+    }
+  ],
+  "agents": [
+    {
+      "name": "random",
+      "kind": "random",
+      "params": {"epsilon_decay_steps": 1}
+    },
+    {
+      "name": "fixed_hybrid",
+      "kind": "fixed_hybrid",
+      "params": {
+        "learning_rate": 0.001,
+        "tabular_learning_rate": 0.2,
+        "batch_size": 32,
+        "replay_warmup": 256,
+        "train_frequency": 16,
+        "target_update_interval": 500,
+        "hidden_size": 64,
+        "fixed_gate": 0.5,
+        "epsilon_decay_steps": 16000
+      }
+    },
+    {
+      "name": "support_abstain_tau_20",
+      "kind": "support_abstain_gate",
+      "params": {
+        "learning_rate": 0.001,
+        "tabular_learning_rate": 0.2,
+        "batch_size": 32,
+        "replay_warmup": 256,
+        "train_frequency": 16,
+        "target_update_interval": 500,
+        "hidden_size": 64,
+        "tau": 20,
+        "epsilon_decay_steps": 16000
+      }
+    }
+  ]
+}

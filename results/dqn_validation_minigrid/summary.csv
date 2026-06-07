@@ -1,0 +1,6 @@
+environment,agent,metric,n_seeds,mean,std,median,q25,q75,t_ci_low,t_ci_high,bootstrap_ci_low,bootstrap_ci_high
+MiniGrid-Empty-5x5,development_selected_dqn,mean_return,10,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+MiniGrid-Empty-5x5,development_selected_dqn,success_rate,10,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+MiniGrid-Empty-5x5,development_selected_dqn,return_auc,10,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+MiniGrid-Empty-5x5,development_selected_dqn,seconds_per_1000_steps,10,1.2513649485015779,0.014072463573615529,1.2474177625001175,1.2413108350017863,1.2634346650040245,1.2412981145001714,1.2614317825029844,1.243212929752153,1.2596665895023036
+MiniGrid-Empty-5x5,development_selected_dqn,gradient_updates,10,1235.0,0.0,1235.0,1235.0,1235.0,1235.0,1235.0,1235.0,1235.0

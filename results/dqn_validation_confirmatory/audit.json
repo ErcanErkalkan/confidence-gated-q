@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "config": "configs\\dqn_validation_confirmatory.json",
+  "result_dir": "results\\dqn_validation_confirmatory",
+  "expected_runs": 120,
+  "observed_runs": 120,
+  "raw_rows": 48702,
+  "violations": [],
+  "files": {
+    "raw.csv": {
+      "sha256": "aaa0ebba48821fc83385900f48308ec088a36aec4ad6d760971c05bab986ffa8",
+      "bytes": 9309811
+    },
+    "seed_metrics.csv": {
+      "sha256": "9d250e55009d82caccca5f5ee6a63f3e200c3017da7e65c97e600b33e29151a0",
+      "bytes": 24122
+    },
+    "summary.csv": {
+      "sha256": "8607530527455a9ff62be4d76aba8c7f3235df83cd9cf1c139b9cbd4099270a7",
+      "bytes": 4041
+    },
+    "pairwise.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "metadata.json": {
+      "sha256": "9f7f7fdeaace2f3a7e4381d64fcdef60ca2d81e592890680600269b5b75dbbb7",
+      "bytes": 3355
+    }
+  }
+}

@@ -1,0 +1,671 @@
+{
+  "status": "PASS",
+  "violations": [],
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "7e6d39b15eeff528da4a17b22961aa91f813a1130911d12eb4b3dc9a825a98db",
+      "bytes": 346
+    },
+    {
+      "path": ".zenodo.json",
+      "sha256": "29d9853afbc1fb67c6e3d73be753e4479619b70336cb7b163cc59616502970c8",
+      "bytes": 608
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "891324410f5c9bc632999599ef08398e900936ca75e13d9c041fd940468a25ee",
+      "bytes": 1053
+    },
+    {
+      "path": "CITATION.cff",
+      "sha256": "3f3d66730dabffaede2cdf7e753083a76c74f387837f362a135be2ab54ab000f",
+      "bytes": 324
+    },
+    {
+      "path": "configs/confirmatory.json",
+      "sha256": "24dca8dd82a00bdca90f67ba5ca27e0d4c9b9303211e4e0d2ee9b4c2e7e2d7ed",
+      "bytes": 3473
+    },
+    {
+      "path": "configs/development.json",
+      "sha256": "dc9208f4c5803459aca8aebef3f6420db831a1811306bffd57c3b1c3abdd7e42",
+      "bytes": 3179
+    },
+    {
+      "path": "configs/dqn_sensitivity_compact.json",
+      "sha256": "ed1e5574f048597ef6303249ccf88c575ace26293727abb274e03d8956c6fc28",
+      "bytes": 2663
+    },
+    {
+      "path": "configs/dqn_sensitivity_minigrid.json",
+      "sha256": "086cb7f67fead45c3857e1f495e483fdd40e8f6c19c3ed70bfe8148e6d79f2ed",
+      "bytes": 1860
+    },
+    {
+      "path": "configs/dqn_validation_confirmatory.json",
+      "sha256": "19de9dc7becf00ce68aeca02367ff5b4d03f7e757732888f98fc62e0114aa84d",
+      "bytes": 2156
+    },
+    {
+      "path": "configs/dqn_validation_minigrid.json",
+      "sha256": "e2fff372faee995334460a06d300b77bf4bb6435f3f41b1ca01d5de71ca90f89",
+      "bytes": 1239
+    },
+    {
+      "path": "configs/external_minigrid.json",
+      "sha256": "52ab850c1254cdb771c3eee346b078b3723c6c68d5f510ace3b047e25ea8d814",
+      "bytes": 1928
+    },
+    {
+      "path": "configs/minigrid_supplemental.json",
+      "sha256": "7bfe20888ba6b6f192901f25e6998a65cd1ce6d117e941a6150ff87cb3bc34bc",
+      "bytes": 1632
+    },
+    {
+      "path": "configs/support_abstention_confirmatory.json",
+      "sha256": "6734ad59d1d45a53eba3e103767113f8e494895dbaf1010d21bc147db8f8aaf0",
+      "bytes": 2056
+    },
+    {
+      "path": "configs/tau_sensitivity_compact.json",
+      "sha256": "19b6b4f9c2902643d8f8277bf0b0ac482a64da95bece5320c6cedef1f9e4229c",
+      "bytes": 3185
+    },
+    {
+      "path": "configs/tau_sensitivity_minigrid.json",
+      "sha256": "d40bf4b4befdf67488fe206eb1f07aaf7cb717289bca69b55fdfa073e436f2e5",
+      "bytes": 2383
+    },
+    {
+      "path": "environment.yml",
+      "sha256": "4ca257a4375903f38b34ec6241115a84f7fdafcf8101211100c8718de3130606",
+      "bytes": 118
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "dfc405aebb13d15ad7cb304ac4dbcd56158037b630f3b20f18a9e6516c5369a6",
+      "bytes": 1238
+    },
+    {
+      "path": "PROVENANCE.md",
+      "sha256": "36302ce7f58ecd1becd013c8478ca9e1d4358b9c2a472ba030ff247ae84755e4",
+      "bytes": 1337
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "95c546463757245bbabb52ac349726171552067db692a43d037d5e735b80f24d",
+      "bytes": 665
+    },
+    {
+      "path": "README.md",
+      "sha256": "f55445a0149e3ac54932f033e072accab4f14440351c27b5541c2beb26fd0041",
+      "bytes": 2928
+    },
+    {
+      "path": "REPRODUCIBILITY.md",
+      "sha256": "540fea3483a9af9cd524b36799c260fff2b42338e6b4d2258434a79dd1289f48",
+      "bytes": 2159
+    },
+    {
+      "path": "requirements-tested.txt",
+      "sha256": "908f96497595c671ce63e466ab26fee308c53af547ed766141501f58536c036c",
+      "bytes": 108
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "d3c1ff3a75aeaa3cc777d83ddafa9e0c253594c04f41b6e992c057b544f84e7d",
+      "bytes": 119
+    },
+    {
+      "path": "results/confirmatory/audit.json",
+      "sha256": "4bc2aab751dbdd76b10e7e01250b5490b12e87380b6f61f98b2cd365fd4cd908",
+      "bytes": 1060
+    },
+    {
+      "path": "results/confirmatory/learning_curve_CliffWalking-v1.png",
+      "sha256": "83fb91346fa336f077a20309376cb0d2f3992a4f8c88207ceb831b5e2c1775af",
+      "bytes": 120723
+    },
+    {
+      "path": "results/confirmatory/learning_curve_FourRooms-7-unseen-goals.png",
+      "sha256": "24235056e1c8e144b5fde1101b5679376ac3f2c3e3f2d20b00de3812b60556da",
+      "bytes": 138729
+    },
+    {
+      "path": "results/confirmatory/learning_curve_FourRooms-9-slip-unseen-goals.png",
+      "sha256": "dfc44678b0393bb489fe9625ba1baec613b668bcb736962438dbf8a013b09f34",
+      "bytes": 159653
+    },
+    {
+      "path": "results/confirmatory/learning_curve_FrozenLake-v1.png",
+      "sha256": "1b0d7be7afc1ec31abe64c6666b21f7452378236c6af70f2c99f764a77f2fed7",
+      "bytes": 240306
+    },
+    {
+      "path": "results/confirmatory/metadata.json",
+      "sha256": "887467838a62883dd38800630c35aa698a1d8ea554f275804cc427f25abf2b4a",
+      "bytes": 5436
+    },
+    {
+      "path": "results/confirmatory/pairwise.csv",
+      "sha256": "5d349adf2a1a4eb25789defbeee730f250bda3fe23fb5b6bcb07fbf04523d2a0",
+      "bytes": 52861
+    },
+    {
+      "path": "results/confirmatory/planned_contrasts.csv",
+      "sha256": "c1a41dcd1c8f63b796c302af9a0893a330253cc6202d29d1ddc424cf0b59fa18",
+      "bytes": 5238
+    },
+    {
+      "path": "results/confirmatory/raw.csv",
+      "sha256": "7f855d1305f347ae9d4b6e553793f3b004c2c0411022002d7bbf49d7d77347c5",
+      "bytes": 56970830
+    },
+    {
+      "path": "results/confirmatory/seed_metrics.csv",
+      "sha256": "7c40b5dc8539ba7f73d009993348d30eb432d86f72e85ce04a4e3f36c416c1ca",
+      "bytes": 145580
+    },
+    {
+      "path": "results/confirmatory/summary.csv",
+      "sha256": "6ad11789dc1194cf60f7fb34b6929de4d6087b22d47c070516699994869e3ce1",
+      "bytes": 29895
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/audit.json",
+      "sha256": "1fb4f1a616315757f105896a1409afb35c3e3869535d2ea9b39ea172a632dcf3",
+      "bytes": 1076
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/learning_curve_CliffWalking-v1.png",
+      "sha256": "ddbcfa2821f2306d3e76cbf018114325ffb898e5b977a65474f761f855f64418",
+      "bytes": 59375
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/learning_curve_FourRooms-7-unseen-goals.png",
+      "sha256": "f8db516d2461405c44a84d75affe088f23b890a26ef35837daa78cd045942d99",
+      "bytes": 63506
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/learning_curve_FourRooms-9-slip-unseen-goals.png",
+      "sha256": "2f6ea73b0c1d6260c64847e011dffd89c55ac7c683b2b9b56cfbbd1858130fd2",
+      "bytes": 65737
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/learning_curve_FrozenLake-v1.png",
+      "sha256": "4676cc73f625864a60eeef14d9c30d8541bb7a7e1eb27081d0a01ec7e51d1bb8",
+      "bytes": 57913
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/metadata.json",
+      "sha256": "22d25c1098e0a7fc439cc8782e5f12744f295bdd70d199071d346f66e08c36f5",
+      "bytes": 4280
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/pairwise.csv",
+      "sha256": "bbd5fadc4ad6abc0edfd6eb7b5ea41544cddd17be279468dc8c20640530d3c21",
+      "bytes": 24479
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/planned_contrasts.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/raw.csv",
+      "sha256": "0e112bfff11227ba4460aba85b5b54c5a6445f07ea202c898cf6a0d2714bb6d7",
+      "bytes": 6863137
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/seed_metrics.csv",
+      "sha256": "539676aa77ba939cfe6ad70c37fead324db9f7c93903e0157e5a3da9314d595d",
+      "bytes": 17445
+    },
+    {
+      "path": "results/dqn_sensitivity_compact/summary.csv",
+      "sha256": "fba0287cd996dc7f2e4c1b054337a788658089edf270a3c5f520b1fa92fd604a",
+      "bytes": 17372
+    },
+    {
+      "path": "results/dqn_sensitivity_minigrid/audit.json",
+      "sha256": "2de87c4a108288c05e6f1b967b756b31aeb3553a53a1240ae92096338a1f0271",
+      "bytes": 1072
+    },
+    {
+      "path": "results/dqn_sensitivity_minigrid/learning_curve_MiniGrid-Empty-5x5.png",
+      "sha256": "b0f1a13c719efd6763f7911dd08cc9cf9ec23bbc13a665f5c6ab328204cb0a11",
+      "bytes": 60634
+    },
+    {
+      "path": "results/dqn_sensitivity_minigrid/metadata.json",
+      "sha256": "8ffdbfc2cefb9d10017ce62c6cd0f5c4e7c2c04d4ec7a265728beee61b899fff",
+      "bytes": 3226
+    },
+    {
+      "path": "results/dqn_sensitivity_minigrid/pairwise.csv",
+      "sha256": "b6e957ebe559d98f44779daa2a52f0ae24f8782632c973046fbc14e5f1d0f897",
+      "bytes": 4065
+    },
+    {
+      "path": "results/dqn_sensitivity_minigrid/planned_contrasts.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/dqn_sensitivity_minigrid/raw.csv",
+      "sha256": "9d76faf40cc153aa108c39affb9d2133cef988536ddbf55082fa4c3f7fb8751d",
+      "bytes": 1633254
+    },
+    {
+      "path": "results/dqn_sensitivity_minigrid/seed_metrics.csv",
+      "sha256": "3c50bcbdeae9b24d50a72e06a1fc9baf75b9ded44f0fdbf4f8e5954fb18336d1",
+      "bytes": 4126
+    },
+    {
+      "path": "results/dqn_sensitivity_minigrid/summary.csv",
+      "sha256": "9a0e00aca7dcee6aa624fe16334e38c3005d8ef48938da14dd74684d65096a75",
+      "bytes": 3171
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/audit.json",
+      "sha256": "129c31704ff01f2d88f1c52d084fb10aa6502316e6864e8eb972e0c9b5831121",
+      "bytes": 1079
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/learning_curve_CliffWalking-v1.png",
+      "sha256": "ddbcfa2821f2306d3e76cbf018114325ffb898e5b977a65474f761f855f64418",
+      "bytes": 59375
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/learning_curve_FourRooms-7-unseen-goals.png",
+      "sha256": "f8db516d2461405c44a84d75affe088f23b890a26ef35837daa78cd045942d99",
+      "bytes": 63506
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/learning_curve_FourRooms-9-slip-unseen-goals.png",
+      "sha256": "2f6ea73b0c1d6260c64847e011dffd89c55ac7c683b2b9b56cfbbd1858130fd2",
+      "bytes": 65737
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/learning_curve_FrozenLake-v1.png",
+      "sha256": "4676cc73f625864a60eeef14d9c30d8541bb7a7e1eb27081d0a01ec7e51d1bb8",
+      "bytes": 57913
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/metadata.json",
+      "sha256": "9f7f7fdeaace2f3a7e4381d64fcdef60ca2d81e592890680600269b5b75dbbb7",
+      "bytes": 3355
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/pairwise.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/planned_contrasts.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/raw.csv",
+      "sha256": "aaa0ebba48821fc83385900f48308ec088a36aec4ad6d760971c05bab986ffa8",
+      "bytes": 9309811
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/seed_metrics.csv",
+      "sha256": "9d250e55009d82caccca5f5ee6a63f3e200c3017da7e65c97e600b33e29151a0",
+      "bytes": 24122
+    },
+    {
+      "path": "results/dqn_validation_confirmatory/summary.csv",
+      "sha256": "8607530527455a9ff62be4d76aba8c7f3235df83cd9cf1c139b9cbd4099270a7",
+      "bytes": 4041
+    },
+    {
+      "path": "results/dqn_validation_minigrid/audit.json",
+      "sha256": "2e30e4d3be92461f984bce067363dab787d0793dae313455c36d17b386bd89ab",
+      "bytes": 1065
+    },
+    {
+      "path": "results/dqn_validation_minigrid/learning_curve_MiniGrid-Empty-5x5.png",
+      "sha256": "b0f1a13c719efd6763f7911dd08cc9cf9ec23bbc13a665f5c6ab328204cb0a11",
+      "bytes": 60634
+    },
+    {
+      "path": "results/dqn_validation_minigrid/metadata.json",
+      "sha256": "fbe7788f11c7f9db2ca5d189be045f154efb384ef20e157f23e9caca72e98458",
+      "bytes": 2047
+    },
+    {
+      "path": "results/dqn_validation_minigrid/pairwise.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/dqn_validation_minigrid/planned_contrasts.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/dqn_validation_minigrid/raw.csv",
+      "sha256": "a4a5dbda48712c969c1b70dda172b2121bc198f20dfb551f66a2a96034508b0d",
+      "bytes": 823246
+    },
+    {
+      "path": "results/dqn_validation_minigrid/seed_metrics.csv",
+      "sha256": "f1d4d8d28d1a8ffe2cf4ba4fabfac88db8958341f647ce43a95bcf7852c2570f",
+      "bytes": 1922
+    },
+    {
+      "path": "results/dqn_validation_minigrid/summary.csv",
+      "sha256": "f433633aeea5390128cec782fe7b8b90e03fc21acec65a8faa12e005835f3f33",
+      "bytes": 768
+    },
+    {
+      "path": "results/external_minigrid/audit.json",
+      "sha256": "4ce87b428ab91c0491526191781fdc7dd32bc1f85bbe5b79470cab428464e251",
+      "bytes": 1061
+    },
+    {
+      "path": "results/external_minigrid/learning_curve_MiniGrid-Empty-5x5.png",
+      "sha256": "3e62436b75b42ff898ad873bf24c182591ddfd84822f4339799488ebb771a7d0",
+      "bytes": 198405
+    },
+    {
+      "path": "results/external_minigrid/metadata.json",
+      "sha256": "d46eebd73be0348653dcedde8be6cd679ecb9952d9cc6a0acb0f87e4c5470110",
+      "bytes": 3222
+    },
+    {
+      "path": "results/external_minigrid/pairwise.csv",
+      "sha256": "69ae41e803f0827a115e2d6455a1c6cd11133cefa33f339b1e69175efa1563ff",
+      "bytes": 3927
+    },
+    {
+      "path": "results/external_minigrid/planned_contrasts.csv",
+      "sha256": "7918213d012b99cc85ccb7454908db85dd7a5bc4f66a5c25e77989053556e744",
+      "bytes": 708
+    },
+    {
+      "path": "results/external_minigrid/raw.csv",
+      "sha256": "e9e2884f6ed9ad9721f898d54eb8d8ebc25e6f80ec4110ea2dcd943968841d46",
+      "bytes": 4158735
+    },
+    {
+      "path": "results/external_minigrid/seed_metrics.csv",
+      "sha256": "6375233041d0154a13ddc230627b8f786fc346a383cc0be95725c295755d1036",
+      "bytes": 7240
+    },
+    {
+      "path": "results/external_minigrid/summary.csv",
+      "sha256": "7b665b5836cdbcc45732e6041d9a65d4a06f3593aca1e21e5a75bc829c0d622b",
+      "bytes": 4463
+    },
+    {
+      "path": "results/minigrid_supplemental/audit.json",
+      "sha256": "fc1eded2844938a33ee1bd5502d0e9459a0db2204917bb5642562699cb18b9c4",
+      "bytes": 1067
+    },
+    {
+      "path": "results/minigrid_supplemental/learning_curve_MiniGrid-Empty-5x5.png",
+      "sha256": "6d9bfba8081ec0704f5d07c2224b1ec5baabc0c810325edad185523725c6b39d",
+      "bytes": 104740
+    },
+    {
+      "path": "results/minigrid_supplemental/metadata.json",
+      "sha256": "6cdfbe58fe10d4cd90b13538898e80dbd08241ff3a5eeddc093eb36d59c33ae8",
+      "bytes": 2525
+    },
+    {
+      "path": "results/minigrid_supplemental/pairwise.csv",
+      "sha256": "db1d6dfe3b9cd853a655ac999352a6d8c0c23a3e4297a2a586a50649285879eb",
+      "bytes": 2495
+    },
+    {
+      "path": "results/minigrid_supplemental/planned_contrasts.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/minigrid_supplemental/raw.csv",
+      "sha256": "ace23c2025ac30ba984c78ac0521a987545de65dca00414e79764b688fdff3df",
+      "bytes": 2761670
+    },
+    {
+      "path": "results/minigrid_supplemental/seed_metrics.csv",
+      "sha256": "b15e3a8bebf9c7f88a46633def5196c7aec8ba39d998ab21599ab92cb3428c11",
+      "bytes": 5873
+    },
+    {
+      "path": "results/minigrid_supplemental/summary.csv",
+      "sha256": "8dd637606bde078db117810a185a007a66f5cfc7b8f8e6585d92de570bfe6406",
+      "bytes": 3914
+    },
+    {
+      "path": "results/support_abstention_confirmatory/audit.json",
+      "sha256": "7ecbed583fd232c57563be70d5f88c04e3e0f6262e46c03efc7c65f8b6a7488d",
+      "bytes": 1088
+    },
+    {
+      "path": "results/support_abstention_confirmatory/learning_curve_CliffWalking-v1.png",
+      "sha256": "ddbcfa2821f2306d3e76cbf018114325ffb898e5b977a65474f761f855f64418",
+      "bytes": 59375
+    },
+    {
+      "path": "results/support_abstention_confirmatory/learning_curve_FourRooms-7-unseen-goals.png",
+      "sha256": "f8db516d2461405c44a84d75affe088f23b890a26ef35837daa78cd045942d99",
+      "bytes": 63506
+    },
+    {
+      "path": "results/support_abstention_confirmatory/learning_curve_FourRooms-9-slip-unseen-goals.png",
+      "sha256": "2f6ea73b0c1d6260c64847e011dffd89c55ac7c683b2b9b56cfbbd1858130fd2",
+      "bytes": 65737
+    },
+    {
+      "path": "results/support_abstention_confirmatory/learning_curve_FrozenLake-v1.png",
+      "sha256": "4676cc73f625864a60eeef14d9c30d8541bb7a7e1eb27081d0a01ec7e51d1bb8",
+      "bytes": 57913
+    },
+    {
+      "path": "results/support_abstention_confirmatory/metadata.json",
+      "sha256": "c552a614f528011163061ea5f1fd3845edb5328fdedd3123bb59cb84fd57f1b2",
+      "bytes": 3258
+    },
+    {
+      "path": "results/support_abstention_confirmatory/pairwise.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/support_abstention_confirmatory/planned_contrasts.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/support_abstention_confirmatory/raw.csv",
+      "sha256": "119a210e6f64806aaceafa61c847fe44a440591799dd3d4e77f9e3ee4489e40d",
+      "bytes": 11935665
+    },
+    {
+      "path": "results/support_abstention_confirmatory/seed_metrics.csv",
+      "sha256": "844ae7049b8e6758b26fccc9672f61b0d86226722cf18b4593edd90036592c83",
+      "bytes": 29051
+    },
+    {
+      "path": "results/support_abstention_confirmatory/summary.csv",
+      "sha256": "117b7ea02206a8aefe082f41d9fe227da431f223e1340943dc488ba348725b1f",
+      "bytes": 7362
+    },
+    {
+      "path": "results/tau_sensitivity_compact/audit.json",
+      "sha256": "7b1505adf15f47264026cfae3d5105dc7498fcb251e51e07bac3896e38d47ad8",
+      "bytes": 1076
+    },
+    {
+      "path": "results/tau_sensitivity_compact/learning_curve_CliffWalking-v1.png",
+      "sha256": "5bf0f3c2c32f36c99a4823d7895a2a00cac79d7fcade355d0dd99c3cb60bcec0",
+      "bytes": 113276
+    },
+    {
+      "path": "results/tau_sensitivity_compact/learning_curve_FourRooms-7-unseen-goals.png",
+      "sha256": "7278cde001851a4779dc72ab9b48070ad9ab9de80d064e79c858bab79a9a338c",
+      "bytes": 98241
+    },
+    {
+      "path": "results/tau_sensitivity_compact/learning_curve_FourRooms-9-slip-unseen-goals.png",
+      "sha256": "6ca6fc1dc94a1069d2dd4d61ee076fc2b12399ae06bed622646b711bbb4c41c3",
+      "bytes": 113626
+    },
+    {
+      "path": "results/tau_sensitivity_compact/learning_curve_FrozenLake-v1.png",
+      "sha256": "9a31164dabc92fc3cacac557f021482afd170e339acdf4312c2f945ae95a3102",
+      "bytes": 106485
+    },
+    {
+      "path": "results/tau_sensitivity_compact/metadata.json",
+      "sha256": "9560d61617b26117816538c2adb5608ab43e4febef2efbe8d96511f712ddc001",
+      "bytes": 5061
+    },
+    {
+      "path": "results/tau_sensitivity_compact/pairwise.csv",
+      "sha256": "a3256c519ce5e8722785261af5a6a29e92afa1d1bb555c3ab7a76dab63c90da0",
+      "bytes": 37661
+    },
+    {
+      "path": "results/tau_sensitivity_compact/planned_contrasts.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/tau_sensitivity_compact/raw.csv",
+      "sha256": "9313a5ba14f00135d0d33747ef1985ad47ebf3b27be847cd9aa0938eadf586d3",
+      "bytes": 9430247
+    },
+    {
+      "path": "results/tau_sensitivity_compact/seed_metrics.csv",
+      "sha256": "e007f4be37f566cb412be721d44ea0b8746934e092464a04ae6d7c066f7f8dc0",
+      "bytes": 24909
+    },
+    {
+      "path": "results/tau_sensitivity_compact/summary.csv",
+      "sha256": "2482b5af51f77b140d77264a76361be1c3af5438346e377264184a27b18dc183",
+      "bytes": 36617
+    },
+    {
+      "path": "results/tau_sensitivity_minigrid/audit.json",
+      "sha256": "fc275692d89cf6f81c2513fa36f733f4635562b0ca511c5fc2309ee0b378a8ff",
+      "bytes": 1073
+    },
+    {
+      "path": "results/tau_sensitivity_minigrid/learning_curve_MiniGrid-Empty-5x5.png",
+      "sha256": "3d6ae040db503b693b05ea2024f6ed2000d829320f23836815333a1bc3ea8bca",
+      "bytes": 122105
+    },
+    {
+      "path": "results/tau_sensitivity_minigrid/metadata.json",
+      "sha256": "207cb0ce1ccd7b0be24dc3deafc74a537aba5ebe19f372ba09d6e476b001daff",
+      "bytes": 4008
+    },
+    {
+      "path": "results/tau_sensitivity_minigrid/pairwise.csv",
+      "sha256": "2fccb076f3a34a1cd81d97f3e96400b7c82cf384a053ba3f80a6e362b47cb734",
+      "bytes": 9152
+    },
+    {
+      "path": "results/tau_sensitivity_minigrid/planned_contrasts.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    {
+      "path": "results/tau_sensitivity_minigrid/raw.csv",
+      "sha256": "4b006120db7fe989e94b3fb34b3c4f93a8af60800f5caeca9c0d241712f76108",
+      "bytes": 4026770
+    },
+    {
+      "path": "results/tau_sensitivity_minigrid/seed_metrics.csv",
+      "sha256": "316669eb9c1c5ed9cf15f6cddc5a8e397da309fca93dfe8ed64a0df55b011dfe",
+      "bytes": 6130
+    },
+    {
+      "path": "results/tau_sensitivity_minigrid/summary.csv",
+      "sha256": "7230b24ce3b05e39652af4b2e7cb4c8450489fe8af722cc7a64295a4df219014",
+      "bytes": 8915
+    },
+    {
+      "path": "scripts/aggregate_results.py",
+      "sha256": "2685c41576d0003c0115e17ecfbf7123fdaf47c8fb5ce7fc5af204bd20dc0ba4",
+      "bytes": 368
+    },
+    {
+      "path": "scripts/audit_artifact.py",
+      "sha256": "ce376107fe495cded1fe61bc3ea19ee8c640dacf20ed98cca9b6319ff7e8e60c",
+      "bytes": 3814
+    },
+    {
+      "path": "scripts/audit_results.py",
+      "sha256": "64d50d320758f8ce9613cad80664b0bfc05713b61cd5ee2b2c6eedbaec12ea8f",
+      "bytes": 6086
+    },
+    {
+      "path": "scripts/reproduce_all.py",
+      "sha256": "beff31854809a1badc982370784b3874772b945c4b711ec952b62c8b8b170ca3",
+      "bytes": 2705
+    },
+    {
+      "path": "scripts/run_benchmark.py",
+      "sha256": "52667e06b87d6981f55919d7144c97997cd13196dc0d2f6878b1b25006b67f53",
+      "bytes": 335
+    },
+    {
+      "path": "src/hybrid_q/__init__.py",
+      "sha256": "1d0e99a5e04551cf4fe1adf4580e6d088a4c495df9b770d3c1fdbd3140f73c48",
+      "bytes": 90
+    },
+    {
+      "path": "src/hybrid_q/agents.py",
+      "sha256": "b9ffb6fdb85bf5d41d8cccbb2755ee30b0fab3f6726f2287512aa4f6b2c16f90",
+      "bytes": 15207
+    },
+    {
+      "path": "src/hybrid_q/cli.py",
+      "sha256": "727de3556c7fdd12d100920bc8abe699b8514d9d0f6231000aa69f198b18b52e",
+      "bytes": 547
+    },
+    {
+      "path": "src/hybrid_q/encoding.py",
+      "sha256": "14c20b132e7a506444bbb3198b6718cd2e6e7a8867ce0e866b83aab904d5ffc1",
+      "bytes": 1350
+    },
+    {
+      "path": "src/hybrid_q/envs.py",
+      "sha256": "2858e2b93f00878f6af45d326e6f2f6a5d0f3db8b23f591f511de32d29124be5",
+      "bytes": 5013
+    },
+    {
+      "path": "src/hybrid_q/experiment.py",
+      "sha256": "2c307eea8b3ceab1595eb78cd9ac7e16e4a43e3121f2bcc8a01747e89a257e30",
+      "bytes": 18117
+    },
+    {
+      "path": "src/hybrid_q/statistics.py",
+      "sha256": "39209ef6c501316c0c70178665bf5590779d9a400b7b29ead17fa8bbe5ea2118",
+      "bytes": 13558
+    },
+    {
+      "path": "tests/test_agents.py",
+      "sha256": "4e728c74dc8063f500fa67db9b874e1978ea7942e8bba975bec94ae20e0f9e0f",
+      "bytes": 3051
+    },
+    {
+      "path": "tests/test_envs.py",
+      "sha256": "4823c09030b866e77db6ee571e2c6157bee79b13f603246f0144dfa7b797a6b3",
+      "bytes": 3912
+    },
+    {
+      "path": "tests/test_statistics.py",
+      "sha256": "c85c65ce767060cb0a653c9cb4c4f68b4436bc2e7a6af86472b956209b8b5264",
+      "bytes": 1172
+    }
+  ]
+}

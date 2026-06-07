@@ -1,0 +1,23 @@
+# Changelog
+
+## 1.1.0 - 2026-06-06
+
+- Fixed nominal evaluation-checkpoint overshoot.
+- Isolated evaluation from training RNG and exact-state support.
+- Separated training runtime from evaluation overhead.
+- Reran all confirmatory and external experiments under the corrected protocol.
+- Added paired median, win-rate, Wilcoxon-Holm, and sign-Holm analyses.
+- Reframed claims around heavy-tailed risk and held-out-support failure.
+- Added support-abstention and compact hyperparameter sensitivity studies.
+
+## 1.0.0 - 2026-06-05
+
+- Added exact environment-step budgeting and resumable run shards.
+- Added structured FourRooms held-out-goal environments.
+- Added TD-residual reliability gating.
+- Completed five-seed development, 30-seed confirmation, and ten-seed
+  MiniGrid external validation.
+- Added paired bootstrap intervals, Cohen's dz, rank-biserial effect size, and
+  Holm-adjusted planned contrasts.
+- Added result audits and a reproducible code-and-data release.
+- Finalized the claim as a bounded positive result with explicit failure cases.
