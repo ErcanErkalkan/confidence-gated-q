@@ -1,3 +1,0 @@
-environment,agent,metric,n_seeds,minimum,maximum,median,mad,skew,excess_kurtosis,catastrophic_low_outliers,catastrophic_high_outliers,heavy_tail_flag
-MiniGrid-Empty-5x5,development_selected_dqn,return_auc,10,0.0,0.0,0.0,0.0,0.0,0.0,0,0,False
-MiniGrid-Empty-5x5,development_selected_dqn,mean_return,10,0.0,0.0,0.0,0.0,0.0,0.0,0,0,False

@@ -4,7 +4,7 @@
   "result_dir": "results\\support_abstention_replication",
   "expected_runs": 840,
   "observed_runs": 840,
-  "run_shards_present": 840,
+  "run_shards_present": 0,
   "raw_rows": 359339,
   "violations": [],
   "files": {

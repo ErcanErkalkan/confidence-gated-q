@@ -4,7 +4,7 @@
   "result_dir": "results\\dqn_tuning_development",
   "expected_runs": 245,
   "observed_runs": 245,
-  "run_shards_present": 245,
+  "run_shards_present": 0,
   "raw_rows": 92690,
   "violations": [],
   "files": {

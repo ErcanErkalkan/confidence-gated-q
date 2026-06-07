@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Removed ten superseded exploratory and sensitivity result families that are
+  not used by the manuscript, figures, tables, or current reproduction flow.
+- Reduced the public reproduction and audit workflow to the five frozen MLWA
+  evidence families.
+
 ## 1.3.0 - 2026-06-07
 
 - Reframed the work as a reproducible boundary analysis rather than a broad

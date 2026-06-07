@@ -14,16 +14,6 @@ CONFIGS = [
     "confirmatory_extended_compact.json",
     "support_abstention_replication.json",
     "minigrid_extended_diagnostic.json",
-    "confirmatory.json",
-    "external_minigrid.json",
-    "support_abstention_confirmatory.json",
-    "minigrid_supplemental.json",
-    "tau_sensitivity_compact.json",
-    "tau_sensitivity_minigrid.json",
-    "dqn_sensitivity_compact.json",
-    "dqn_sensitivity_minigrid.json",
-    "dqn_validation_confirmatory.json",
-    "dqn_validation_minigrid.json",
 ]
 
 

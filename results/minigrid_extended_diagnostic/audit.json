@@ -4,7 +4,7 @@
   "result_dir": "results\\minigrid_extended_diagnostic",
   "expected_runs": 420,
   "observed_runs": 420,
-  "run_shards_present": 420,
+  "run_shards_present": 0,
   "raw_rows": 215786,
   "violations": [],
   "files": {

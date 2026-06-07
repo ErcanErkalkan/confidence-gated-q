@@ -41,7 +41,8 @@ Journal submission files are intentionally excluded from the public repository.
 | abstention replication | `configs/support_abstention_replication.json` | 300-329; 400-429 | confirmation after diagnostic discovery |
 | MiniGrid expansion | `configs/minigrid_extended_diagnostic.json` | 500-509 | post hoc diagnostic |
 
-Earlier frozen and sensitivity families remain available for provenance.
+Superseded exploratory and sensitivity families are preserved only in the
+archived `v1.3.0` release and are not part of the current manuscript artifact.
 
 ## Install
 

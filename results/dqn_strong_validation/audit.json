@@ -4,7 +4,7 @@
   "result_dir": "results\\dqn_strong_validation",
   "expected_runs": 440,
   "observed_runs": 440,
-  "run_shards_present": 440,
+  "run_shards_present": 0,
   "raw_rows": 190902,
   "violations": [],
   "files": {

@@ -99,16 +99,6 @@ def audit(root: Path) -> dict:
         "src/hybrid_q/agents.py",
         "scripts/reproduce_all.py",
         "tests/test_agents.py",
-        "results/confirmatory/audit.json",
-        "results/external_minigrid/audit.json",
-        "results/support_abstention_confirmatory/audit.json",
-        "results/minigrid_supplemental/audit.json",
-        "results/tau_sensitivity_compact/audit.json",
-        "results/tau_sensitivity_minigrid/audit.json",
-        "results/dqn_sensitivity_compact/audit.json",
-        "results/dqn_sensitivity_minigrid/audit.json",
-        "results/dqn_validation_confirmatory/audit.json",
-        "results/dqn_validation_minigrid/audit.json",
         *[f"results/{name}/audit.json" for name in MLWA_RESULT_SETS],
     ]
     for name in required:

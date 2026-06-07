@@ -4,7 +4,7 @@
   "result_dir": "results\\confirmatory_extended_compact",
   "expected_runs": 1470,
   "observed_runs": 1470,
-  "run_shards_present": 1470,
+  "run_shards_present": 0,
   "raw_rows": 663483,
   "violations": [],
   "files": {

@@ -14,8 +14,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sha256": "91ed34d94dd92421dec1feb38f46b19cef6c4023c0038bcc92812b0c073bc9d9",
-      "bytes": 2481
+      "sha256": "64b8b4bf1c157e8b8306388790d58d81aa1ae28702c73c8717db93dd0c703f16",
+      "bytes": 2747
     },
     {
       "path": "CITATION.cff",
@@ -23,29 +23,9 @@
       "bytes": 973
     },
     {
-      "path": "configs/confirmatory.json",
-      "sha256": "24dca8dd82a00bdca90f67ba5ca27e0d4c9b9303211e4e0d2ee9b4c2e7e2d7ed",
-      "bytes": 3473
-    },
-    {
       "path": "configs/confirmatory_extended_compact.json",
       "sha256": "3d4ace48d3c22eed9e8877240db4e9a8e6338ce25de4e686013a13845985febe",
       "bytes": 4647
-    },
-    {
-      "path": "configs/development.json",
-      "sha256": "dc9208f4c5803459aca8aebef3f6420db831a1811306bffd57c3b1c3abdd7e42",
-      "bytes": 3179
-    },
-    {
-      "path": "configs/dqn_sensitivity_compact.json",
-      "sha256": "ed1e5574f048597ef6303249ccf88c575ace26293727abb274e03d8956c6fc28",
-      "bytes": 2663
-    },
-    {
-      "path": "configs/dqn_sensitivity_minigrid.json",
-      "sha256": "086cb7f67fead45c3857e1f495e483fdd40e8f6c19c3ed70bfe8148e6d79f2ed",
-      "bytes": 1860
     },
     {
       "path": "configs/dqn_strong_validation.json",
@@ -58,49 +38,14 @@
       "bytes": 4767
     },
     {
-      "path": "configs/dqn_validation_confirmatory.json",
-      "sha256": "19de9dc7becf00ce68aeca02367ff5b4d03f7e757732888f98fc62e0114aa84d",
-      "bytes": 2156
-    },
-    {
-      "path": "configs/dqn_validation_minigrid.json",
-      "sha256": "e2fff372faee995334460a06d300b77bf4bb6435f3f41b1ca01d5de71ca90f89",
-      "bytes": 1239
-    },
-    {
-      "path": "configs/external_minigrid.json",
-      "sha256": "52ab850c1254cdb771c3eee346b078b3723c6c68d5f510ace3b047e25ea8d814",
-      "bytes": 1928
-    },
-    {
       "path": "configs/minigrid_extended_diagnostic.json",
       "sha256": "701aa5905b3918ab30b628b37ee47fc8ee38307c3a3a0b107888ecdcad0a5f07",
       "bytes": 3995
     },
     {
-      "path": "configs/minigrid_supplemental.json",
-      "sha256": "7bfe20888ba6b6f192901f25e6998a65cd1ce6d117e941a6150ff87cb3bc34bc",
-      "bytes": 1632
-    },
-    {
-      "path": "configs/support_abstention_confirmatory.json",
-      "sha256": "6734ad59d1d45a53eba3e103767113f8e494895dbaf1010d21bc147db8f8aaf0",
-      "bytes": 2056
-    },
-    {
       "path": "configs/support_abstention_replication.json",
       "sha256": "d1c92d2ed52ff2a3633df3909b99270af104a18d1e131d526f6053fc2a9fa20c",
       "bytes": 4333
-    },
-    {
-      "path": "configs/tau_sensitivity_compact.json",
-      "sha256": "19b6b4f9c2902643d8f8277bf0b0ac482a64da95bece5320c6cedef1f9e4229c",
-      "bytes": 3185
-    },
-    {
-      "path": "configs/tau_sensitivity_minigrid.json",
-      "sha256": "d40bf4b4befdf67488fe206eb1f07aaf7cb717289bca69b55fdfa073e436f2e5",
-      "bytes": 2383
     },
     {
       "path": "environment.yml",
@@ -114,8 +59,8 @@
     },
     {
       "path": "PROVENANCE.md",
-      "sha256": "d38914a11d9b5883e7cd5a9d320630fb4abb233d6d758525c3725cdc1697fabf",
-      "bytes": 2592
+      "sha256": "8d54aee9250d2f5fb61227edcb73f4aa112733a6b1f0b0a249c7e515292c3bda",
+      "bytes": 2662
     },
     {
       "path": "pyproject.toml",
@@ -124,8 +69,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "3fd0b120915a450025ef06442ad8d8f2969215c65079d63dd20aa500687eb94b",
-      "bytes": 4886
+      "sha256": "81c0615724f973f35f0a1945b5c79159a9930ffe9777026f7b1628e4fa9c18a9",
+      "bytes": 4965
     },
     {
       "path": "REPRODUCIBILITY.md",
@@ -143,74 +88,9 @@
       "bytes": 119
     },
     {
-      "path": "results/confirmatory/audit.json",
-      "sha256": "378d5d1e59fd0a4e3279ddf39c0f35dabd44532611f4ba394ea79d0565055463",
-      "bytes": 1389
-    },
-    {
-      "path": "results/confirmatory/cross_environment.csv",
-      "sha256": "89194168d5926ed60df5b942c22646f7c91e7c4b61fbc7b58105a00e87bc3cb4",
-      "bytes": 922
-    },
-    {
-      "path": "results/confirmatory/heavy_tail_diagnostics.csv",
-      "sha256": "bb357e0838aec08df5863f34944752f5c75c6ab1b6256ab786d8ebea720914d7",
-      "bytes": 7773
-    },
-    {
-      "path": "results/confirmatory/learning_curve_CliffWalking-v1.png",
-      "sha256": "83fb91346fa336f077a20309376cb0d2f3992a4f8c88207ceb831b5e2c1775af",
-      "bytes": 120723
-    },
-    {
-      "path": "results/confirmatory/learning_curve_FourRooms-7-unseen-goals.png",
-      "sha256": "24235056e1c8e144b5fde1101b5679376ac3f2c3e3f2d20b00de3812b60556da",
-      "bytes": 138729
-    },
-    {
-      "path": "results/confirmatory/learning_curve_FourRooms-9-slip-unseen-goals.png",
-      "sha256": "dfc44678b0393bb489fe9625ba1baec613b668bcb736962438dbf8a013b09f34",
-      "bytes": 159653
-    },
-    {
-      "path": "results/confirmatory/learning_curve_FrozenLake-v1.png",
-      "sha256": "1b0d7be7afc1ec31abe64c6666b21f7452378236c6af70f2c99f764a77f2fed7",
-      "bytes": 240306
-    },
-    {
-      "path": "results/confirmatory/metadata.json",
-      "sha256": "b495c626fd76ec185d6f250b6ffdb983d347b29e7425215854c8b07a91a04f7a",
-      "bytes": 5724
-    },
-    {
-      "path": "results/confirmatory/pairwise.csv",
-      "sha256": "bfcf4e8b4e9ad2b9edee9249f98d65266556f67b7465feec7e37180986d8b104",
-      "bytes": 60587
-    },
-    {
-      "path": "results/confirmatory/planned_contrasts.csv",
-      "sha256": "51f8cbbfc35c6100b0f9fe35597d214f1c4bb9b6fbcbb64779314ed32b46011a",
-      "bytes": 6236
-    },
-    {
-      "path": "results/confirmatory/raw.csv.gz",
-      "sha256": "4fad50c1ee6e39e507e56fbd74c3d82f9bbd7b70ce3cd4e875cf35e5abdd994e",
-      "bytes": 12853764
-    },
-    {
-      "path": "results/confirmatory/seed_metrics.csv",
-      "sha256": "b6f849f83380d457035533029aa06ad4ac4dd258e162f2d54af5d24238e763bd",
-      "bytes": 321330
-    },
-    {
-      "path": "results/confirmatory/summary.csv",
-      "sha256": "388a88884bfea9476aad196c681cdbf67aff45040d168c06eb6cfe2694f0902e",
-      "bytes": 34986
-    },
-    {
       "path": "results/confirmatory_extended_compact/audit.json",
-      "sha256": "663c6af23393a7a413937e5f63813321ed49df5f5dc9d55daafcb745ae62308b",
-      "bytes": 1430
+      "sha256": "12615db4efb4b5d596d46ff3d39f263c5c7a6438bb21d7ca6df2ce858b12cca5",
+      "bytes": 1427
     },
     {
       "path": "results/confirmatory_extended_compact/cross_environment.csv",
@@ -288,124 +168,9 @@
       "bytes": 79514
     },
     {
-      "path": "results/dqn_sensitivity_compact/audit.json",
-      "sha256": "5a5344a7737ecede80b09ec5236489236f87bde494a12abad16ca9752b9b126a",
-      "bytes": 1405
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/cross_environment.csv",
-      "sha256": "aee2ffc1a8b5f20f6a3093355b057ecc4389ed461bbbad8118e957730defee32",
-      "bytes": 877
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/heavy_tail_diagnostics.csv",
-      "sha256": "37e723189f30161c1703559cb4225089940f4e743764404a56f185efe8b6f349",
-      "bytes": 6076
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/learning_curve_CliffWalking-v1.png",
-      "sha256": "ddbcfa2821f2306d3e76cbf018114325ffb898e5b977a65474f761f855f64418",
-      "bytes": 59375
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/learning_curve_FourRooms-7-unseen-goals.png",
-      "sha256": "f8db516d2461405c44a84d75affe088f23b890a26ef35837daa78cd045942d99",
-      "bytes": 63506
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/learning_curve_FourRooms-9-slip-unseen-goals.png",
-      "sha256": "2f6ea73b0c1d6260c64847e011dffd89c55ac7c683b2b9b56cfbbd1858130fd2",
-      "bytes": 65737
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/learning_curve_FrozenLake-v1.png",
-      "sha256": "4676cc73f625864a60eeef14d9c30d8541bb7a7e1eb27081d0a01ec7e51d1bb8",
-      "bytes": 57913
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/metadata.json",
-      "sha256": "610b17261b88b54c14829bfe30ecbce3872ae4eec41bd0f41e404a3660bc6846",
-      "bytes": 4579
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/pairwise.csv",
-      "sha256": "789a4757378cb99c8de973ce4070b6c36bc47fd1ddf4043b94e45df19eed69e1",
-      "bytes": 29059
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/planned_contrasts.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/raw.csv.gz",
-      "sha256": "21721c21206798fd7508c774709ea098fa8617ea99cb327d28d17366f6658cd9",
-      "bytes": 1461020
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/seed_metrics.csv",
-      "sha256": "21f016fcdb27eb8152b3e8faf8632ebcf30f16cff9a5a4f6175006951ce693fb",
-      "bytes": 42839
-    },
-    {
-      "path": "results/dqn_sensitivity_compact/summary.csv",
-      "sha256": "f71579adf60fb9d4c1babc29b6207bf9b5051ccb5b83eec1efc52359d3f1f328",
-      "bytes": 20682
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/audit.json",
-      "sha256": "59d6a8ddf102d125b9c661c38c3c56a64c09acde2ef4d82d1847ede2d377df20",
-      "bytes": 1400
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/cross_environment.csv",
-      "sha256": "437f5c2ddb71b3dbb6ea99a19fc0e912f6ad4b84da6bd1af3b1864bd125ed1ae",
-      "bytes": 869
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/heavy_tail_diagnostics.csv",
-      "sha256": "f79d5717a9f58905ffd7f4e3fd575c00140d0b99cdb66ae7f361f93df36a7c17",
-      "bytes": 1002
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/learning_curve_MiniGrid-Empty-5x5.png",
-      "sha256": "b0f1a13c719efd6763f7911dd08cc9cf9ec23bbc13a665f5c6ab328204cb0a11",
-      "bytes": 60634
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/metadata.json",
-      "sha256": "9f8154daea11bc7fd4eeb6fdd6a8fba29029abda84e0bcab29e73217c125bbde",
-      "bytes": 3526
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/pairwise.csv",
-      "sha256": "e7d96fd04d763324a3477b7266e3201309e5c8f069f729e60cc303512cc0eebf",
-      "bytes": 4521
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/planned_contrasts.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/raw.csv.gz",
-      "sha256": "ef334fe0a0204a42f7a6a44405dc2a4fd8b6d36ff94d0e70045c24793df016e5",
-      "bytes": 356331
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/seed_metrics.csv",
-      "sha256": "4bda0907d989f9940fd8a4643dfd3b530db1362875a81b79c120f3a7a1d19474",
-      "bytes": 10410
-    },
-    {
-      "path": "results/dqn_sensitivity_minigrid/summary.csv",
-      "sha256": "d20c80e0490a9399105b35a2d40cb182771aa60485eabba7bbcac11ee968d76f",
-      "bytes": 3635
-    },
-    {
       "path": "results/dqn_strong_validation/audit.json",
-      "sha256": "9f194465b40d2df9892583b2a0f05f75e44a502dc7e4cd0489d524be3a69a303",
-      "bytes": 1405
+      "sha256": "14abab53a21847e4ef522a2b805e26dd4d336cfa05b6d241e2b3a13066a43876",
+      "bytes": 1403
     },
     {
       "path": "results/dqn_strong_validation/cross_environment.csv",
@@ -489,8 +254,8 @@
     },
     {
       "path": "results/dqn_tuning_development/audit.json",
-      "sha256": "7b4bc77d19a1995573d9fb172ef92c32b4a3abd7b30bb623f447871cc11b15d4",
-      "bytes": 1407
+      "sha256": "0b556932c3edf4f66c9d9339f601b2dca67be25595197e7057c79e5866f03ddd",
+      "bytes": 1405
     },
     {
       "path": "results/dqn_tuning_development/cross_environment.csv",
@@ -568,174 +333,9 @@
       "bytes": 53713
     },
     {
-      "path": "results/dqn_validation_confirmatory/audit.json",
-      "sha256": "c3762fb2d57e1b6c62ff032fb23d8208cbab2578f5aac83e30778f0242e07097",
-      "bytes": 1408
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/cross_environment.csv",
-      "sha256": "1e277bbe78af71b1322069854f3753f54ac7423712133ee79241bee976901014",
-      "bytes": 292
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/heavy_tail_diagnostics.csv",
-      "sha256": "a9ac266a153c076f3000ca93cbf0bd0828758ca882b7fc71c1512cdd3572406a",
-      "bytes": 1465
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/learning_curve_CliffWalking-v1.png",
-      "sha256": "ddbcfa2821f2306d3e76cbf018114325ffb898e5b977a65474f761f855f64418",
-      "bytes": 59375
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/learning_curve_FourRooms-7-unseen-goals.png",
-      "sha256": "f8db516d2461405c44a84d75affe088f23b890a26ef35837daa78cd045942d99",
-      "bytes": 63506
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/learning_curve_FourRooms-9-slip-unseen-goals.png",
-      "sha256": "2f6ea73b0c1d6260c64847e011dffd89c55ac7c683b2b9b56cfbbd1858130fd2",
-      "bytes": 65737
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/learning_curve_FrozenLake-v1.png",
-      "sha256": "4676cc73f625864a60eeef14d9c30d8541bb7a7e1eb27081d0a01ec7e51d1bb8",
-      "bytes": 57913
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/metadata.json",
-      "sha256": "b2fe623f2ccd75ad70d19ed4544a8a0e7f830bde271ef74d302787ba55b71053",
-      "bytes": 3658
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/pairwise.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/planned_contrasts.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/raw.csv.gz",
-      "sha256": "0f57c9b0db052b9db8b80ca554771cc54db1aca98d5099edc556499d927a5c41",
-      "bytes": 1680930
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/seed_metrics.csv",
-      "sha256": "583ccff23e1dace0e525d2fab1d8e0b78c125ebd4754491b08b08cef8aad7243",
-      "bytes": 57622
-    },
-    {
-      "path": "results/dqn_validation_confirmatory/summary.csv",
-      "sha256": "76be6e84cdd0b8b85c6726246ed1dde8facc00861bf94a415e3652f53ae35f24",
-      "bytes": 4828
-    },
-    {
-      "path": "results/dqn_validation_minigrid/audit.json",
-      "sha256": "ca5c56b442a48d87ac739c12d072cb189b4648480e5d1cbeac1bbc9d8a3a13a8",
-      "bytes": 1392
-    },
-    {
-      "path": "results/dqn_validation_minigrid/cross_environment.csv",
-      "sha256": "009e293166b86d5ee13e5a38dddb292d76ca8cad2b55206c43018c743c52b776",
-      "bytes": 292
-    },
-    {
-      "path": "results/dqn_validation_minigrid/heavy_tail_diagnostics.csv",
-      "sha256": "bc6989c5988d6ef5044b2335196a61306ffbe7f0e7ae6e7f35917c91442fe036",
-      "bytes": 338
-    },
-    {
-      "path": "results/dqn_validation_minigrid/learning_curve_MiniGrid-Empty-5x5.png",
-      "sha256": "b0f1a13c719efd6763f7911dd08cc9cf9ec23bbc13a665f5c6ab328204cb0a11",
-      "bytes": 60634
-    },
-    {
-      "path": "results/dqn_validation_minigrid/metadata.json",
-      "sha256": "c4a17016a16213fd73f81fde14db84d4f4baca878a81eaf80c0a66900a069ffa",
-      "bytes": 2346
-    },
-    {
-      "path": "results/dqn_validation_minigrid/pairwise.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/dqn_validation_minigrid/planned_contrasts.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/dqn_validation_minigrid/raw.csv.gz",
-      "sha256": "4926e95a6c2f7593597c21c841686533b5bf841876e58ecb00025e0dcfd879cf",
-      "bytes": 158858
-    },
-    {
-      "path": "results/dqn_validation_minigrid/seed_metrics.csv",
-      "sha256": "958d25e33df0c21664519fd286013b775017eb1efaf0de198c153c4e2489e9b4",
-      "bytes": 4672
-    },
-    {
-      "path": "results/dqn_validation_minigrid/summary.csv",
-      "sha256": "89755de2aa71bee2ddd8c4dfe4f2950c588c9030ac18c9fd98ed450a507d83f0",
-      "bytes": 869
-    },
-    {
-      "path": "results/external_minigrid/audit.json",
-      "sha256": "8dd4bd6be36a7e5259eb94c2ee583b8c51de03513e08e8aff4b6a2ebb8036f8e",
-      "bytes": 1389
-    },
-    {
-      "path": "results/external_minigrid/cross_environment.csv",
-      "sha256": "13b81fe0601f5efe4130c06f18ee3a2c025ff9925bc86d021e9c83418d3704f5",
-      "bytes": 655
-    },
-    {
-      "path": "results/external_minigrid/heavy_tail_diagnostics.csv",
-      "sha256": "d3567a068e1d6e713afb77049aef6037a911f48233d109d7a7921f5c43df46e9",
-      "bytes": 1074
-    },
-    {
-      "path": "results/external_minigrid/learning_curve_MiniGrid-Empty-5x5.png",
-      "sha256": "3e62436b75b42ff898ad873bf24c182591ddfd84822f4339799488ebb771a7d0",
-      "bytes": 198405
-    },
-    {
-      "path": "results/external_minigrid/metadata.json",
-      "sha256": "80f79faa267d4435e49affe12db0ddf65866e9257b197ee6776f8a3a07d0acaf",
-      "bytes": 3515
-    },
-    {
-      "path": "results/external_minigrid/pairwise.csv",
-      "sha256": "94ce1f1bc458c62fba77bedfa1d65e536273f0315ba7c90811ac9838176ed068",
-      "bytes": 4749
-    },
-    {
-      "path": "results/external_minigrid/planned_contrasts.csv",
-      "sha256": "c6fad4a76be2381ff93dd93358d6efc10324c5b149f4bef3465e36921186cb86",
-      "bytes": 927
-    },
-    {
-      "path": "results/external_minigrid/raw.csv.gz",
-      "sha256": "817fc01a6d538facdaddb2feec01d06f4a9b5cec9ebf5ae890ad395cf6dd3607",
-      "bytes": 972637
-    },
-    {
-      "path": "results/external_minigrid/seed_metrics.csv",
-      "sha256": "621e30b1d1cecf79e3387052eb017ed985d647475646dd5afd00a6c282f3e3f5",
-      "bytes": 16891
-    },
-    {
-      "path": "results/external_minigrid/summary.csv",
-      "sha256": "929cd225d6563314df8a3f47be9d103d128e9e5e61a1d0088fad215628e0decd",
-      "bytes": 5105
-    },
-    {
       "path": "results/minigrid_extended_diagnostic/audit.json",
-      "sha256": "fcef8e66b55bac49dd1b241b5d831dff5fbe7a3cab5c8a674d0a199480f4563d",
-      "bytes": 1422
+      "sha256": "a4f9b910ad22517d0c581670106afa46fa36ad8f772e3e6b2d1c634a2488b008",
+      "bytes": 1420
     },
     {
       "path": "results/minigrid_extended_diagnostic/cross_environment.csv",
@@ -808,124 +408,9 @@
       "bytes": 59008
     },
     {
-      "path": "results/minigrid_supplemental/audit.json",
-      "sha256": "1ded3619b1295a5cf9b3e96a1a94d68a0519d8221353c4c571c49f4b46007afd",
-      "bytes": 1394
-    },
-    {
-      "path": "results/minigrid_supplemental/cross_environment.csv",
-      "sha256": "fe8b7663af42b07fe4c035b4b1e8147e867bcf68233cc699ba23fa817d958c29",
-      "bytes": 540
-    },
-    {
-      "path": "results/minigrid_supplemental/heavy_tail_diagnostics.csv",
-      "sha256": "7b9ce063e7020f4325c723931b38ddec15794503c260b889050630d51023e9a1",
-      "bytes": 976
-    },
-    {
-      "path": "results/minigrid_supplemental/learning_curve_MiniGrid-Empty-5x5.png",
-      "sha256": "6d9bfba8081ec0704f5d07c2224b1ec5baabc0c810325edad185523725c6b39d",
-      "bytes": 104740
-    },
-    {
-      "path": "results/minigrid_supplemental/metadata.json",
-      "sha256": "1fb71820ad4ad097827ed7d3f5f739e74c3e3d8f01096ad727de9a70fbf0f917",
-      "bytes": 2822
-    },
-    {
-      "path": "results/minigrid_supplemental/pairwise.csv",
-      "sha256": "3fe676b2c00481acfd02b501f373d8b9dce18b35335aeedcd2d02bc8c7da9e38",
-      "bytes": 2976
-    },
-    {
-      "path": "results/minigrid_supplemental/planned_contrasts.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/minigrid_supplemental/raw.csv.gz",
-      "sha256": "5d26a20841a434174c8154c5a95a2ac8d9b709ed3e5544562154836d405aa995",
-      "bytes": 558826
-    },
-    {
-      "path": "results/minigrid_supplemental/seed_metrics.csv",
-      "sha256": "aaa942e67deb9cf4691f36ff631a7ff023ebdcda04a3a1ef12cb497be105ac67",
-      "bytes": 13842
-    },
-    {
-      "path": "results/minigrid_supplemental/summary.csv",
-      "sha256": "b96f0d37d0a4a775015345e13faa887d7d8ba96a0b7638f7e522e3b8275b36d2",
-      "bytes": 4501
-    },
-    {
-      "path": "results/support_abstention_confirmatory/audit.json",
-      "sha256": "07644b058869eb9e95603b99513e020fddc8740a03e0f3e49507a509c55eaa31",
-      "bytes": 1416
-    },
-    {
-      "path": "results/support_abstention_confirmatory/cross_environment.csv",
-      "sha256": "b8a276bd080608959e8c1c0ab4b7be59a0f10437dc1e403706e5bcf41944e097",
-      "bytes": 286
-    },
-    {
-      "path": "results/support_abstention_confirmatory/heavy_tail_diagnostics.csv",
-      "sha256": "e1904a75293988e60b657070b5d99a74f002ef8c8de6df71775c2c90d371d035",
-      "bytes": 1491
-    },
-    {
-      "path": "results/support_abstention_confirmatory/learning_curve_CliffWalking-v1.png",
-      "sha256": "ddbcfa2821f2306d3e76cbf018114325ffb898e5b977a65474f761f855f64418",
-      "bytes": 59375
-    },
-    {
-      "path": "results/support_abstention_confirmatory/learning_curve_FourRooms-7-unseen-goals.png",
-      "sha256": "f8db516d2461405c44a84d75affe088f23b890a26ef35837daa78cd045942d99",
-      "bytes": 63506
-    },
-    {
-      "path": "results/support_abstention_confirmatory/learning_curve_FourRooms-9-slip-unseen-goals.png",
-      "sha256": "2f6ea73b0c1d6260c64847e011dffd89c55ac7c683b2b9b56cfbbd1858130fd2",
-      "bytes": 65737
-    },
-    {
-      "path": "results/support_abstention_confirmatory/learning_curve_FrozenLake-v1.png",
-      "sha256": "4676cc73f625864a60eeef14d9c30d8541bb7a7e1eb27081d0a01ec7e51d1bb8",
-      "bytes": 57913
-    },
-    {
-      "path": "results/support_abstention_confirmatory/metadata.json",
-      "sha256": "9e49e22593ad9f857b801c211d872d25963eb1094caf1f77055345f65439dae8",
-      "bytes": 3565
-    },
-    {
-      "path": "results/support_abstention_confirmatory/pairwise.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/support_abstention_confirmatory/planned_contrasts.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/support_abstention_confirmatory/raw.csv.gz",
-      "sha256": "598d6ede3d47cd229809332ab762109395ff70c7c7e7b072dfc435e0e1c888ce",
-      "bytes": 2405960
-    },
-    {
-      "path": "results/support_abstention_confirmatory/seed_metrics.csv",
-      "sha256": "9e86710e3a603c29870b2ae185b9f754f42dd06dae21a90016dfd9b5460f9d41",
-      "bytes": 62305
-    },
-    {
-      "path": "results/support_abstention_confirmatory/summary.csv",
-      "sha256": "84ff127e6148df8dde19355e48ba7505e21002b02dc00c005a6c8b5dfd2396c2",
-      "bytes": 8261
-    },
-    {
       "path": "results/support_abstention_replication/audit.json",
-      "sha256": "8c12e86898d2ebda39d83ed926151619acf61e5056ae40af0f0167da9ac29894",
-      "bytes": 1427
+      "sha256": "9201600990aa0ae58eff6ccce8970c472052f68106598e391f1f031647cbf37f",
+      "bytes": 1425
     },
     {
       "path": "results/support_abstention_replication/cross_environment.csv",
@@ -988,124 +473,9 @@
       "bytes": 47974
     },
     {
-      "path": "results/tau_sensitivity_compact/audit.json",
-      "sha256": "10083e67d0bc509c0ff536624c6f1b572198efcc96d08ff5b452258f3723ca5d",
-      "bytes": 1406
-    },
-    {
-      "path": "results/tau_sensitivity_compact/cross_environment.csv",
-      "sha256": "78e5db43c203d86607228445401241eafb47bf40bdb3b091a93cee1cf7f67c38",
-      "bytes": 1069
-    },
-    {
-      "path": "results/tau_sensitivity_compact/heavy_tail_diagnostics.csv",
-      "sha256": "542048f8f546d563e4ace69d58ce63d17a1dea6b7f950062ade8b70755041aa4",
-      "bytes": 7489
-    },
-    {
-      "path": "results/tau_sensitivity_compact/learning_curve_CliffWalking-v1.png",
-      "sha256": "5bf0f3c2c32f36c99a4823d7895a2a00cac79d7fcade355d0dd99c3cb60bcec0",
-      "bytes": 113276
-    },
-    {
-      "path": "results/tau_sensitivity_compact/learning_curve_FourRooms-7-unseen-goals.png",
-      "sha256": "7278cde001851a4779dc72ab9b48070ad9ab9de80d064e79c858bab79a9a338c",
-      "bytes": 98241
-    },
-    {
-      "path": "results/tau_sensitivity_compact/learning_curve_FourRooms-9-slip-unseen-goals.png",
-      "sha256": "6ca6fc1dc94a1069d2dd4d61ee076fc2b12399ae06bed622646b711bbb4c41c3",
-      "bytes": 113626
-    },
-    {
-      "path": "results/tau_sensitivity_compact/learning_curve_FrozenLake-v1.png",
-      "sha256": "9a31164dabc92fc3cacac557f021482afd170e339acdf4312c2f945ae95a3102",
-      "bytes": 106485
-    },
-    {
-      "path": "results/tau_sensitivity_compact/metadata.json",
-      "sha256": "3c88ad52c3adeaf5812e1f740e632b047d09057bcea7832594535ac1de907b73",
-      "bytes": 5360
-    },
-    {
-      "path": "results/tau_sensitivity_compact/pairwise.csv",
-      "sha256": "2f1c517f7539dd6a3b1ab484a2e3ba8ca3be4413e78b90adaecac9c0c9e1b99b",
-      "bytes": 44434
-    },
-    {
-      "path": "results/tau_sensitivity_compact/planned_contrasts.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/tau_sensitivity_compact/raw.csv.gz",
-      "sha256": "95850fcade8a5a5b75eec7617df8dcd003e21f8c8bf12903bf001c86069532cc",
-      "bytes": 2073290
-    },
-    {
-      "path": "results/tau_sensitivity_compact/seed_metrics.csv",
-      "sha256": "ade5a05439afa7009447fb367c9120e781065967665552b885b46e868b21f3b2",
-      "bytes": 55267
-    },
-    {
-      "path": "results/tau_sensitivity_compact/summary.csv",
-      "sha256": "e1db2ca57b398dac955dd234b36822ddda7693bbad31bfb7985cdecfab27bac3",
-      "bytes": 40960
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/audit.json",
-      "sha256": "c3fb1ba1e6895edb03b06fa827f355aabb31a64babae1e1297ade46da15f2ef7",
-      "bytes": 1404
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/cross_environment.csv",
-      "sha256": "4d858a6e46eb922d9f8e3400b76138a38cf0a36ea0ae0ec93299d1200576a6bc",
-      "bytes": 1041
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/heavy_tail_diagnostics.csv",
-      "sha256": "2771e05886dd854d0315672651fa5b1f21f981ea2741ffce00851c0165cbaedf",
-      "bytes": 1831
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/learning_curve_MiniGrid-Empty-5x5.png",
-      "sha256": "3d6ae040db503b693b05ea2024f6ed2000d829320f23836815333a1bc3ea8bca",
-      "bytes": 122105
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/metadata.json",
-      "sha256": "1e984c207b5374fa276d836a3a66dfbcc83e79684ad8fbc9e75bfd736abd3af1",
-      "bytes": 4308
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/pairwise.csv",
-      "sha256": "4a41880c2ad370d8d6a773870ca3ed0c9ec6269d3984c4b54e3587d576cb8854",
-      "bytes": 11040
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/planned_contrasts.csv",
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
-      "bytes": 2
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/raw.csv.gz",
-      "sha256": "5206a4cf519bb2a6e1352c676ba14ec0e755a942255947f153d4c9dc9d60c5be",
-      "bytes": 913079
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/seed_metrics.csv",
-      "sha256": "5fd40809844a09ecd16afa05c8bc1deb2c814e6d5b9327484f1f897c6019f746",
-      "bytes": 13927
-    },
-    {
-      "path": "results/tau_sensitivity_minigrid/summary.csv",
-      "sha256": "0a9676a44dc9637a533abbb0e53e2abc0ab3289e9e0e6485d7ed0bbc97b9b89b",
-      "bytes": 10097
-    },
-    {
       "path": "REVISION_LOG_MLWA.md",
-      "sha256": "3648b60fa349ccfbd6a373d38c5b278e3fb8d457349914550e8b49cc006dfa77",
-      "bytes": 8095
+      "sha256": "ecba2de4cc187a74f63741c91e1b27980ab194301618e8f37ddb3ad2c1173a3b",
+      "bytes": 8034
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1114,8 +484,8 @@
     },
     {
       "path": "scripts/audit_artifact.py",
-      "sha256": "5594903beba3b444334999a6c9d7133f51ae6b478693b402623b1814cdeb6919",
-      "bytes": 4503
+      "sha256": "180b309be9d56190a8a2a1da24d25209e0a6b08745776c0338b1eae7ce1334e0",
+      "bytes": 3953
     },
     {
       "path": "scripts/audit_results.py",
@@ -1123,14 +493,9 @@
       "bytes": 7400
     },
     {
-      "path": "scripts/migrate_legacy_results.py",
-      "sha256": "0e465bc86bc3a3835e2e8af570e2b37ba716026554518f09ed8fba61a62d7a89",
-      "bytes": 5216
-    },
-    {
       "path": "scripts/reproduce_all.py",
-      "sha256": "106cdcbcd69cf22183a3905d6b3e0ae4b734128246c717634934fec89d612ece",
-      "bytes": 3181
+      "sha256": "66a18eb947b30c9163199336ce0b902b91d67eb9b8323efa50f28e20b2833db7",
+      "bytes": 2809
     },
     {
       "path": "scripts/run_benchmark.py",

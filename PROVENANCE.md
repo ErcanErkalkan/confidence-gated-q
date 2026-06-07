@@ -34,12 +34,13 @@ experiment provenance.
 
 ## Result Preservation
 
-Per-run shards are retained locally for resumability and ignored by Git.
-Combined public raw data are stored as lossless `raw.csv.gz` files where plain
-CSV size would exceed practical hosting limits. Aggregation and audit scripts
-read compressed files directly.
+Per-run shards are omitted after aggregation because the committed
+`raw.csv.gz` files preserve every public row needed for reaggregation and
+auditing. Aggregation and audit scripts read compressed files directly.
 
-Existing pre-revision result directories are retained and are not overwritten.
+Only the five frozen MLWA evidence directories are retained in the current
+artifact. Superseded exploratory and sensitivity families remain recoverable
+from the archived `v1.3.0` release and Git history.
 
 ## Generative AI Disclosure
 

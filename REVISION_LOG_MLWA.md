@@ -28,8 +28,7 @@
 - Added success-rate AUC, reproducible bootstrap intervals, median
   differences, win/loss/tie counts, Wilcoxon sensitivity, heavy-tail
   diagnostics, catastrophic outlier counts, and cross-environment ranks.
-- Added lossless `raw.csv.gz` support and a deterministic legacy-schema
-  migration.
+- Added lossless `raw.csv.gz` support for the frozen MLWA evidence families.
 - Made result audits work both with resumable shards and clean-clone raw data.
 
 ### Configurations
@@ -44,9 +43,9 @@
 
 - All five MLWA revision families were fully executed.
 - No smoke result was substituted for a full result.
-- Existing result families were preserved and migrated without changing
-  numerical outcomes.
-- All 15 result-family audits pass.
+- The five manuscript result families were preserved without changing
+  numerical outcomes; superseded exploratory families were removed later.
+- All five current result-family audits pass.
 - Public raw data are losslessly compressed where appropriate.
 
 ### Manuscript
@@ -145,27 +144,25 @@ Total revision runs: 3,415 method-environment-seed runs.
 7. **Are all files reproducible?** Yes. Configs, raw data, summaries,
    provenance, tests, generation commands, and audits are present.
 8. **Are remaining research-package pieces missing?** No. Journal portal form
-   entry and minting a new Zenodo version are external account actions; the
-   source release and metadata are prepared.
+   entry is the only external account action. GitHub release `v1.3.0` and
+   Zenodo DOI `10.5281/zenodo.20581705` are published.
 
 ## Validation
 
 - Tests: 22 passed.
-- Result audits: 15 passed.
+- Result audits: 5 passed.
 - Artifact audit: PASS.
 - LaTeX: complete `pdflatex/bibtex/pdflatex/pdflatex` build passed.
 - LaTeX log: no overfull boxes, undefined citations, or undefined references.
 - PDF: 18 pages.
 - Submission audit: PASS.
-- Submission ZIP SHA-256:
-  `420a354fbaec6c845a6efa8db5af3945e1f5451649a255f2eefac3cd4a1f8c08`.
+- Submission ZIP SHA-256 is recorded alongside the generated ZIP.
 
 ## Failed Commands and Resolutions
 
-- The first final quick audit rejected legacy CSVs because they lacked the new
-  provenance schema. A deterministic migration added only derivable metadata,
-  preserved numerical values, compressed the files losslessly, and all audits
-  then passed.
+- Earlier legacy CSVs were migrated without numerical changes during the
+  revision. Those superseded result families are no longer part of the current
+  manuscript artifact.
 - The first package audit found a prohibited promotional phrase in a
   "claims not made" list. It was replaced with neutral wording and the clean
   package audit passed.
