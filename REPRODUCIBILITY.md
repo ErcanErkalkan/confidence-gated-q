@@ -43,6 +43,9 @@ python scripts/run_benchmark.py --config configs/dqn_strong_validation.json
 python scripts/run_benchmark.py --config configs/confirmatory_extended_compact.json
 python scripts/run_benchmark.py --config configs/support_abstention_replication.json
 python scripts/run_benchmark.py --config configs/minigrid_extended_diagnostic.json
+python scripts/run_application_case_study.py --config configs/application_navigation_case_study.json
+python scripts/run_adaptive_gate_validation.py --config configs/adaptive_gate_compact_validation.json
+python scripts/run_benchmark.py --config configs/cost_support_metrics.json
 ```
 
 Aggregate and audit one family:
@@ -67,6 +70,9 @@ python scripts/audit_results.py `
 - `confirmatory_replication_after_diagnostic_discovery`: new support-abstention
   seeds after the mechanism was discovered.
 - `post_hoc_extended_minigrid_diagnostic`: broader diagnostic evidence.
+- `confirmatory_application_case_study`: controlled deployment-goal shift.
+- `confirmatory_adaptive_gate_validation`: fuzzy-gate compact validation.
+- `descriptive_cost_and_support_analysis`: support, memory, and timing metrics.
 
 These labels are stored in config and result metadata and are not inferred from
 outcomes.
@@ -82,6 +88,9 @@ Measured cumulative training time across independent runs:
 | compact expansion | 4.95 h | 9.82 s | 60.67 s |
 | abstention replication | 4.21 h | 13.91 s | 80.89 s |
 | MiniGrid expansion | 6.75 h | 46.68 s | 165.42 s |
+| application navigation | 0.47 h | 11.47 s | 14.26 s |
+| adaptive gate validation | 0.95 h | 9.29 s | 13.30 s |
+| cost/support analysis | 0.32 h | 14.61 s | 22.38 s |
 
 Eight independent runs were normally scheduled in parallel. Wall time depends
 on CPU contention and storage.
@@ -104,6 +113,8 @@ From the complete local submission workspace:
 
 ```powershell
 python scripts/generate_asoc_assets.py
+python scripts/generate_asoc_strong_revision_tables.py
+python scripts/generate_asoc_strong_revision_figures.py
 ```
 
 This writes vector figures and LaTeX tables under `paper/figures/` and
@@ -125,6 +136,7 @@ pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex
 python scripts/audit_artifact.py --root . --output artifact_audit.json
 python scripts/package_release.py
 python scripts/audit_submission.py
+python scripts/audit_asoc_strong_revision.py
 ```
 
 The public artifact excludes journal-only paper and portal files.

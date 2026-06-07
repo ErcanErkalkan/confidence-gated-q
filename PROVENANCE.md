@@ -26,6 +26,9 @@ be copied into a release or supplement.
 | `results/confirmatory_extended_compact` | `configs/confirmatory_extended_compact.json` | 500-529 | rerun; PASS | `a867c4bd9a5206204e82b235e92cf9a3500d38ba` |
 | `results/support_abstention_replication` | `configs/support_abstention_replication.json` | 300-329; 400-429 | rerun; PASS | `a867c4bd9a5206204e82b235e92cf9a3500d38ba` |
 | `results/minigrid_extended_diagnostic` | `configs/minigrid_extended_diagnostic.json` | 500-509 | rerun; PASS | `a867c4bd9a5206204e82b235e92cf9a3500d38ba` |
+| `results/application_navigation_case_study` | `configs/application_navigation_case_study.json` | 600-629 | new; PASS | `b292c8d` |
+| `results/adaptive_gate_compact_validation` | `configs/adaptive_gate_compact_validation.json` | 700-729 | new; PASS | `b292c8d` |
+| `results/cost_support_metrics` | `configs/cost_support_metrics.json` | 800-809 | new; PASS | `b292c8d` |
 
 Each `metadata.json` records the complete config, config SHA-256, requested and
 resolved environment IDs, observation representation, platform, package
@@ -38,6 +41,6 @@ Per-run shards are omitted after aggregation because the committed
 `raw.csv.gz` files preserve every public row needed for reaggregation and
 auditing. Aggregation and audit scripts read compressed files directly.
 
-Only the five frozen ASOC evidence directories are retained in the current
+Only the eight current ASOC evidence directories are retained in the current
 artifact. Superseded exploratory and sensitivity families remain recoverable
 from the archived `v1.3.0` release and Git history.

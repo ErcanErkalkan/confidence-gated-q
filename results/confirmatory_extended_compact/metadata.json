@@ -8,7 +8,7 @@
   "torch_threads": 1,
   "cpu_count": 12,
   "processor": "Intel64 Family 6 Model 165 Stepping 3, GenuineIntel",
-  "config_sha256": "202d84f4b90604128020009382aa7ee9ed01b570976d19d4214212831a4193b6",
+  "config_sha256": "bc8644f6f7c200bafd693324b1e834c9bd894e3e947ada7e667ca9f52cbf7354",
   "config_file": "configs/confirmatory_extended_compact.json",
   "git_commit_hash": "a867c4bd9a5206204e82b235e92cf9a3500d38ba",
   "package_version": "1.3.0.dev0",

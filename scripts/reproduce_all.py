@@ -14,6 +14,9 @@ CONFIGS = [
     "confirmatory_extended_compact.json",
     "support_abstention_replication.json",
     "minigrid_extended_diagnostic.json",
+    "application_navigation_case_study.json",
+    "adaptive_gate_compact_validation.json",
+    "cost_support_metrics.json",
 ]
 
 
@@ -81,6 +84,7 @@ def quick_check() -> None:
         "--output",
         "artifact_audit.json",
     )
+    run("scripts/audit_asoc_strong_revision.py")
 
 
 def main() -> None:

@@ -8,7 +8,7 @@
   "torch_threads": 1,
   "cpu_count": 12,
   "processor": "Intel64 Family 6 Model 165 Stepping 3, GenuineIntel",
-  "config_sha256": "e0810ae66764f75247a2bece12f6593c32857b20b72314131f416f99ab82d2bb",
+  "config_sha256": "f93b2ef225c78657d2a95e0a52cc362cba223d145cb41eb0bda3c2167bc03569",
   "config_file": "configs/dqn_tuning_development.json",
   "git_commit_hash": "050aa5196aa8789a1a06cd3bd9bef41fcc20b784",
   "package_version": "1.3.0.dev0",

@@ -1,9 +1,9 @@
 {
-  "title": "Support-Aware Exact-State Memory for Deep Q-Learning: Reproducibility Artifact",
-  "description": "Code, exact-step results, independent DQN validation, confirmatory task expansion, support-abstention replication, extended MiniGrid diagnostics, and integrity audits for a reproducible boundary analysis of tabular-neural Q-learning gates.",
+  "title": "Support-Aware Neuro-Memory Reinforcement Learning under Support Shift: Reproducibility Artifact",
+  "description": "Code, exact-step results, an application-inspired navigation case, fuzzy adaptive arbitration, support and cost metrics, compact and MiniGrid validation, and integrity audits for a soft-computing boundary analysis.",
   "upload_type": "software",
   "publication_date": "2026-06-07",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "license": "MIT",
   "creators": [
     {
@@ -19,7 +19,7 @@
       "scheme": "url"
     },
     {
-      "identifier": "10.5281/zenodo.20578928",
+      "identifier": "10.5281/zenodo.20581705",
       "relation": "isNewVersionOf",
       "scheme": "doi"
     }
@@ -30,6 +30,8 @@
     "deep Q-network",
     "episodic memory",
     "support shift",
+    "fuzzy adaptive gate",
+    "neuro-memory reinforcement learning",
     "abstention",
     "negative results",
     "reproducibility"

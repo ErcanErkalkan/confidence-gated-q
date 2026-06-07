@@ -9,8 +9,8 @@
   "violations": [],
   "files": {
     "seed_metrics.csv": {
-      "sha256": "6ff3e3554fa19155fe07867c77a44e6dd6fb0729bf0bafbd7af251b8939c3dc5",
-      "bytes": 713030
+      "sha256": "1d79979048ebfe8b07dcd4786eed469b5582c6929f592c872db0711b145e2242",
+      "bytes": 736908
     },
     "summary.csv": {
       "sha256": "364aec0e86bf30b9cf65de6af73af129fb06d46ebd8057cbafbec7d9014064bd",
@@ -33,8 +33,8 @@
       "bytes": 1322
     },
     "metadata.json": {
-      "sha256": "9a2f85231f151068f4ee28b40d1f37779611f8140bb06663b58f86cadc6d4070",
-      "bytes": 9099
+      "sha256": "3786c1c1da4f68199ab319104d3da7d71501a5f0d533c55f0ebcd1e805438a7e",
+      "bytes": 8770
     },
     "raw.csv.gz": {
       "sha256": "4b7a1286bb5c0aea4c837309fcad624f0505749c0b19f542fb885a58efc8b600",

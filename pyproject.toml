@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "confidence-gated-q"
-version = "1.3.0"
-description = "Reproducible boundary analysis of exact-state memory and DQN"
+version = "1.4.0"
+description = "Support-aware neuro-memory RL under exact-state support shift"
 requires-python = ">=3.10"
 authors = [
   {name = "Ercan Erkalkan", email = "ercan.erkalkan@marmara.edu.tr"},

@@ -10,9 +10,15 @@ paper/
 submission_clean_asoc/
 submission_clean_asoc.zip
 submission_clean_asoc.zip.sha256
+submission_clean_asoc_strong_revision/
+submission_clean_asoc_strong_revision.zip
+research_asoc_strong_revision.zip
+asoc_separate_figures_for_upload.zip
+asoc_strong_revision_checksums.sha256
 submission_audit.json
 submission_audit.md
 FINAL_SUBMISSION_CHECK.md
 scripts/audit_submission.py
 scripts/generate_asoc_assets.py
 scripts/package_release.py
+paper/manuscript_asoc_strong_revision.pdf
