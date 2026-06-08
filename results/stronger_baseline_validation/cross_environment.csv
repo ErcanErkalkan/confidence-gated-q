@@ -1,0 +1,10 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+a2c_actor_critic,return_auc,2,1.5,1.5,1.0,2.0
+dueling_double_dqn,return_auc,2,3.0,3.0,3.0,3.0
+validated_dqn,return_auc,2,1.5,1.5,1.0,2.0
+a2c_actor_critic,success_rate_auc,2,2.0,2.0,1.5,2.5
+dueling_double_dqn,success_rate_auc,2,2.75,2.75,2.5,3.0
+validated_dqn,success_rate_auc,2,1.25,1.25,1.0,1.5
+a2c_actor_critic,mean_return,2,1.75,1.75,1.0,2.5
+dueling_double_dqn,mean_return,2,2.75,2.75,2.5,3.0
+validated_dqn,mean_return,2,1.5,1.5,1.0,2.0

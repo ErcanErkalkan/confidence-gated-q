@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from hybrid_q.agents import AgentConfig, DQNAgent, HybridQAgent, TabularQAgent
+from hybrid_q.agents import A2CAgent, AgentConfig, DQNAgent, HybridQAgent, TabularQAgent
 
 
 def test_tabular_update_moves_toward_reward():
@@ -206,3 +206,52 @@ def test_vanilla_dqn_uses_target_network_maximum():
     agent.target = FixedQNetwork([10.0, 0.0])
     values = agent._next_values(torch.zeros((1, 2)))
     assert values.item() == 10.0
+
+
+def test_approximate_support_gate_retrieves_nearby_memory():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(
+            replay_warmup=100,
+            approximate_support_k=1,
+            approximate_support_bandwidth=10.0,
+            approximate_support_tau=1.0,
+        ),
+        gate_kind="approx_count",
+    )
+    seen = np.array([1.0, 0.0], dtype=np.float32)
+    nearby = np.array([0.9, 0.1], dtype=np.float32)
+    next_state = np.array([0.0, 1.0], dtype=np.float32)
+    agent.observe(seen, "seen", 1, 2.0, next_state, "next", True)
+    values = agent.q_values(nearby, "unseen_nearby")
+    decision = agent.decision_diagnostics()
+    assert decision["unsupported_state"] == 1.0
+    assert decision["memory_branch_weight"] > 0.0
+    assert values[1] > values[0]
+
+
+def test_dueling_dqn_network_outputs_action_values():
+    agent = DQNAgent(
+        input_dim=3,
+        action_dim=4,
+        seed=0,
+        config=AgentConfig(network_architecture="dueling_mlp"),
+    )
+    values = agent.q_values(np.zeros(3, dtype=np.float32), "s")
+    assert values.shape == (4,)
+
+
+def test_a2c_agent_updates_online():
+    agent = A2CAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(learning_rate=0.001),
+    )
+    state = np.array([1.0, 0.0], dtype=np.float32)
+    next_state = np.array([0.0, 1.0], dtype=np.float32)
+    agent.observe(state, "s", 0, 1.0, next_state, "next", True)
+    assert agent.gradient_updates == 1
+    assert agent.environment_steps == 1

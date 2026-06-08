@@ -32,7 +32,21 @@ class AgentConfig:
     fuzzy_uncertainty_scale: float = 1.0
     fuzzy_abstain_threshold: float = 0.5
     fuzzy_abstain_zero_support: bool = True
+    fuzzy_membership_shape: str = "triangular"
+    fuzzy_consequents: tuple[float, float, float, float, float] = (
+        0.0,
+        0.35,
+        0.65,
+        0.75,
+        0.95,
+    )
+    approximate_support_k: int = 5
+    approximate_support_bandwidth: float = 0.25
+    approximate_support_tau: float = 2.0
     abstain_action: int = -1
+    network_architecture: str = "mlp"
+    a2c_value_coef: float = 0.5
+    a2c_entropy_coef: float = 0.01
 
 
 class ReplayBuffer:
@@ -72,6 +86,42 @@ class QNetwork(nn.Module):
 
     def forward(self, states: torch.Tensor) -> torch.Tensor:
         return self.layers(states)
+
+
+class DuelingQNetwork(nn.Module):
+    def __init__(self, input_dim: int, action_dim: int, hidden_size: int):
+        super().__init__()
+        self.trunk = nn.Sequential(
+            nn.Linear(input_dim, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, hidden_size),
+            nn.ReLU(),
+        )
+        self.value = nn.Linear(hidden_size, 1)
+        self.advantage = nn.Linear(hidden_size, action_dim)
+
+    def forward(self, states: torch.Tensor) -> torch.Tensor:
+        features = self.trunk(states)
+        value = self.value(features)
+        advantage = self.advantage(features)
+        return value + advantage - advantage.mean(dim=1, keepdim=True)
+
+
+class ActorCriticNetwork(nn.Module):
+    def __init__(self, input_dim: int, action_dim: int, hidden_size: int):
+        super().__init__()
+        self.trunk = nn.Sequential(
+            nn.Linear(input_dim, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, hidden_size),
+            nn.ReLU(),
+        )
+        self.policy = nn.Linear(hidden_size, action_dim)
+        self.value = nn.Linear(hidden_size, 1)
+
+    def forward(self, states: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        features = self.trunk(states)
+        return self.policy(features), self.value(features).squeeze(-1)
 
 
 class BaseAgent:
@@ -251,10 +301,15 @@ class DQNAgent(BaseAgent):
         self.config = config
         torch.manual_seed(seed)
         self.device = torch.device("cpu")
-        self.online = QNetwork(input_dim, action_dim, config.hidden_size).to(
+        network_cls = (
+            DuelingQNetwork
+            if config.network_architecture == "dueling_mlp"
+            else QNetwork
+        )
+        self.online = network_cls(input_dim, action_dim, config.hidden_size).to(
             self.device
         )
-        self.target = QNetwork(input_dim, action_dim, config.hidden_size).to(
+        self.target = network_cls(input_dim, action_dim, config.hidden_size).to(
             self.device
         )
         self.target.load_state_dict(self.online.state_dict())
@@ -362,6 +417,100 @@ class DQNAgent(BaseAgent):
         self.gradient_updates += 1
 
 
+class A2CAgent(BaseAgent):
+    def __init__(
+        self,
+        input_dim: int,
+        action_dim: int,
+        seed: int,
+        config: AgentConfig,
+    ):
+        super().__init__(action_dim, seed)
+        self.config = config
+        torch.manual_seed(seed)
+        self.device = torch.device("cpu")
+        self.network = ActorCriticNetwork(
+            input_dim, action_dim, config.hidden_size
+        ).to(self.device)
+        self.optimizer = torch.optim.Adam(
+            self.network.parameters(), lr=config.learning_rate
+        )
+
+    def policy_logits_and_value(
+        self, state: np.ndarray
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        tensor = torch.as_tensor(
+            state, dtype=torch.float32, device=self.device
+        ).unsqueeze(0)
+        logits, value = self.network(tensor)
+        return logits.squeeze(0), value.squeeze(0)
+
+    def q_values(self, state: np.ndarray, key: Hashable) -> np.ndarray:
+        with torch.no_grad():
+            logits, _ = self.policy_logits_and_value(state)
+        self._record_decision(
+            key=key,
+            memory_weight=0.0,
+            neural_weight=1.0,
+        )
+        return logits.cpu().numpy()
+
+    def act(self, state: np.ndarray, key: Hashable, epsilon: float) -> int:
+        if self.rng.random() < epsilon:
+            return int(self.rng.integers(self.action_dim))
+        logits, _ = self.policy_logits_and_value(state)
+        if epsilon > 0.0:
+            distribution = torch.distributions.Categorical(logits=logits)
+            action = int(distribution.sample().item())
+        else:
+            action = int(torch.argmax(logits).item())
+        self._record_decision(
+            key=key,
+            memory_weight=0.0,
+            neural_weight=1.0,
+        )
+        return action
+
+    def observe(
+        self,
+        state: np.ndarray,
+        key: Hashable,
+        action: int,
+        reward: float,
+        next_state: np.ndarray,
+        next_key: Hashable,
+        done: bool,
+    ) -> None:
+        self.training_support.add(key)
+        logits, value = self.policy_logits_and_value(state)
+        with torch.no_grad():
+            _, next_value = self.policy_logits_and_value(next_state)
+            target = torch.tensor(
+                reward, dtype=torch.float32, device=self.device
+            )
+            if not done:
+                target = target + self.config.gamma * next_value
+        advantage = target - value
+        distribution = torch.distributions.Categorical(logits=logits)
+        log_prob = distribution.log_prob(
+            torch.tensor(action, dtype=torch.int64, device=self.device)
+        )
+        entropy = distribution.entropy()
+        policy_loss = -log_prob * advantage.detach()
+        value_loss = advantage.pow(2)
+        loss = (
+            policy_loss
+            + self.config.a2c_value_coef * value_loss
+            - self.config.a2c_entropy_coef * entropy
+        )
+        self.optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        nn.utils.clip_grad_norm_(self.network.parameters(), max_norm=10.0)
+        self.optimizer.step()
+        self.environment_steps += 1
+        self.gradient_updates += 1
+
+
 class HybridQAgent(DQNAgent):
     def __init__(
         self,
@@ -386,6 +535,7 @@ class HybridQAgent(DQNAgent):
         self.error_counts: defaultdict[Hashable, int] = defaultdict(int)
         self.global_tabular_error = self.config.reliability_prior
         self.global_neural_error = self.config.reliability_prior
+        self.state_vectors: dict[Hashable, np.ndarray] = {}
         self.gate_sum = 0.0
         self.gate_queries = 0
         self.support_queries = 0
@@ -420,19 +570,18 @@ class HybridQAgent(DQNAgent):
             np.clip(neural_error / (neural_error + scale), 0.0, 1.0)
         )
 
-        low_support = float(np.clip(1.0 - 2.0 * support, 0.0, 1.0))
-        medium_support = float(
-            np.clip(1.0 - abs(2.0 * support - 1.0), 0.0, 1.0)
+        low_support, medium_support, high_support = (
+            self._support_memberships(support)
         )
-        high_support = float(np.clip(2.0 * support - 1.0, 0.0, 1.0))
         low_uncertainty = 1.0 - uncertainty
         high_uncertainty = uncertainty
+        consequents = self.config.fuzzy_consequents
         rules = (
-            (low_support, 0.0),
-            (medium_support * low_uncertainty, 0.35),
-            (medium_support * high_uncertainty, 0.65),
-            (high_support * low_uncertainty, 0.75),
-            (high_support * high_uncertainty, 0.95),
+            (low_support, consequents[0]),
+            (medium_support * low_uncertainty, consequents[1]),
+            (medium_support * high_uncertainty, consequents[2]),
+            (high_support * low_uncertainty, consequents[3]),
+            (high_support * high_uncertainty, consequents[4]),
         )
         total_membership = sum(weight for weight, _ in rules)
         alpha = (
@@ -447,6 +596,48 @@ class HybridQAgent(DQNAgent):
         if count == 0:
             alpha = 0.0
         return alpha, support, uncertainty
+
+    def _support_memberships(self, support: float) -> tuple[float, float, float]:
+        if self.config.fuzzy_membership_shape == "shoulder":
+            low = float(1.0 / (1.0 + np.exp(12.0 * (support - 0.35))))
+            high = float(1.0 / (1.0 + np.exp(-12.0 * (support - 0.65))))
+            medium = float(max(0.0, 1.0 - max(low, high)))
+            return low, medium, high
+        if self.config.fuzzy_membership_shape != "triangular":
+            raise ValueError(
+                "fuzzy_membership_shape must be triangular or shoulder"
+            )
+        low = float(np.clip(1.0 - 2.0 * support, 0.0, 1.0))
+        medium = float(
+            np.clip(1.0 - abs(2.0 * support - 1.0), 0.0, 1.0)
+        )
+        high = float(np.clip(2.0 * support - 1.0, 0.0, 1.0))
+        return low, medium, high
+
+    def _approximate_support_and_values(
+        self, state: np.ndarray
+    ) -> tuple[float, np.ndarray]:
+        if not self.state_vectors:
+            return 0.0, np.zeros(self.action_dim, dtype=np.float32)
+        keys = list(self.state_vectors)
+        vectors = np.stack([self.state_vectors[item] for item in keys])
+        distances = np.linalg.norm(vectors - state[None, :], axis=1)
+        k = max(1, min(int(self.config.approximate_support_k), len(keys)))
+        nearest = np.argpartition(distances, k - 1)[:k]
+        bandwidth = max(float(self.config.approximate_support_bandwidth), 1e-8)
+        weights = np.exp(-0.5 * (distances[nearest] / bandwidth) ** 2)
+        mass = float(weights.sum())
+        if mass <= 1e-12:
+            return 0.0, np.zeros(self.action_dim, dtype=np.float32)
+        q_values = np.zeros(self.action_dim, dtype=np.float32)
+        for weight, index in zip(weights, nearest):
+            q_values += float(weight) * self.table[keys[int(index)]]
+        return mass, q_values / mass
+
+    def approximate_gate(self, state: np.ndarray) -> tuple[float, np.ndarray, float]:
+        mass, values = self._approximate_support_and_values(state)
+        gate = mass / (mass + max(float(self.config.approximate_support_tau), 1e-8))
+        return float(gate), values, mass
 
     def gate(self, key: Hashable) -> float:
         if self.gate_kind == "fixed":
@@ -496,6 +687,22 @@ class HybridQAgent(DQNAgent):
                 and uncertainty_score
                 >= self.config.fuzzy_abstain_threshold
             )
+        if self.gate_kind == "approx_count":
+            gate, approximate_values, approximate_mass = self.approximate_gate(state)
+            support_score = float(
+                approximate_mass
+                / (approximate_mass + max(self.config.approximate_support_tau, 1e-8))
+            )
+            self.gate_sum += gate
+            self.gate_queries += 1
+            self._record_decision(
+                key=key,
+                memory_weight=gate if approximate_mass > 0 else 0.0,
+                neural_weight=1.0 - gate,
+                support_score=support_score,
+            )
+            return gate * approximate_values + (1.0 - gate) * self.neural_q_values(state)
+
         gate = self.gate(key)
         self.gate_sum += gate
         self.gate_queries += 1
@@ -542,6 +749,8 @@ class HybridQAgent(DQNAgent):
         next_key: Hashable,
         done: bool,
     ) -> None:
+        if key not in self.state_vectors:
+            self.state_vectors[key] = np.asarray(state, dtype=np.float32).copy()
         current = self.table[key][action]
         bootstrap = 0.0 if done else float(self.table[next_key].max())
         target = reward + self.config.gamma * bootstrap
@@ -587,6 +796,7 @@ class HybridQAgent(DQNAgent):
         )
         states = len(self.table)
         entries = states * self.action_dim
+        vector_entries = sum(vector.size for vector in self.state_vectors.values())
         return {
             "mean_gate": mean_gate,
             "support_abstention_rate": support_abstention_rate,
@@ -598,6 +808,7 @@ class HybridQAgent(DQNAgent):
             "memory_cost_bytes_estimated": float(
                 entries * np.dtype(np.float32).itemsize
                 + states * np.dtype(np.int64).itemsize
+                + vector_entries * np.dtype(np.float32).itemsize
             ),
         }
 
@@ -619,6 +830,11 @@ def create_agent(
         return TabularQAgent(action_dim, seed, config)
     if kind == "dqn":
         return DQNAgent(input_dim, action_dim, seed, config)
+    if kind == "dueling_dqn":
+        config.network_architecture = "dueling_mlp"
+        return DQNAgent(input_dim, action_dim, seed, config)
+    if kind == "a2c":
+        return A2CAgent(input_dim, action_dim, seed, config)
     if kind == "double_dqn":
         config.double_dqn = True
         return DQNAgent(input_dim, action_dim, seed, config)
@@ -637,6 +853,10 @@ def create_agent(
     if kind == "reliability_gated":
         return HybridQAgent(
             input_dim, action_dim, seed, config, gate_kind="reliability"
+        )
+    if kind == "approx_count_gated":
+        return HybridQAgent(
+            input_dim, action_dim, seed, config, gate_kind="approx_count"
         )
     if kind == "fuzzy_support_adaptive_gate":
         return HybridQAgent(

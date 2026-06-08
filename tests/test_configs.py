@@ -15,6 +15,9 @@ CONFIGS = (
     "application_navigation_case_study.json",
     "adaptive_gate_compact_validation.json",
     "cost_support_metrics.json",
+    "approximate_support_baseline_validation.json",
+    "stronger_baseline_validation.json",
+    "fuzzy_sensitivity_ablation.json",
 )
 
 

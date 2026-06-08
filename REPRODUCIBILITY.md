@@ -134,9 +134,7 @@ pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex
 
 ```powershell
 python scripts/audit_artifact.py --root . --output artifact_audit.json
-python scripts/package_release.py
-python scripts/audit_submission.py
 python scripts/audit_asoc_strong_revision.py
 ```
 
-The public artifact excludes journal-only paper and portal files.
+The public artifact excludes journal-only paper and portal files. The journal submission package is verified separately before upload.

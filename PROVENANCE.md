@@ -13,7 +13,7 @@ be copied into a release or supplement.
 ## Persistent Identifiers
 
 - Repository: https://github.com/ErcanErkalkan/confidence-gated-q
-- Current version DOI: https://doi.org/10.5281/zenodo.20581705
+- Current public concept DOI: https://doi.org/10.5281/zenodo.20578927
 - Concept DOI: https://doi.org/10.5281/zenodo.20578927
 - Previous version DOI: https://doi.org/10.5281/zenodo.20578928
 
@@ -43,4 +43,4 @@ auditing. Aggregation and audit scripts read compressed files directly.
 
 Only the eight current ASOC evidence directories are retained in the current
 artifact. Superseded exploratory and sensitivity families remain recoverable
-from the archived `v1.3.0` release and Git history.
+from the previous archived release and Git history.

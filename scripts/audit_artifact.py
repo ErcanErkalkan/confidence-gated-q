@@ -56,9 +56,6 @@ EXCLUDED_FILES = {
     "research_asoc_strong_revision.zip",
     "asoc_separate_figures_for_upload.zip",
     "asoc_strong_revision_checksums.sha256",
-    "scripts/audit_submission.py",
-    "scripts/generate_asoc_assets.py",
-    "scripts/package_release.py",
 }
 
 

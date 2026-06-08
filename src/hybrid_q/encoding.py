@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Hashable
 
-import gymnasium as gym
+from .gym_compat import gym, spaces, HAS_GYMNASIUM
 import numpy as np
 
 

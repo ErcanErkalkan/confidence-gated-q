@@ -53,6 +53,67 @@ def style() -> None:
     )
 
 
+def _draw_application_map(axis) -> None:
+    size = 9
+    walls = {(4, y) for y in range(size)} | {(x, 4) for x in range(size)}
+    walls -= {(4, 1), (4, 7), (1, 4), (7, 4)}
+    starts = {(1, 3), (3, 1), (5, 7), (7, 5)}
+    train_goals = {(1, 1), (7, 1), (1, 7)}
+    shifted_goals = {(7, 7), (5, 5)}
+    risk_cells = {(2, 2), (2, 6), (6, 2), (6, 6)}
+    for y in range(size):
+        for x in range(size):
+            face = "white"
+            label = ""
+            if (x, y) in walls:
+                face = "#455a64"
+            elif (x, y) in risk_cells:
+                face = "#ffe0b2"
+                label = "R"
+            elif (x, y) in train_goals:
+                face = "#c8e6c9"
+                label = "T"
+            elif (x, y) in shifted_goals:
+                face = "#ffcdd2"
+                label = "S"
+            elif (x, y) in starts:
+                face = "#bbdefb"
+                label = "A"
+            axis.add_patch(
+                Rectangle(
+                    (x, size - 1 - y),
+                    1,
+                    1,
+                    facecolor=face,
+                    edgecolor="#37474f",
+                    linewidth=0.6,
+                )
+            )
+            if label:
+                axis.text(
+                    x + 0.5,
+                    size - 1 - y + 0.5,
+                    label,
+                    ha="center",
+                    va="center",
+                    fontsize=8,
+                    fontweight="bold",
+                )
+    axis.set_xlim(0, size)
+    axis.set_ylim(0, size)
+    axis.set_aspect("equal")
+    axis.set_xticks([])
+    axis.set_yticks([])
+    axis.set_title("(a) Application layout")
+    axis.text(
+        0.0,
+        -0.9,
+        "A=start, T=training goal, S=shifted goal, R=risk, dark=wall",
+        fontsize=7.5,
+        transform=axis.transData,
+    )
+
+
 def application_figure() -> None:
     result_dir = RESULTS / "application_navigation_case_study"
     raw_path = result_dir / "raw.csv"
@@ -68,7 +129,8 @@ def application_figure() -> None:
         .mean()
         .reset_index()
     )
-    figure, axes = plt.subplots(1, 2, figsize=(11.2, 4.0))
+    figure, axes = plt.subplots(1, 3, figsize=(14.8, 4.0))
+    _draw_application_map(axes[0])
     for agent in ORDER:
         selected = checkpoint[checkpoint["agent"] == agent]
         curve = (
@@ -76,7 +138,7 @@ def application_figure() -> None:
             .agg(["mean", "sem"])
             .reset_index()
         )
-        axes[0].plot(
+        axes[1].plot(
             curve["checkpoint"],
             curve["mean"],
             label=NAMES[agent],
@@ -84,44 +146,44 @@ def application_figure() -> None:
             linewidth=1.8,
         )
         radius = 1.96 * curve["sem"].fillna(0)
-        axes[0].fill_between(
+        axes[1].fill_between(
             curve["checkpoint"],
             curve["mean"] - radius,
             curve["mean"] + radius,
             color=COLORS[agent],
             alpha=0.14,
         )
-    axes[0].set_title("(a) Deployment-shift learning curves")
-    axes[0].set_xlabel("Environment steps")
-    axes[0].set_ylabel("Evaluation return")
-    axes[0].grid(alpha=0.2)
-    axes[0].legend(frameon=False, ncol=2)
+    axes[1].set_title("(b) Deployment-shift learning curves")
+    axes[1].set_xlabel("Environment steps")
+    axes[1].set_ylabel("Evaluation return")
+    axes[1].grid(alpha=0.2)
+    axes[1].legend(frameon=False, ncol=2)
 
     final = summary[
         summary["metric"].isin(("success_rate", "collision_rate"))
     ].pivot(index="agent", columns="metric", values="mean")
     x = np.arange(len(ORDER))
     width = 0.36
-    axes[1].bar(
+    axes[2].bar(
         x - width / 2,
         final.loc[ORDER, "success_rate"],
         width,
         label="Success",
         color="#2ca02c",
     )
-    axes[1].bar(
+    axes[2].bar(
         x + width / 2,
         final.loc[ORDER, "collision_rate"],
         width,
         label="Collision",
         color="#d62728",
     )
-    axes[1].set_title("(b) Final deployment outcomes")
-    axes[1].set_ylabel("Rate")
-    axes[1].set_xticks(x, [NAMES[item] for item in ORDER], rotation=30)
-    axes[1].set_ylim(0, 1)
-    axes[1].grid(axis="y", alpha=0.2)
-    axes[1].legend(frameon=False)
+    axes[2].set_title("(c) Final deployment outcomes")
+    axes[2].set_ylabel("Rate")
+    axes[2].set_xticks(x, [NAMES[item] for item in ORDER], rotation=30)
+    axes[2].set_ylim(0, 1)
+    axes[2].grid(axis="y", alpha=0.2)
+    axes[2].legend(frameon=False)
     figure.tight_layout()
     figure.savefig(
         FIGURES / "Figure_05_Application_Case_Study.pdf",
@@ -179,7 +241,84 @@ def cost_support_figure() -> None:
     axes[0, 0].legend(frameon=False)
     figure.tight_layout()
     figure.savefig(
-        FIGURES / "Figure_06_Cost_Support_and_Unsupported_Ratio.pdf",
+        FIGURES / "Figure_07_Cost_Support_and_Unsupported_Ratio.pdf",
+        bbox_inches="tight",
+    )
+    plt.close(figure)
+
+
+def _fuzzy_alpha_grid(
+    tau_n: float,
+    kappa: float,
+    consequents: tuple[float, float, float, float, float],
+    shape: str = "triangular",
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    counts = np.linspace(0, 80, 121)
+    errors = np.linspace(0, 4, 121)
+    x, y = np.meshgrid(counts, errors)
+    support = 1.0 - np.exp(-x / tau_n)
+    uncertainty = y / (y + kappa + 1e-12)
+    if shape == "shoulder":
+        low = 1.0 / (1.0 + np.exp(12.0 * (support - 0.35)))
+        high = 1.0 / (1.0 + np.exp(-12.0 * (support - 0.65)))
+        medium = np.maximum(0.0, 1.0 - np.maximum(low, high))
+    else:
+        low = np.clip(1.0 - 2.0 * support, 0.0, 1.0)
+        medium = np.clip(1.0 - np.abs(2.0 * support - 1.0), 0.0, 1.0)
+        high = np.clip(2.0 * support - 1.0, 0.0, 1.0)
+    low_unc = 1.0 - uncertainty
+    high_unc = uncertainty
+    weights = [
+        low,
+        medium * low_unc,
+        medium * high_unc,
+        high * low_unc,
+        high * high_unc,
+    ]
+    numerator = sum(weight * value for weight, value in zip(weights, consequents))
+    denominator = sum(weights)
+    alpha = numerator / np.maximum(denominator, 1e-12)
+    alpha = np.clip(alpha, 0.05, 0.95)
+    alpha[x == 0] = 0.0
+    return x, y, alpha
+
+
+def fuzzy_sensitivity_figure() -> None:
+    settings = [
+        (5.0, 1.0, (0.0, 0.35, 0.65, 0.75, 0.95), "triangular", "Fast support"),
+        (20.0, 1.0, (0.0, 0.35, 0.65, 0.75, 0.95), "triangular", "Default"),
+        (80.0, 1.0, (0.0, 0.35, 0.65, 0.75, 0.95), "triangular", "Slow support"),
+        (20.0, 0.25, (0.0, 0.35, 0.65, 0.75, 0.95), "triangular", "Low kappa"),
+        (20.0, 4.0, (0.0, 0.35, 0.65, 0.75, 0.95), "triangular", "High kappa"),
+        (20.0, 1.0, (0.0, 0.20, 0.55, 0.65, 0.90), "shoulder", "Shape/consequent"),
+    ]
+    figure, axes = plt.subplots(
+        3, 2, figsize=(10.4, 10.2), constrained_layout=True
+    )
+    last = None
+    for index, (axis, (tau_n, kappa, consequents, shape, title)) in enumerate(
+        zip(axes.flat, settings)
+    ):
+        x, y, alpha = _fuzzy_alpha_grid(tau_n, kappa, consequents, shape)
+        last = axis.contourf(
+            x, y, alpha, levels=np.linspace(0, 1, 11), vmin=0, vmax=1
+        )
+        axis.set_title(f"{title}: tau_N={tau_n:g}, kappa={kappa:g}", fontsize=9)
+        axis.axvline(0, color="black", linewidth=0.9)
+        if index >= 4:
+            axis.set_xlabel("Exact-state count N(s)")
+        else:
+            axis.set_xlabel("")
+        if index % 2 == 0:
+            axis.set_ylabel("Neural TD-error proxy")
+        else:
+            axis.set_ylabel("")
+    figure.colorbar(
+        last, ax=axes.ravel().tolist(), label="Fuzzy memory weight alpha", shrink=0.82
+    )
+    figure.suptitle("Fuzzy gate sensitivity and zero-support behavior", fontsize=12)
+    figure.savefig(
+        FIGURES / "Figure_06_Fuzzy_Gate_Sensitivity.pdf",
         bbox_inches="tight",
     )
     plt.close(figure)
@@ -349,6 +488,7 @@ def main() -> None:
     FIGURES.mkdir(parents=True, exist_ok=True)
     application_figure()
     cost_support_figure()
+    fuzzy_sensitivity_figure()
     graphical_abstract()
     print("Generated ASOC strong-revision figures.")
 

@@ -1,0 +1,5 @@
+Exact-state support determines when neuro-memory gating can help.
+Fuzzy arbitration improves selected DQN comparisons, not all baselines.
+Deployment goal shift exposes unsupported neural extrapolation.
+Safe hold abstention cuts collisions in controlled navigation.
+Audited runs report support, memory, branch use, and decision cost.

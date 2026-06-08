@@ -15,8 +15,6 @@ Journal submission files are intentionally excluded from the public repository.
 ## Persistent Identifiers
 
 - Source: https://github.com/ErcanErkalkan/confidence-gated-q
-- Current archived version DOI:
-  https://doi.org/10.5281/zenodo.20581705
 - Persistent artifact concept DOI:
   https://doi.org/10.5281/zenodo.20578927
 - ORCID: https://orcid.org/0000-0001-9259-7112
@@ -51,7 +49,7 @@ Journal submission files are intentionally excluded from the public repository.
 | cost/support analysis | `configs/cost_support_metrics.json` | 800-809 | descriptive cost and support analysis |
 
 Superseded exploratory and sensitivity families are preserved only in the
-archived `v1.3.0` release and are not part of the current manuscript artifact.
+previous archived release and are not part of the current manuscript artifact.
 
 ## Install
 
@@ -127,10 +125,7 @@ This repository does not contain or import Berkeley CS188 assignment code.
 
 ## Citation
 
-The latest version-specific archive is `v1.3.0`:
-https://doi.org/10.5281/zenodo.20581705. Until a `v1.4.0` record is minted,
-use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927
-alongside the GitHub release.
+The artifact is prepared as release `v1.4.0`. Use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927 and the source repository https://github.com/ErcanErkalkan/confidence-gated-q when citing the reproducibility package.
 
 ## Author
 

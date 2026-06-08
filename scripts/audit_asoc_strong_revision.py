@@ -40,7 +40,8 @@ PAPER_FILES = (
     "paper/generated/asoc_cost_and_support_metrics.tex",
     "paper/generated/asoc_strong_revision_claims.csv",
     "paper/figures/Figure_05_Application_Case_Study.pdf",
-    "paper/figures/Figure_06_Cost_Support_and_Unsupported_Ratio.pdf",
+    "paper/figures/Figure_06_Fuzzy_Gate_Sensitivity.pdf",
+    "paper/figures/Figure_07_Cost_Support_and_Unsupported_Ratio.pdf",
     "paper/graphical_abstract/Graphical_Abstract_Neuro_Memory_Support_Shift.png",
 )
 
@@ -113,8 +114,10 @@ def audit() -> dict:
             "fuzzy",
             "unsupported-state ratio",
             "Figure_05_Application_Case_Study.pdf",
-            "Figure_06_Cost_Support_and_Unsupported_Ratio.pdf",
+            "Figure_06_Fuzzy_Gate_Sensitivity.pdf",
+            "Figure_07_Cost_Support_and_Unsupported_Ratio.pdf",
             "Declaration of generative AI",
+            "dependency-free smoke",
         ):
             if required.lower() not in text.lower():
                 violations.append(

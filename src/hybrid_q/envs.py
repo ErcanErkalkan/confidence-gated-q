@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
-import gymnasium as gym
+from .gym_compat import gym, spaces, HAS_GYMNASIUM
 import numpy as np
-from gymnasium import spaces
 
 
 ENV_ID_COMPATIBILITY = {
@@ -245,6 +244,160 @@ class ApplicationNavigationSupportShiftEnv(gym.Env):
         }
         return self._observation(), reward, terminated, truncated, info
 
+class FallbackFrozenLakeEnv(gym.Env):
+    """Minimal deterministic/slippery grid task used only when gymnasium is absent."""
+
+    metadata = {"render_modes": []}
+
+    def __init__(self, map_name: str = "4x4", is_slippery: bool = True, **_: Any):
+        self.size = 8 if "8" in str(map_name) else 4
+        self.is_slippery = bool(is_slippery)
+        self.action_space = spaces.Discrete(4)
+        self.observation_space = spaces.Discrete(self.size * self.size)
+        self.position = (0, 0)
+        self.steps = 0
+        self.max_steps = self.size * self.size * 4
+        self.np_random = np.random.default_rng(0)
+
+    def reset(self, *, seed: int | None = None, options=None):
+        super().reset(seed=seed)
+        self.position = (0, 0)
+        self.steps = 0
+        return self._state(), {}
+
+    def _state(self) -> int:
+        return self.position[1] * self.size + self.position[0]
+
+    def step(self, action: int):
+        if self.is_slippery and self.np_random.random() < 0.2:
+            action = int(self.np_random.integers(self.action_space.n))
+        moves = ((0, -1), (1, 0), (0, 1), (-1, 0))
+        dx, dy = moves[int(action)]
+        x = int(np.clip(self.position[0] + dx, 0, self.size - 1))
+        y = int(np.clip(self.position[1] + dy, 0, self.size - 1))
+        self.position = (x, y)
+        self.steps += 1
+        terminated = self.position == (self.size - 1, self.size - 1)
+        truncated = self.steps >= self.max_steps and not terminated
+        reward = 1.0 if terminated else 0.0
+        return self._state(), reward, terminated, truncated, {}
+
+
+class FallbackCliffWalkingEnv(gym.Env):
+    """Small cliff-walking stand-in for dependency-free tests."""
+
+    metadata = {"render_modes": []}
+
+    def __init__(self, **_: Any):
+        self.width = 12
+        self.height = 4
+        self.action_space = spaces.Discrete(4)
+        self.observation_space = spaces.Discrete(self.width * self.height)
+        self.start = (0, self.height - 1)
+        self.goal = (self.width - 1, self.height - 1)
+        self.position = self.start
+        self.np_random = np.random.default_rng(0)
+
+    def reset(self, *, seed: int | None = None, options=None):
+        super().reset(seed=seed)
+        self.position = self.start
+        return self._state(), {}
+
+    def _state(self) -> int:
+        return self.position[1] * self.width + self.position[0]
+
+    def step(self, action: int):
+        moves = ((0, -1), (1, 0), (0, 1), (-1, 0))
+        dx, dy = moves[int(action)]
+        x = int(np.clip(self.position[0] + dx, 0, self.width - 1))
+        y = int(np.clip(self.position[1] + dy, 0, self.height - 1))
+        reward = -1.0
+        terminated = False
+        if y == self.height - 1 and 1 <= x <= self.width - 2:
+            self.position = self.start
+            reward = -100.0
+        else:
+            self.position = (x, y)
+            terminated = self.position == self.goal
+        return self._state(), reward, terminated, False, {}
+
+
+class FallbackTaxiEnv(gym.Env):
+    """Compact Taxi-like discrete stand-in when gymnasium is unavailable."""
+
+    metadata = {"render_modes": []}
+
+    def __init__(self, **_: Any):
+        self.size = 5
+        self.action_space = spaces.Discrete(6)
+        self.observation_space = spaces.Discrete(self.size * self.size)
+        self.position = (0, 0)
+        self.goal = (4, 4)
+        self.np_random = np.random.default_rng(0)
+
+    def reset(self, *, seed: int | None = None, options=None):
+        super().reset(seed=seed)
+        self.position = (0, 0)
+        return self._state(), {}
+
+    def _state(self) -> int:
+        return self.position[1] * self.size + self.position[0]
+
+    def step(self, action: int):
+        moves = ((0, 1), (0, -1), (1, 0), (-1, 0), (0, 0), (0, 0))
+        dx, dy = moves[int(action)]
+        x = int(np.clip(self.position[0] + dx, 0, self.size - 1))
+        y = int(np.clip(self.position[1] + dy, 0, self.size - 1))
+        self.position = (x, y)
+        terminated = self.position == self.goal and int(action) in {4, 5}
+        reward = 20.0 if terminated else -1.0
+        return self._state(), reward, terminated, False, {}
+
+
+class FallbackMiniGridImageEnv(gym.Env):
+    """Fully observable image-style stand-in for MiniGrid dependency tests."""
+
+    metadata = {"render_modes": []}
+
+    def __init__(self, env_id: str, **_: Any):
+        self.env_id = env_id
+        self.size = 8 if "8x8" in env_id else 6 if "6x6" in env_id else 5
+        if "FourRooms" in env_id:
+            self.size = 7
+        self.action_space = spaces.Discrete(7)
+        self.observation_space = spaces.Box(
+            low=0.0, high=10.0, shape=(self.size, self.size, 3), dtype=np.float32
+        )
+        self.position = (0, 0)
+        self.goal = (self.size - 1, self.size - 1)
+        self.steps = 0
+        self.max_steps = self.size * self.size * 4
+        self.np_random = np.random.default_rng(0)
+
+    def reset(self, *, seed: int | None = None, options=None):
+        super().reset(seed=seed)
+        self.position = (0, 0)
+        self.steps = 0
+        return self._observation(), {}
+
+    def _observation(self) -> np.ndarray:
+        obs = np.zeros(self.observation_space.shape, dtype=np.float32)
+        obs[self.goal[1], self.goal[0], 1] = 2.0
+        obs[self.position[1], self.position[0], 0] = 5.0
+        return obs
+
+    def step(self, action: int):
+        moves = ((0, -1), (1, 0), (0, 1), (-1, 0), (0, 0), (0, 0), (0, 0))
+        dx, dy = moves[int(action) % len(moves)]
+        x = int(np.clip(self.position[0] + dx, 0, self.size - 1))
+        y = int(np.clip(self.position[1] + dy, 0, self.size - 1))
+        self.position = (x, y)
+        self.steps += 1
+        terminated = self.position == self.goal
+        truncated = self.steps >= self.max_steps and not terminated
+        reward = 1.0 if terminated else -0.01
+        return self._observation(), reward, terminated, truncated, {}
+
 
 def resolve_env_id(env_id: str) -> str:
     if env_id in gym.registry:
@@ -267,6 +420,8 @@ def make_env(spec: dict[str, Any], evaluation: bool = False) -> gym.Env:
         return ApplicationNavigationSupportShiftEnv(**kwargs)
 
     if env_id.startswith("MiniGrid-"):
+        if not HAS_GYMNASIUM:
+            return FallbackMiniGridImageEnv(env_id, **kwargs)
         import minigrid  # noqa: F401 - registers MiniGrid environments
         from minigrid.wrappers import FullyObsWrapper, ImgObsWrapper
 
