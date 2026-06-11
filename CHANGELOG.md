@@ -2,12 +2,21 @@
 
 ## Unreleased
 
+- Prepared the `v1.4.0` strong ASOC revision.
+- Added a controlled application-navigation support-shift environment.
+- Added a fuzzy support- and uncertainty-aware adaptive gate baseline.
+- Added unsupported-state, branch-use, abstention, exact-memory,
+  collision/risk, and per-decision timing metrics.
+- Completed 730 new full method--environment--seed runs across application,
+  adaptive-gate, and cost/support families; all family audits passed.
+- Added generated ASOC tables, vector figures, claims provenance, and a
+  strong-revision audit.
 - Retargeted the journal-specific manuscript assets and submission package to
   *Applied Soft Computing* and removed superseded journal names and duplicates.
 - Removed ten superseded exploratory and sensitivity result families that are
   not used by the manuscript, figures, tables, or current reproduction flow.
-- Reduced the public reproduction and audit workflow to the five frozen ASOC
-  evidence families.
+- Expanded the public reproduction and audit workflow to eight ASOC evidence
+  families.
 
 ## 1.3.0 - 2026-06-07
 
@@ -24,7 +33,7 @@
 - Expanded the test suite from 13 to 22 tests.
 - Added lossless compressed raw-CSV support for public hosting.
 - Regenerated the manuscript, tables, vector figures, and submission package.
-- Archived the v1.3.0 reproducibility artifact at
+- Archived the previous reproducibility artifact at
   https://doi.org/10.5281/zenodo.20581705.
 
 ## 1.2.0 - 2026-06-06

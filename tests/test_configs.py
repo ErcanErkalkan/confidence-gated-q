@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from hybrid_q.envs import make_env
+from src.hybrid_q.envs import make_env
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,6 +11,13 @@ CONFIGS = (
     "support_abstention_replication.json",
     "dqn_tuning_development.json",
     "dqn_strong_validation.json",
+    "smoke_application_navigation_case_study.json",
+    "application_navigation_case_study.json",
+    "adaptive_gate_compact_validation.json",
+    "cost_support_metrics.json",
+    "approximate_support_baseline_validation.json",
+    "stronger_baseline_validation.json",
+    "fuzzy_sensitivity_ablation.json",
 )
 
 

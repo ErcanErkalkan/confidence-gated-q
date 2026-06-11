@@ -1,0 +1,155 @@
+{
+  "experiment_name": "asoc_approximate_support_full_reviewer_protocol",
+  "output_dir": "results/approximate_support_full_reviewer_protocol",
+  "runtime": {
+    "torch_threads": 1,
+    "torch_interop_threads": 1,
+    "workers": 1
+  },
+  "seeds": [
+    930,
+    931,
+    932,
+    933,
+    934,
+    935,
+    936,
+    937,
+    938,
+    939,
+    940,
+    941,
+    942,
+    943,
+    944,
+    945,
+    946,
+    947,
+    948,
+    949,
+    950,
+    951,
+    952,
+    953,
+    954,
+    955,
+    956,
+    957,
+    958,
+    959
+  ],
+  "evaluation": {
+    "interval_steps": 2000,
+    "episodes": 30
+  },
+  "analysis": {
+    "primary_metric": "return_auc",
+    "analysis_status": "preregistered_full_reviewer_protocol_not_executed_in_deposited_results",
+    "planned_contrasts": [
+      {
+        "name": "approx_vs_exact_count",
+        "left": "approx_count_gated_k5",
+        "right": "count_gated_tau_20",
+        "metric": "return_auc"
+      },
+      {
+        "name": "approx_vs_support_abstain",
+        "left": "approx_count_gated_k5",
+        "right": "support_abstain_tau_20",
+        "metric": "return_auc"
+      },
+      {
+        "name": "approx_vs_tabular",
+        "left": "approx_count_gated_k5",
+        "right": "tabular",
+        "metric": "return_auc"
+      }
+    ],
+    "validation_scope": "30-seed reviewer-response protocol for approximate support; execute before making performance claims."
+  },
+  "envs": [
+    {
+      "name": "ApplicationNavigation-deployment-goal-shift",
+      "id": "ApplicationNavigationSupportShift-v0",
+      "kwargs": {
+        "goal_split": "train",
+        "slip_probability": 0.05,
+        "max_steps": 120
+      },
+      "eval_kwargs": {
+        "goal_split": "deployment"
+      },
+      "training_steps": 12000,
+      "max_steps": 120,
+      "success_mode": "positive_terminal"
+    }
+  ],
+  "agents": [
+    {
+      "name": "tabular",
+      "kind": "tabular",
+      "params": {
+        "tabular_learning_rate": 0.2,
+        "epsilon_decay_steps": 10000,
+        "batch_size": 32,
+        "hidden_size": 64,
+        "replay_warmup": 512,
+        "train_frequency": 16
+      }
+    },
+    {
+      "name": "count_gated_tau_20",
+      "kind": "count_gated",
+      "params": {
+        "double_dqn": false,
+        "learning_rate": 0.0003,
+        "tabular_learning_rate": 0.2,
+        "batch_size": 32,
+        "replay_capacity": 100000,
+        "replay_warmup": 512,
+        "train_frequency": 16,
+        "target_update_interval": 500,
+        "hidden_size": 64,
+        "tau": 20,
+        "epsilon_decay_steps": 10000
+      }
+    },
+    {
+      "name": "support_abstain_tau_20",
+      "kind": "support_abstain_gate",
+      "params": {
+        "double_dqn": false,
+        "learning_rate": 0.0003,
+        "tabular_learning_rate": 0.2,
+        "batch_size": 32,
+        "replay_capacity": 100000,
+        "replay_warmup": 512,
+        "train_frequency": 16,
+        "target_update_interval": 500,
+        "hidden_size": 64,
+        "tau": 20,
+        "abstain_action": 4,
+        "epsilon_decay_steps": 10000
+      }
+    },
+    {
+      "name": "approx_count_gated_k5",
+      "kind": "approx_count_gated",
+      "params": {
+        "double_dqn": false,
+        "learning_rate": 0.0003,
+        "tabular_learning_rate": 0.2,
+        "batch_size": 32,
+        "replay_capacity": 100000,
+        "replay_warmup": 512,
+        "train_frequency": 16,
+        "target_update_interval": 500,
+        "hidden_size": 64,
+        "approximate_support_k": 5,
+        "approximate_support_bandwidth": 0.25,
+        "approximate_support_tau": 2.0,
+        "epsilon_decay_steps": 10000
+      }
+    }
+  ]
+}

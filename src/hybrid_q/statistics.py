@@ -141,11 +141,28 @@ def sample_excess_kurtosis(values: np.ndarray) -> float:
 
 
 def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
-    for column in (
+    optional_metrics = (
         "support_abstention_rate",
         "training_elapsed_seconds",
         "evaluation_elapsed_seconds",
-    ):
+        "failure_rate",
+        "collision_rate",
+        "risk_zone_rate",
+        "unsupported_state_ratio",
+        "memory_branch_usage_ratio",
+        "neural_branch_usage_ratio",
+        "abstention_ratio",
+        "adaptive_alpha_mean",
+        "adaptive_alpha_iqr",
+        "support_score_mean",
+        "uncertainty_score_mean",
+        "inference_time_us_per_decision_mean",
+        "inference_time_us_per_decision_median",
+        "memory_cost_states",
+        "memory_cost_entries",
+        "memory_cost_bytes_estimated",
+    )
+    for column in optional_metrics:
         if column not in raw:
             raw[column] = np.nan
     evaluation = raw[raw["phase"] == "eval"].copy()
@@ -174,6 +191,37 @@ def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
             global_tabular_error=("global_tabular_error", "max"),
             global_neural_error=("global_neural_error", "max"),
             visited_states=("visited_states", "max"),
+            failure_rate=("failure_rate", "mean"),
+            collision_rate=("collision_rate", "mean"),
+            risk_zone_rate=("risk_zone_rate", "mean"),
+            unsupported_state_ratio=("unsupported_state_ratio", "mean"),
+            memory_branch_usage_ratio=(
+                "memory_branch_usage_ratio",
+                "mean",
+            ),
+            neural_branch_usage_ratio=(
+                "neural_branch_usage_ratio",
+                "mean",
+            ),
+            abstention_ratio=("abstention_ratio", "mean"),
+            adaptive_alpha_mean=("adaptive_alpha_mean", "mean"),
+            adaptive_alpha_iqr=("adaptive_alpha_iqr", "mean"),
+            support_score_mean=("support_score_mean", "mean"),
+            uncertainty_score_mean=("uncertainty_score_mean", "mean"),
+            inference_time_us_per_decision_mean=(
+                "inference_time_us_per_decision_mean",
+                "mean",
+            ),
+            inference_time_us_per_decision_median=(
+                "inference_time_us_per_decision_median",
+                "median",
+            ),
+            memory_cost_states=("memory_cost_states", "max"),
+            memory_cost_entries=("memory_cost_entries", "max"),
+            memory_cost_bytes_estimated=(
+                "memory_cost_bytes_estimated",
+                "max",
+            ),
         )
         .reset_index()
         .sort_values(["environment", "agent", "seed", "checkpoint"])
@@ -254,6 +302,22 @@ def summarize(seed_metrics: pd.DataFrame) -> pd.DataFrame:
             "global_tabular_error",
             "global_neural_error",
             "visited_states",
+            "failure_rate",
+            "collision_rate",
+            "risk_zone_rate",
+            "unsupported_state_ratio",
+            "memory_branch_usage_ratio",
+            "neural_branch_usage_ratio",
+            "abstention_ratio",
+            "adaptive_alpha_mean",
+            "adaptive_alpha_iqr",
+            "support_score_mean",
+            "uncertainty_score_mean",
+            "inference_time_us_per_decision_mean",
+            "inference_time_us_per_decision_median",
+            "memory_cost_states",
+            "memory_cost_entries",
+            "memory_cost_bytes_estimated",
         ):
             values = group[metric].to_numpy(dtype=float)
             values = values[np.isfinite(values)]
@@ -486,6 +550,8 @@ def plot_learning_curves(raw: pd.DataFrame, output_dir: Path) -> None:
         "fixed_hybrid",
         "count_gated_tau_20",
         "reliability_gated",
+        "support_abstain_tau_20",
+        "fuzzy_support_adaptive",
     ]
     display_names = {
         "tabular": "Tabular Q",
@@ -493,6 +559,8 @@ def plot_learning_curves(raw: pd.DataFrame, output_dir: Path) -> None:
         "fixed_hybrid": "Fixed mixture",
         "count_gated_tau_20": "Count gate",
         "reliability_gated": "TD-reliability gate",
+        "support_abstain_tau_20": "Support abstention",
+        "fuzzy_support_adaptive": "Fuzzy adaptive gate",
     }
     evaluation = raw[raw["phase"] == "eval"]
     for environment, env_group in evaluation.groupby("environment"):

@@ -1,0 +1,26 @@
+{
+  "experiment_name": "asoc_cost_support_metrics",
+  "output_dir": "results/cost_support_metrics",
+  "runtime": {"torch_threads": 1, "torch_interop_threads": 1, "workers": 8},
+  "seeds": [800, 801, 802, 803, 804, 805, 806, 807, 808, 809],
+  "evaluation": {"interval_steps": 2000, "episodes": 30},
+  "analysis": {
+    "primary_metric": "inference_time_us_per_decision_mean",
+    "analysis_status": "descriptive_cost_and_support_analysis",
+    "planned_contrasts": [
+      {"name": "fuzzy_vs_count_cost", "left": "fuzzy_support_adaptive", "right": "count_gated_tau_20", "metric": "inference_time_us_per_decision_mean"},
+      {"name": "fuzzy_vs_dqn_cost", "left": "fuzzy_support_adaptive", "right": "validated_dqn", "metric": "inference_time_us_per_decision_mean"}
+    ]
+  },
+  "envs": [
+    {"name": "FourRooms-9-cost-support", "id": "StructuredFourRooms-v0", "kwargs": {"size": 9, "goal_split": "train", "slip_probability": 0.1, "max_steps": 160}, "eval_kwargs": {"goal_split": "test"}, "training_steps": 12000, "max_steps": 160, "success_mode": "positive_terminal"},
+    {"name": "ApplicationNavigation-cost-support", "id": "ApplicationNavigationSupportShift-v0", "kwargs": {"goal_split": "train", "slip_probability": 0.05, "max_steps": 120}, "eval_kwargs": {"goal_split": "deployment"}, "training_steps": 12000, "max_steps": 120, "success_mode": "positive_terminal"}
+  ],
+  "agents": [
+    {"name": "tabular", "kind": "tabular", "params": {"tabular_learning_rate": 0.2, "epsilon_decay_steps": 10000}},
+    {"name": "validated_dqn", "kind": "dqn", "params": {"double_dqn": false, "learning_rate": 0.0003, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "epsilon_decay_steps": 10000}},
+    {"name": "count_gated_tau_20", "kind": "count_gated", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "tau": 20, "epsilon_decay_steps": 10000}},
+    {"name": "support_abstain_tau_20", "kind": "support_abstain_gate", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "tau": 20, "abstain_action": 4, "epsilon_decay_steps": 10000}},
+    {"name": "fuzzy_support_adaptive", "kind": "fuzzy_support_adaptive_gate", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 32, "replay_capacity": 100000, "replay_warmup": 512, "train_frequency": 16, "target_update_interval": 500, "hidden_size": 128, "fuzzy_tau_support": 20, "fuzzy_uncertainty_scale": 1.0, "fuzzy_abstain_zero_support": false, "epsilon_decay_steps": 10000}}
+  ]
+}

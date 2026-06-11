@@ -1,0 +1,16 @@
+\begin{tabular}{llccccccc}
+\toprule
+Environment & Method & Unsupported & Memory branch & Neural branch & Abstention & Stored states & Estimated KiB & Decision time (us) \\
+\midrule
+Application navigation & Count gate & 0.430 & 0.437 & 0.563 & 0.000 & 198.5 & 5.43 & 573.3 \\
+Application navigation & Fuzzy adaptive & 0.430 & 0.432 & 0.568 & 0.000 & 196.8 & 5.38 & 713.1 \\
+Application navigation & Support abstention & 0.430 & 0.439 & 0.131 & 0.430 & 197.6 & 5.40 & 348.5 \\
+Application navigation & Tabular Q & 0.430 & 0.570 & 0.000 & 0.430 & 199.0 & 5.44 & 134.1 \\
+Application navigation & Validated DQN & 0.430 & 0.000 & 1.000 & 0.000 & 0.0 & 0.00 & 442.5 \\
+FourRooms 9 support shift & Count gate & 1.000 & 0.000 & 1.000 & 0.000 & 1401.7 & 32.85 & 485.0 \\
+FourRooms 9 support shift & Fuzzy adaptive & 1.000 & 0.000 & 1.000 & 0.000 & 1401.1 & 32.84 & 655.1 \\
+FourRooms 9 support shift & Support abstention & 1.000 & 0.000 & 0.000 & 1.000 & 1524.3 & 35.73 & 168.9 \\
+FourRooms 9 support shift & Tabular Q & 1.000 & 0.000 & 0.000 & 1.000 & 1903.6 & 44.62 & 132.4 \\
+FourRooms 9 support shift & Validated DQN & 1.000 & 0.000 & 1.000 & 0.000 & 0.0 & 0.00 & 416.8 \\
+\bottomrule
+\end{tabular}

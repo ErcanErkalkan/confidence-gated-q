@@ -3,11 +3,14 @@ import json
 import numpy as np
 import pandas as pd
 
-from hybrid_q.agents import AgentConfig, HybridQAgent
-from hybrid_q.encoding import ObservationEncoder
-from hybrid_q.envs import StructuredFourRoomsEnv
-from hybrid_q.envs import make_env, resolve_env_id
-from hybrid_q.experiment import evaluate, run_config
+from src.hybrid_q.agents import AgentConfig, HybridQAgent
+from src.hybrid_q.encoding import ObservationEncoder
+from src.hybrid_q.envs import (
+    ApplicationNavigationSupportShiftEnv,
+    StructuredFourRoomsEnv,
+)
+from src.hybrid_q.envs import make_env, resolve_env_id
+from src.hybrid_q.experiment import evaluate, run_config
 
 
 def test_structured_goal_splits_are_disjoint():
@@ -16,6 +19,21 @@ def test_structured_goal_splits_are_disjoint():
     assert set(train.goals)
     assert set(test.goals)
     assert set(train.goals).isdisjoint(test.goals)
+
+
+def test_application_navigation_goal_shift_and_seed_are_deterministic():
+    train = ApplicationNavigationSupportShiftEnv(goal_split="train")
+    test = ApplicationNavigationSupportShiftEnv(goal_split="test")
+    assert set(train.goals).isdisjoint(test.goals)
+    first_observation, first_info = train.reset(seed=13)
+    second_observation, second_info = train.reset(seed=13)
+    assert np.array_equal(first_observation, second_observation)
+    assert first_info == second_info
+    first_step = train.step(0)
+    train.reset(seed=13)
+    second_step = train.step(0)
+    assert np.array_equal(first_step[0], second_step[0])
+    assert first_step[1:] == second_step[1:]
 
 
 def test_step_budget_is_exact(tmp_path):
@@ -54,6 +72,53 @@ def test_step_budget_is_exact(tmp_path):
     assert (
         evaluation["environment_steps"] == evaluation["checkpoint"]
     ).all()
+
+
+def test_application_support_shift_emits_extended_metrics(tmp_path):
+    output_dir = tmp_path / "application"
+    config = {
+        "experiment_name": "application_metric_test",
+        "output_dir": str(output_dir),
+        "runtime": {"torch_threads": 1, "torch_interop_threads": 1},
+        "seeds": [0],
+        "evaluation": {"interval_steps": 10, "episodes": 4},
+        "envs": [
+            {
+                "id": "ApplicationNavigationSupportShift-v0",
+                "kwargs": {
+                    "goal_split": "train",
+                    "slip_probability": 0.0,
+                    "max_steps": 20,
+                },
+                "eval_kwargs": {"goal_split": "test"},
+                "training_steps": 20,
+                "max_steps": 20,
+                "success_mode": "positive_terminal",
+            }
+        ],
+        "agents": [
+            {
+                "name": "fuzzy_support_adaptive",
+                "kind": "fuzzy_support_adaptive_gate",
+                "params": {
+                    "batch_size": 2,
+                    "replay_warmup": 100,
+                    "fuzzy_abstain_zero_support": False,
+                },
+            }
+        ],
+    }
+    config_path = tmp_path / "application.json"
+    config_path.write_text(json.dumps(config), encoding="utf-8")
+    raw = pd.read_csv(run_config(config_path))
+    evaluation = raw[raw["phase"] == "eval"]
+    assert evaluation["unsupported_state_ratio"].gt(0).all()
+    assert evaluation["adaptive_alpha_mean"].between(0, 1).all()
+    assert evaluation["inference_time_us_per_decision_mean"].gt(0).all()
+    assert evaluation["memory_cost_states"].ge(0).all()
+    assert set(evaluation["selected_branch"]).issubset(
+        {"memory", "neural", "mixed", "abstention"}
+    )
 
 
 def test_evaluation_does_not_change_rng_or_exact_state_support():

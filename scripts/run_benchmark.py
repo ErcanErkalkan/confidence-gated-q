@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 
-from hybrid_q.experiment import run_config
+from src.hybrid_q.experiment import run_config
 
 
 def main() -> None:

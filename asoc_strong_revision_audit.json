@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "new_full_runs": 730,
+  "families": [
+    "application_navigation_case_study",
+    "adaptive_gate_compact_validation",
+    "cost_support_metrics"
+  ],
+  "violations": []
+}

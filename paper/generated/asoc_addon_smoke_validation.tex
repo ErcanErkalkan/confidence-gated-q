@@ -1,0 +1,23 @@
+\begin{tabular}{lllrl}
+\toprule
+Validation family & Environment & Method & Seeds & Return AUC \\
+\midrule
+Approximate support smoke & Application navigation & approx\_count\_gated\_k5 & 3 & -5.835 [-13.932, -1.653] \\
+Approximate support smoke & Application navigation & count\_gated\_tau\_20 & 3 & -6.040 [-14.545, -1.653] \\
+Approximate support smoke & Application navigation & support\_abstain\_tau\_20 & 3 & -1.786 [-1.922, -1.653] \\
+Approximate support smoke & Application navigation & tabular & 3 & -2.900 [-4.698, -0.656] \\
+Fuzzy ablation smoke & Application navigation & fuzzy\_kappa\_025 & 2 & -2.575 [-2.985, -2.165] \\
+Fuzzy ablation smoke & Application navigation & fuzzy\_kappa\_4 & 2 & -2.575 [-2.985, -2.165] \\
+Fuzzy ablation smoke & Application navigation & fuzzy\_shoulder\_conservative & 2 & -2.575 [-2.985, -2.165] \\
+Fuzzy ablation smoke & Application navigation & fuzzy\_tau\_20 & 2 & -2.575 [-2.985, -2.165] \\
+Fuzzy ablation smoke & Application navigation & fuzzy\_tau\_5 & 2 & -2.575 [-2.985, -2.165] \\
+Fuzzy ablation smoke & Application navigation & fuzzy\_tau\_80 & 2 & -2.575 [-2.985, -2.165] \\
+Fuzzy ablation smoke & Application navigation & fuzzy\_zero\_support\_abstain & 2 & -0.829 [-0.858, -0.800] \\
+Stronger baseline smoke & Application navigation & a2c\_actor\_critic & 2 & -6.981 [-7.068, -6.895] \\
+Stronger baseline smoke & Application navigation & dueling\_double\_dqn & 2 & -8.764 [-9.023, -8.505] \\
+Stronger baseline smoke & Application navigation & validated\_dqn & 2 & -4.325 [-9.023, 0.373] \\
+Stronger baseline smoke & FourRooms 7 & a2c\_actor\_critic & 2 & -0.519 [-0.693, -0.345] \\
+Stronger baseline smoke & FourRooms 7 & dueling\_double\_dqn & 2 & -0.789 [-0.790, -0.788] \\
+Stronger baseline smoke & FourRooms 7 & validated\_dqn & 2 & -0.520 [-0.695, -0.345] \\
+\bottomrule
+\end{tabular}

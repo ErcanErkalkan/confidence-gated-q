@@ -1,0 +1,152 @@
+{
+  "created_utc": "2026-06-08T16:20:19Z",
+  "platform": "Linux-4.4.0-x86_64-with-glibc2.41",
+  "python": "3.13.5",
+  "gymnasium": "fallback-local",
+  "numpy": "2.3.5",
+  "torch": "2.10.0+cpu",
+  "torch_threads": 1,
+  "cpu_count": 56,
+  "processor": "",
+  "config_sha256": "2cd7d03768f8c00211768e4d306eaac78c24ede578c21ea61a7cecf9afbfdc0e",
+  "config_file": "configs/stronger_baseline_validation.json",
+  "git_commit_hash": "unknown",
+  "package_version": "1.4.0",
+  "environment_observations": [
+    {
+      "name": "FourRooms-7-unseen-goals",
+      "requested_id": "StructuredFourRooms-v0",
+      "resolved_id": "StructuredFourRooms-v0",
+      "representation": "native_gymnasium_observation"
+    },
+    {
+      "name": "ApplicationNavigation-deployment-goal-shift",
+      "requested_id": "ApplicationNavigationSupportShift-v0",
+      "resolved_id": "ApplicationNavigationSupportShift-v0",
+      "representation": "native_gymnasium_observation"
+    }
+  ],
+  "packages": {
+    "gymnasium": null,
+    "minigrid": null,
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8",
+    "torch": "2.10.0+cpu"
+  },
+  "config": {
+    "experiment_name": "asoc_stronger_baseline_validation",
+    "output_dir": "results/stronger_baseline_validation",
+    "runtime": {
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "workers": 1
+    },
+    "seeds": [
+      950,
+      951
+    ],
+    "evaluation": {
+      "interval_steps": 50,
+      "episodes": 2
+    },
+    "analysis": {
+      "primary_metric": "return_auc",
+      "analysis_status": "completed_dependency_free_stronger_baseline_smoke_validation",
+      "planned_contrasts": [
+        {
+          "name": "dueling_double_dqn_vs_validated_dqn",
+          "left": "dueling_double_dqn",
+          "right": "validated_dqn",
+          "metric": "return_auc"
+        },
+        {
+          "name": "a2c_vs_validated_dqn",
+          "left": "a2c_actor_critic",
+          "right": "validated_dqn",
+          "metric": "return_auc"
+        }
+      ],
+      "validation_scope": "dependency-free two-seed smoke validation of executable DQN, dueling-DQN, and A2C code paths; full neural baseline claims require the published dependency environment"
+    },
+    "envs": [
+      {
+        "name": "FourRooms-7-unseen-goals",
+        "id": "StructuredFourRooms-v0",
+        "kwargs": {
+          "size": 7,
+          "goal_split": "train",
+          "slip_probability": 0.0,
+          "max_steps": 100
+        },
+        "eval_kwargs": {
+          "goal_split": "test"
+        },
+        "training_steps": 100,
+        "max_steps": 40,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "ApplicationNavigation-deployment-goal-shift",
+        "id": "ApplicationNavigationSupportShift-v0",
+        "kwargs": {
+          "goal_split": "train",
+          "slip_probability": 0.05,
+          "max_steps": 120
+        },
+        "eval_kwargs": {
+          "goal_split": "deployment"
+        },
+        "training_steps": 100,
+        "max_steps": 40,
+        "success_mode": "positive_terminal"
+      }
+    ],
+    "agents": [
+      {
+        "name": "validated_dqn",
+        "kind": "dqn",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "epsilon_decay_steps": 80
+        }
+      },
+      {
+        "name": "dueling_double_dqn",
+        "kind": "dueling_dqn",
+        "params": {
+          "double_dqn": true,
+          "network_architecture": "dueling_mlp",
+          "learning_rate": 0.0003,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "epsilon_decay_steps": 80
+        }
+      },
+      {
+        "name": "a2c_actor_critic",
+        "kind": "a2c",
+        "params": {
+          "learning_rate": 0.0003,
+          "hidden_size": 32,
+          "a2c_value_coef": 0.5,
+          "a2c_entropy_coef": 0.01,
+          "epsilon_decay_steps": 80,
+          "batch_size": 16
+        }
+      }
+    ]
+  }
+}

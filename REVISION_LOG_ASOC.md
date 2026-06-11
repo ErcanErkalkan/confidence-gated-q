@@ -38,14 +38,17 @@
 - `configs/confirmatory_extended_compact.json`
 - `configs/support_abstention_replication.json`
 - `configs/minigrid_extended_diagnostic.json`
+- `configs/application_navigation_case_study.json`
+- `configs/adaptive_gate_compact_validation.json`
+- `configs/cost_support_metrics.json`
 
 ### Results
 
-- All five ASOC revision families were fully executed.
+- All eight ASOC revision families were fully executed.
 - No smoke result was substituted for a full result.
-- The five manuscript result families were preserved without changing
+- The eight manuscript result families were preserved without changing
   numerical outcomes; superseded exploratory families were removed later.
-- All five current result-family audits pass.
+- All eight current result-family audits pass.
 - Public raw data are losslessly compressed where appropriate.
 
 ### Manuscript
@@ -58,7 +61,7 @@ Revised:
 - Related Work;
 - estimator, gate, abstention, encoding, evaluation, and provenance methods;
 - development/validation/confirmation/replication design;
-- RQ1-RQ5 Results;
+- RQ1-RQ7 Results;
 - Discussion;
 - standalone Limitations;
 - reproducibility and declarations;
@@ -106,8 +109,11 @@ Updated:
 | `confirmatory_extended_compact.json` | `results/confirmatory_extended_compact` | 500-529 | completed | 663,483 | PASS |
 | `support_abstention_replication.json` | `results/support_abstention_replication` | 300-329; 400-429 | completed | 359,339 | PASS |
 | `minigrid_extended_diagnostic.json` | `results/minigrid_extended_diagnostic` | 500-509 | completed | 215,786 | PASS |
+| `application_navigation_case_study.json` | `results/application_navigation_case_study` | 600-629 | completed | 81,922 | PASS |
+| `adaptive_gate_compact_validation.json` | `results/adaptive_gate_compact_validation` | 700-729 | completed | 234,834 | PASS |
+| `cost_support_metrics.json` | `results/cost_support_metrics` | 800-809 | completed | 37,081 | PASS |
 
-Total revision runs: 3,415 method-environment-seed runs.
+Total revision runs: 4,145 method-environment-seed runs.
 
 ## Statistical Status
 
@@ -123,6 +129,10 @@ Total revision runs: 3,415 method-environment-seed runs.
 | Abstention is neutral vs count on replicated MiniGrid Empty-5x5 | same | return AUC | +0.019 [-0.034, 0.070] | t-Holm 1.0 | replication after discovery |
 | Count improves DQN on MiniGrid Empty-8x8 | `minigrid_extended_diagnostic/planned_contrasts.csv` | return AUC | +0.596 [0.442, 0.750] | t-Holm 0.000761 | post hoc diagnostic |
 | Validated DQN is not universally better than original DQN | `dqn_strong_validation/planned_contrasts.csv` | return AUC | task dependent | no Holm-significant task | independent validation |
+| Fuzzy improves DQN in application navigation | `application_navigation_case_study/planned_contrasts.csv` | return AUC | +0.575 [0.152, 0.987] | t-Holm 0.0256 | confirmatory application case |
+| Fuzzy does not improve count gating in application navigation | same | return AUC | +0.211 [-0.171, 0.626] | t-Holm 0.318 | confirmatory application case |
+| Fuzzy improves DQN on FrozenLake 4x4 | `adaptive_gate_compact_validation/planned_contrasts.csv` | return AUC | +0.291 [0.244, 0.338] | t-Holm 1.12e-11 | adaptive-gate validation |
+| Fuzzy fails at complete FourRooms support shift | same | return AUC | -1.195 vs tabular | all 30 pairs lose | adaptive-gate validation |
 
 ## Reviewer-Risk Checklist
 
@@ -135,31 +145,37 @@ Total revision runs: 3,415 method-environment-seed runs.
 3. **Is support abstention still only post hoc?** The discovery remains post
    hoc, but its FourRooms repair is independently replicated and labeled
    confirmation after diagnostic discovery.
-4. **Are broader tasks included?** Yes: seven compact tasks and six MiniGrid
-   diagnostics.
+4. **Are broader tasks included?** Yes: seven compact tasks, six MiniGrid
+   diagnostics, and a controlled application-navigation case.
 5. **Are negative results reported?** Yes, including FourRooms support failure,
    tabular superiority, MiniGrid failures, and DQN tuning sensitivity.
-6. **Is ASOC relevance explained?** Yes, as reproducible methodology for
-   applied ML systems under support mismatch.
+6. **Is ASOC relevance explained?** Yes, through fuzzy arbitration,
+   uncertainty-aware support signals, navigation decision support, and
+   reproducible failure-boundary analysis.
 7. **Are all files reproducible?** Yes. Configs, raw data, summaries,
    provenance, tests, generation commands, and audits are present.
-8. **Are remaining research-package pieces missing?** No. Journal portal form
-   entry is the only external account action. GitHub release `v1.3.0` and
-   Zenodo DOI `10.5281/zenodo.20581705` are published.
+8. **Are remaining research-package pieces missing?** The `v1.4.0` source and
+   packages are prepared. A new version-specific Zenodo DOI remains an external
+   account action; the persistent concept DOI is unchanged.
 
 ## Validation
 
-- Tests: 22 passed.
-- Result audits: 5 passed.
+- Tests: 28 passed.
+- Result audits: 8 passed.
 - Artifact audit: PASS.
+- ASOC strong-revision audit: PASS.
 - LaTeX: complete `pdflatex/bibtex/pdflatex/pdflatex` build passed.
 - LaTeX log: no overfull boxes, undefined citations, or undefined references.
-- PDF: 18 pages.
+- PDF: 29 pages.
 - Submission audit: PASS.
 - Submission ZIP SHA-256 is recorded alongside the generated ZIP.
 
 ## Failed Commands and Resolutions
 
+- The first eight-family quick reproduction found stale `config_sha256`
+  fields in the five legacy metadata files. Their embedded configs already
+  matched the frozen JSON files exactly; only those five hash fields were
+  corrected, with no result-row or numerical change.
 - Earlier legacy CSVs were migrated without numerical changes during the
   revision. Those superseded result families are no longer part of the current
   manuscript artifact.
@@ -169,7 +185,7 @@ Total revision runs: 3,415 method-environment-seed runs.
 
 ## Final Recommendation
 
-`READY_FOR_SUBMISSION`
+`READY_AFTER_EXTERNAL_ASOC_UPLOAD_ITEMS`
 ## Soft-computing motivation update
 
 - Strengthened the Introduction with an explicit soft-computing motivation.

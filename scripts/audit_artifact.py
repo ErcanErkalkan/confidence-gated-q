@@ -29,6 +29,9 @@ ASOC_RESULT_SETS = (
     "confirmatory_extended_compact",
     "support_abstention_replication",
     "minigrid_extended_diagnostic",
+    "application_navigation_case_study",
+    "adaptive_gate_compact_validation",
+    "cost_support_metrics",
 )
 EXCLUDED_PARTS = {
     ".git",
@@ -40,6 +43,7 @@ EXCLUDED_PARTS = {
     "release",
     "runs",
     "submission_clean_asoc",
+    "submission_clean_asoc_strong_revision",
 }
 EXCLUDED_FILES = {
     "FINAL_SUBMISSION_CHECK.md",
@@ -48,9 +52,10 @@ EXCLUDED_FILES = {
     "submission_audit.md",
     "submission_clean_asoc.zip",
     "submission_clean_asoc.zip.sha256",
-    "scripts/audit_submission.py",
-    "scripts/generate_asoc_assets.py",
-    "scripts/package_release.py",
+    "submission_clean_asoc_strong_revision.zip",
+    "research_asoc_strong_revision.zip",
+    "asoc_separate_figures_for_upload.zip",
+    "asoc_strong_revision_checksums.sha256",
 }
 
 

@@ -1,0 +1,5 @@
+Exact-state support determines when tabular-neural gating can help.
+Count and fuzzy gates degenerate to neural fallback at zero exact support.
+Support abstention repairs the unsupported-neural-preference failure mechanism.
+A controlled navigation diagnostic reports success, collision, risk, support, and timing.
+The artifact separates main evidence from auxiliary smoke checks and full-run protocols.

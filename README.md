@@ -1,20 +1,20 @@
-# Support-Aware Exact-State Memory for Deep Q-Learning
+# Support-Boundary Diagnostic for Tabular-Neural Reinforcement Learning
 
 This repository contains the public code, configurations, seed-level results,
-tests, and audits for a reproducible boundary analysis of exact-state memory
-combined with DQN.
+tests, and audits for a soft-computing boundary analysis of exact-state memory,
+deep Q-networks (DQN), fuzzy adaptive arbitration, and support abstention.
 
 The method is **not** a generally superior reinforcement-learning algorithm.
 Count gating is useful only when exact states recur. It is not a
-generalization mechanism and can fail under support shift.
+generalization mechanism and can fail under support shift. The application
+case is a controlled pre-deployment diagnostic, not a real-world deployment or
+safety guarantee.
 
 Journal submission files are intentionally excluded from the public repository.
 
 ## Persistent Identifiers
 
 - Source: https://github.com/ErcanErkalkan/confidence-gated-q
-- Current archived version DOI:
-  https://doi.org/10.5281/zenodo.20581705
 - Persistent artifact concept DOI:
   https://doi.org/10.5281/zenodo.20578927
 - ORCID: https://orcid.org/0000-0001-9259-7112
@@ -30,6 +30,10 @@ Journal submission files are intentionally excluded from the public repository.
   failure, with all 30 pairs favoring abstention in each FourRooms task.
 - Six MiniGrid diagnostics remain heterogeneous; tabular Q-learning has the
   best descriptive cross-task rank.
+- A 30-seed application-navigation case measures collision, support, branch
+  usage, exact-memory size, and decision time under deployment goal shift.
+- The fuzzy adaptive gate improves over the validated DQN in selected tasks
+  but does not generally beat tabular learning or support abstention.
 
 ## Analysis Families
 
@@ -40,9 +44,12 @@ Journal submission files are intentionally excluded from the public repository.
 | compact expansion | `configs/confirmatory_extended_compact.json` | 500-529 | confirmatory task expansion |
 | abstention replication | `configs/support_abstention_replication.json` | 300-329; 400-429 | confirmation after diagnostic discovery |
 | MiniGrid expansion | `configs/minigrid_extended_diagnostic.json` | 500-509 | post hoc diagnostic |
+| application navigation | `configs/application_navigation_case_study.json` | 600-629 | confirmatory application case |
+| fuzzy gate validation | `configs/adaptive_gate_compact_validation.json` | 700-729 | confirmatory adaptive-gate validation |
+| cost/support analysis | `configs/cost_support_metrics.json` | 800-809 | descriptive cost and support analysis |
 
 Superseded exploratory and sensitivity families are preserved only in the
-archived `v1.3.0` release and are not part of the current manuscript artifact.
+previous archived release and are not part of the current manuscript artifact.
 
 ## Install
 
@@ -80,6 +87,12 @@ python scripts/run_benchmark.py --config configs/dqn_strong_validation.json
 python scripts/run_benchmark.py --config configs/confirmatory_extended_compact.json
 python scripts/run_benchmark.py --config configs/support_abstention_replication.json
 python scripts/run_benchmark.py --config configs/minigrid_extended_diagnostic.json
+python scripts/run_application_case_study.py --config configs/application_navigation_case_study.json
+python scripts/run_adaptive_gate_validation.py --config configs/adaptive_gate_compact_validation.json
+python scripts/run_benchmark.py --config configs/cost_support_metrics.json
+python scripts/generate_asoc_strong_revision_tables.py
+python scripts/generate_asoc_strong_revision_figures.py
+python scripts/audit_asoc_strong_revision.py
 ```
 
 Completed run shards are resumable and ignored by Git. Committed compressed
@@ -97,6 +110,8 @@ CSV files are lossless and read directly by pandas.
   MiniGrid provenance.
 - Paired effects, bootstrap intervals, Holm correction, Wilcoxon sensitivity,
   win/loss/tie counts, and heavy-tail diagnostics are generated.
+- Evaluation logs unsupported-state, branch-use, abstention, fuzzy-alpha,
+  exact-memory, collision/risk, and decision-time metrics.
 
 ## Repository Contents
 
@@ -106,13 +121,10 @@ CSV files are lossless and read directly by pandas.
 - `scripts/`: execution, aggregation, reproduction, and audit commands.
 - `tests/`: unit and integration tests.
 
-This repository does not contain or import Berkeley CS188 assignment code.
 
 ## Citation
 
-> Erkalkan, E. (2026). *Support-Aware Exact-State Memory for Deep Q-Learning:
-> Reproducibility Artifact* (Version 1.3.0). Zenodo.
-> https://doi.org/10.5281/zenodo.20581705
+The artifact is prepared as release `v1.4.0`. Use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927 and the source repository https://github.com/ErcanErkalkan/confidence-gated-q when citing the reproducibility package.
 
 ## Author
 
