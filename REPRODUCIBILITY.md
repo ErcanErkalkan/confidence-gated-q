@@ -101,6 +101,10 @@ python scripts/audit_results.py `
   fallback risk analysis.
 - `main_external_physics_based_uav_validation`: held-out waypoint and
   ideal-to-drag/ground-effect physics shift with seeds `900-929`.
+- `independent_confirmatory_fuzzy_reliability_stationary`: stationary
+  relative-reliability validation with seeds `1300-1329`.
+- `independent_confirmatory_reliability_shift`: recurring-state stale-support
+  validation with seeds `1400-1429`.
 - `auxiliary_smoke_check`: installation and pipeline check only.
 - `preregistered_extension_protocol_not_executed`: no result claim permitted.
 
@@ -109,7 +113,7 @@ outcomes.
 
 ## Strict Source Provenance
 
-New `v1.5.0` experiment families record:
+New `v1.5.0` and later experiment families record:
 
 - the clean execution commit;
 - package and dependency versions;
@@ -137,6 +141,8 @@ Measured cumulative training time across independent runs:
 | adaptive gate validation | 0.95 h | 9.29 s | 13.30 s |
 | cost/support analysis | 0.32 h | 14.61 s | 22.38 s |
 | physics-based UAV validation | 4.78 h | 103.48 s | 201.52 s |
+| stationary fuzzy reliability | 2.05 h | 12.89 s | 20.77 s |
+| recurring-state reliability shift | 2.17 h | 22.42 s | 25.95 s |
 
 Eight independent runs were normally scheduled in parallel. Wall time depends
 on CPU contention and storage.
@@ -152,6 +158,11 @@ recorded versions and seed sets.
 Evaluation is read-only. It runs in a separate environment, restores the agent
 RNG, does not insert unseen keys, and records evaluation time separately from
 training time.
+
+Raw results are normally stored as `raw.csv.gz`. Families that exceed GitHub's
+single-file limit use lossless `raw_parts/*.csv.gz` files grouped by
+environment and agent. `scripts/pack_raw_parts.py` creates the parts and
+`scripts/audit_results.py` verifies them as one logical raw table.
 
 ## Manuscript Assets
 

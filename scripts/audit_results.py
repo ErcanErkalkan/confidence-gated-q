@@ -61,6 +61,19 @@ def expected_checkpoints(config: dict, env_spec: dict) -> set[int]:
     return checkpoints
 
 
+def raw_result_paths(result_dir: Path) -> list[Path]:
+    for name in ("raw.csv", "raw.csv.gz", "raw.csv.xz"):
+        candidate = result_dir / name
+        if candidate.exists():
+            return [candidate]
+    parts = sorted((result_dir / "raw_parts").glob("*.csv*"))
+    if parts:
+        return parts
+    raise FileNotFoundError(
+        f"Missing raw.csv, compressed raw.csv, or raw_parts in {result_dir}"
+    )
+
+
 def audit(config_path: Path, result_dir: Path) -> dict:
     config = load_config(config_path)
     metadata = json.loads(
@@ -112,14 +125,12 @@ def audit(config_path: Path, result_dir: Path) -> dict:
             f"run shard count {len(shards)} != expected {expected_runs}"
         )
 
-    raw_path = result_dir / "raw.csv"
-    if not raw_path.exists():
-        raw_path = result_dir / "raw.csv.gz"
-    if not raw_path.exists():
-        raise FileNotFoundError(
-            f"Missing raw.csv or raw.csv.gz in {result_dir}"
-        )
-    raw = pd.read_csv(raw_path)
+    raw_paths = raw_result_paths(result_dir)
+    raw = pd.concat(
+        [pd.read_csv(path) for path in raw_paths],
+        ignore_index=True,
+        sort=False,
+    )
     observed_runs = len(
         raw[["environment", "agent", "seed"]].drop_duplicates()
     )
@@ -236,10 +247,18 @@ def audit(config_path: Path, result_dir: Path) -> dict:
                 "sha256": sha256(path),
                 "bytes": path.stat().st_size,
             }
-    result_files[raw_path.name] = {
-        "sha256": sha256(raw_path),
-        "bytes": raw_path.stat().st_size,
-    }
+    for raw_path in raw_paths:
+        logical_path = raw_path.relative_to(result_dir).as_posix()
+        result_files[logical_path] = {
+            "sha256": sha256(raw_path),
+            "bytes": raw_path.stat().st_size,
+        }
+    raw_manifest = result_dir / "raw_parts" / "manifest.json"
+    if raw_manifest.exists():
+        result_files["raw_parts/manifest.json"] = {
+            "sha256": sha256(raw_manifest),
+            "bytes": raw_manifest.stat().st_size,
+        }
 
     return {
         "status": "PASS" if not violations else "FAIL",
@@ -248,6 +267,7 @@ def audit(config_path: Path, result_dir: Path) -> dict:
         "expected_runs": expected_runs,
         "observed_runs": observed_runs,
         "run_shards_present": len(shards),
+        "raw_files": len(raw_paths),
         "raw_rows": len(raw),
         "violations": violations,
         "warnings": warnings,

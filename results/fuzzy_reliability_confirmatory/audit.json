@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "config": "configs\\fuzzy_reliability_confirmatory_30seed.yaml",
+  "result_dir": "results\\fuzzy_reliability_confirmatory",
+  "expected_runs": 540,
+  "observed_runs": 540,
+  "run_shards_present": 0,
+  "raw_files": 1,
+  "raw_rows": 284504,
+  "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "13aed3aeaac39f72b1196ef548ebd40880d095db66520f7c89bec8e8b86a7a52",
+      "bytes": 395285
+    },
+    "summary.csv": {
+      "sha256": "b4adc822fcc879c203dc2247d50692648035184bf50a538c0e0dd18db8d53dc9",
+      "bytes": 94904
+    },
+    "pairwise.csv": {
+      "sha256": "1e1ced61f09ab1e83b144c8174026ec372d57fd142bb7d1c2ce167e59dad77a9",
+      "bytes": 46024
+    },
+    "planned_contrasts.csv": {
+      "sha256": "9d6d372418d8b3d4720b7054b43721515739f9127cdc0dc63bcb76cd20770320",
+      "bytes": 1728
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "b8e5a3bcb1ee5c35ef8f75ff04b724335414a64c8688a7037b3242a0a55dc0c8",
+      "bytes": 6290
+    },
+    "cross_environment.csv": {
+      "sha256": "5171bdab7af412755d07ea2f2bbd00390193e8fd76011d39dac8d3064cf9b633",
+      "bytes": 1194
+    },
+    "metadata.json": {
+      "sha256": "7b4a71504b5261d994cc50221022cc556dd2f11f8fe9e27e13b5f7bc6f7cbc34",
+      "bytes": 11487
+    },
+    "raw.csv.gz": {
+      "sha256": "4bc6a0ee561ee5e6989292206479dcb4860aba8ddc1ce6dce36ad24fe3b55caa",
+      "bytes": 27255460
+    }
+  }
+}

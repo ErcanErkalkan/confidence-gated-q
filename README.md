@@ -2,7 +2,8 @@
 
 This repository contains the public code, configurations, seed-level results,
 tests, and audits for a soft-computing boundary analysis of exact-state memory,
-deep Q-networks (DQN), fuzzy adaptive arbitration, and support abstention.
+deep Q-networks (DQN), relative estimator reliability, fuzzy adaptive
+arbitration, and support abstention.
 
 The method is **not** a generally superior reinforcement-learning algorithm.
 Count gating is useful only when exact states recur. It is not a
@@ -35,6 +36,14 @@ Journal submission files are intentionally excluded from the public repository.
   usage, exact-memory size, and decision time under deployment goal shift.
 - The fuzzy adaptive gate improves over the validated DQN in selected tasks
   but does not generally beat tabular learning or support abstention.
+- On three stationary compact tasks, a new relative-reliability fuzzy gate
+  still does not significantly beat count gating.
+- Under two independently seeded recurring-state reliability shifts, the
+  relative-reliability fuzzy gate beats count gating in all `30/30` pairs,
+  with AUC gains of `0.0872` and `0.0585`.
+- A same-input crisp gate remains slightly stronger than fuzzy defuzzification.
+  The supported mechanism is relative reliability, not uniquely necessary
+  fuzzy inference.
 - In 150 matched physics-based UAV runs, the obstacle-aware PID controller
   reaches `0.922` waypoint success and `0.006` collision rate. The best learned
   support variant reaches `0.162` success, exposing a large deployment gap
@@ -57,6 +66,8 @@ Journal submission files are intentionally excluded from the public repository.
 | fuzzy component ablation | `configs/fuzzy_ablation/fuzzy_ablation_30seed.yaml` | 600-629 | main confirmatory |
 | application fallback ablation | `configs/application_risk_variants_30seed.yaml` | 600-629 | main confirmatory |
 | physics-based Crazyflie validation | `configs/uav_pybullet_30seed.yaml` | 900-929 | main external validation |
+| stationary fuzzy reliability | `configs/fuzzy_reliability_confirmatory_30seed.yaml` | 1300-1329 | independent confirmatory |
+| recurring-state reliability shift | `configs/fuzzy_reliability_shift_confirmatory_30seed.yaml` | 1400-1429 | independent confirmatory |
 
 ## Install
 
@@ -116,6 +127,9 @@ python scripts/run_application_risk_variants.py
 python scripts/aggregate_application_risk.py
 python scripts/run_uav_validation.py
 python scripts/aggregate_uav_validation.py
+python scripts/run_benchmark.py --config configs/fuzzy_reliability_confirmatory_30seed.yaml
+python scripts/run_benchmark.py --config configs/fuzzy_reliability_shift_confirmatory_30seed.yaml
+python scripts/aggregate_fuzzy_reliability.py
 python scripts/generate_submission_tables.py
 python scripts/generate_submission_figures.py
 python scripts/generate_submission_assets.py
@@ -126,14 +140,17 @@ python scripts/audit_submission_readiness.py
 
 - **Main confirmatory experiments:** executed 30-seed baseline, approximate
   support, fuzzy ablation, application fallback, and physics-based UAV
-  families.
+  families, plus stationary and recurring-state relative-reliability tests.
 - **Auxiliary smoke checks:** the two-seed quick path; never used as performance
   evidence.
 - **Pre-registered extension protocols:** A2C/PPO and convolutional MiniGrid;
   not reported as completed results.
 
 Completed run shards are resumable and ignored by Git. Committed compressed
-CSV files are lossless and read directly by pandas.
+CSV files are lossless and read directly by pandas. Very large raw families
+are stored as semantic `raw_parts/*.csv.gz` files grouped by environment and
+agent; `scripts/audit_results.py` validates both single-file and multipart raw
+formats.
 
 ## Reproducibility Controls
 
@@ -161,7 +178,7 @@ CSV files are lossless and read directly by pandas.
 
 ## Citation
 
-The artifact is prepared as release `v1.5.0`. Use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927 and the source repository https://github.com/ErcanErkalkan/confidence-gated-q when citing the reproducibility package.
+The artifact is prepared as release `v1.6.0`. Use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927 and the source repository https://github.com/ErcanErkalkan/confidence-gated-q when citing the reproducibility package.
 
 ## Author
 

@@ -1,9 +1,9 @@
 {
   "title": "Support-Boundary Diagnostic for Tabular-Neural Reinforcement Learning: Reproducibility Artifact",
-  "description": "Code, exact-step results, physics-based Crazyflie UAV validation, fuzzy adaptive arbitration, support and cost metrics, compact and MiniGrid validation, and integrity audits for a soft-computing boundary analysis.",
+  "description": "Code, exact-step results, relative-reliability and fuzzy arbitration studies, physics-based Crazyflie UAV validation, support and cost metrics, compact and MiniGrid validation, and integrity audits for a soft-computing boundary analysis.",
   "upload_type": "software",
-  "publication_date": "2026-06-11",
-  "version": "1.5.0",
+  "publication_date": "2026-06-12",
+  "version": "1.6.0",
   "license": "MIT",
   "creators": [
     {
@@ -26,6 +26,8 @@
     "episodic memory",
     "support shift",
     "fuzzy adaptive gate",
+    "relative estimator reliability",
+    "nonstationary reinforcement learning",
     "tabular-neural reinforcement learning",
     "abstention",
     "negative results",

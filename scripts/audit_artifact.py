@@ -47,6 +47,8 @@ RESULT_DIRS = (
     "results/fuzzy_ablation",
     "results/application_risk_variants",
     "results/uav_pybullet_validation",
+    "results/fuzzy_reliability_confirmatory",
+    "results/fuzzy_reliability_shift_confirmatory",
 )
 EXCLUDED_PARTS = {
     ".git",
@@ -141,6 +143,8 @@ def audit(root: Path) -> dict:
         "tables/table_approx_support.csv",
         "tables/table_application_risk_adjusted.csv",
         "tables/table_uav_pybullet_validation.csv",
+        "tables/table_fuzzy_reliability_stationary.csv",
+        "tables/table_fuzzy_reliability_shift.csv",
     ]
     for name in required:
         if not (root / name).exists():
@@ -157,8 +161,10 @@ def audit(root: Path) -> dict:
         if not (
             (result_dir / "raw.csv").exists()
             or (result_dir / "raw.csv.gz").exists()
+            or (result_dir / "raw.csv.xz").exists()
+            or any((result_dir / "raw_parts").glob("*.csv*"))
         ):
-            violations.append(f"{relative}: missing raw.csv or raw.csv.gz")
+            violations.append(f"{relative}: missing raw experiment data")
 
     audit_manifest(root, violations)
     return {

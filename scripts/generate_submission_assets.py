@@ -80,6 +80,8 @@ def copy_submission_figures() -> None:
         "fig_application_tradeoff.pdf",
         "fig_uav_pybullet_validation.pdf",
         "fig_uav_pybullet_tradeoff.pdf",
+        "fig_fuzzy_reliability_stationary.pdf",
+        "fig_fuzzy_reliability_shift.pdf",
     ):
         shutil.copy2(FIGURES / name, PAPER_FIGURES / name)
 
@@ -106,11 +108,20 @@ def submission_result_tables() -> None:
             TABLES / "table_uav_pybullet_validation.csv",
             "table_uav_pybullet_validation.tex",
         ),
+        (
+            TABLES / "table_fuzzy_reliability_stationary.csv",
+            "table_fuzzy_reliability_stationary.tex",
+        ),
+        (
+            TABLES / "table_fuzzy_reliability_shift.csv",
+            "table_fuzzy_reliability_shift.tex",
+        ),
     )
     for source, target in specifications:
         frame = pd.read_csv(source)
         compact = frame[
             [
+                "environment",
                 "method",
                 "metric",
                 "n_seeds",
@@ -127,9 +138,14 @@ def submission_result_tables() -> None:
             ),
             axis=1,
         )
-        compact = compact[["method", "metric", "n_seeds", "estimate"]]
+        columns = ["method", "metric", "n_seeds", "estimate"]
+        if frame["environment"].nunique() > 1:
+            columns.insert(0, "environment")
+        compact = compact[columns]
         latex = compact.to_latex(
-            index=False, escape=True, column_format="llrl"
+            index=False,
+            escape=True,
+            column_format="lllrl" if len(columns) == 5 else "llrl",
         )
         (PAPER_GENERATED / target).write_text(latex, encoding="utf-8")
 
@@ -159,6 +175,8 @@ def benchmark_status() -> None:
         ("fuzzy component ablation", "main confirmatory", 120),
         ("application fallback ablation", "main confirmatory", 120),
         ("physics-based UAV validation", "main external validation", 150),
+        ("fuzzy reliability stationary", "independent confirmatory", 540),
+        ("reliability shift", "independent confirmatory", 360),
     )
     rows.extend(additions)
     frame = pd.DataFrame(

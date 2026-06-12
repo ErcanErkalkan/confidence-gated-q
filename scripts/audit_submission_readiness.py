@@ -50,6 +50,8 @@ PAPER_FILES = (
     "paper/generated/table_fuzzy_ablation.tex",
     "paper/generated/table_application_risk_adjusted.tex",
     "paper/generated/table_uav_pybullet_validation.tex",
+    "paper/generated/table_fuzzy_reliability_stationary.tex",
+    "paper/generated/table_fuzzy_reliability_shift.tex",
     "paper/figures/fig_strong_baselines.pdf",
     "paper/figures/fig_approx_support.pdf",
     "paper/figures/fig_fuzzy_memberships.pdf",
@@ -57,6 +59,8 @@ PAPER_FILES = (
     "paper/figures/fig_application_tradeoff.pdf",
     "paper/figures/fig_uav_pybullet_validation.pdf",
     "paper/figures/fig_uav_pybullet_tradeoff.pdf",
+    "paper/figures/fig_fuzzy_reliability_stationary.pdf",
+    "paper/figures/fig_fuzzy_reliability_shift.pdf",
 )
 def raw_path(result_dir: Path) -> Path:
     for name in ("raw.csv", "raw.csv.gz"):

@@ -13,7 +13,9 @@ metadata are excluded from the clean release package.
 
 - Repository: https://github.com/ErcanErkalkan/confidence-gated-q
 - Persistent concept DOI: https://doi.org/10.5281/zenodo.20578927
-- Version-specific DOI: not minted in this environment; replace the concept DOI in final proofs if a journal-specific Zenodo release is created.
+- Latest archived release DOI before v1.6.0:
+  https://doi.org/10.5281/zenodo.20661403 (`v1.5.0`).
+- The `v1.6.0` DOI must be added after the new Zenodo version is minted.
 
 ## ASOC Result Lineage
 
@@ -32,6 +34,8 @@ metadata are excluded from the clean release package.
 | `results/fuzzy_ablation` | `configs/fuzzy_ablation/fuzzy_ablation_30seed.yaml` | 600-629 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
 | `results/application_risk_variants` | `configs/application_risk_variants_30seed.yaml` | 600-629 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
 | `results/uav_pybullet_validation` | `configs/uav_pybullet_30seed.yaml` | 900-929 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
+| `results/fuzzy_reliability_confirmatory` | `configs/fuzzy_reliability_confirmatory_30seed.yaml` | 1300-1329 | PASS | `ce81c103cc524029aa4bbeda841e350b8f9266ec` |
+| `results/fuzzy_reliability_shift_confirmatory` | `configs/fuzzy_reliability_shift_confirmatory_30seed.yaml` | 1400-1429 | PASS | `ce81c103cc524029aa4bbeda841e350b8f9266ec` |
 
 Each `metadata.json` records the complete config, config SHA-256, requested and
 resolved environment IDs, observation representation, platform, package
@@ -45,6 +49,10 @@ implementation, package metadata, and dependency files. The corresponding
 rejected when any of those execution inputs differ from the recorded git
 commit. Result audits recompute the snapshot and report `STRICT_PASS` only when
 the current artifact matches the executed inputs.
+
+The two `v1.6.0` result families share execution commit `ce81c10` and package
+version `1.6.0`. The large reliability-shift raw table is losslessly split by
+environment and agent under `raw_parts/`; its manifest records each part hash.
 
 ## Result Preservation
 
