@@ -260,6 +260,75 @@ class ApplicationNavigationSupportShiftEnv(gym.Env):
         return self._observation(), reward, terminated, truncated, info
 
 
+class ReliabilityShiftBanditEnv(gym.Env):
+    """Contextual bandit with recurring states and a delayed reward shift."""
+
+    metadata = {"render_modes": []}
+
+    def __init__(
+        self,
+        context_count: int = 41,
+        regime: str = "switch",
+        shift_after: int = 6000,
+        pre_boundary: float = 0.5,
+        post_boundary: float = 0.3,
+    ):
+        if context_count < 5:
+            raise ValueError("context_count must be at least 5")
+        if regime not in {"pre", "post", "switch"}:
+            raise ValueError("regime must be pre, post, or switch")
+        if not 0.0 < pre_boundary < 1.0:
+            raise ValueError("pre_boundary must be in (0, 1)")
+        if not 0.0 < post_boundary < 1.0:
+            raise ValueError("post_boundary must be in (0, 1)")
+        self.context_count = int(context_count)
+        self.regime = regime
+        self.shift_after = int(shift_after)
+        self.pre_boundary = float(pre_boundary)
+        self.post_boundary = float(post_boundary)
+        self.action_space = spaces.Discrete(2)
+        self.observation_space = spaces.Box(
+            low=0.0, high=1.0, shape=(1,), dtype=np.float32
+        )
+        self.total_steps = 0
+        self.context_index = 0
+
+    def _post_shift(self) -> bool:
+        return self.regime == "post" or (
+            self.regime == "switch" and self.total_steps >= self.shift_after
+        )
+
+    def _observation(self) -> np.ndarray:
+        return np.asarray(
+            [self.context_index / (self.context_count - 1)],
+            dtype=np.float32,
+        )
+
+    def reset(self, *, seed: int | None = None, options=None):
+        super().reset(seed=seed)
+        self.context_index = int(
+            self.np_random.integers(self.context_count)
+        )
+        return self._observation(), {
+            "post_shift": self._post_shift(),
+        }
+
+    def step(self, action: int):
+        post_shift = self._post_shift()
+        boundary = (
+            self.post_boundary if post_shift else self.pre_boundary
+        )
+        context = self.context_index / (self.context_count - 1)
+        optimal_action = int(context >= boundary)
+        success = int(action) == optimal_action
+        reward = 1.0 if success else -1.0
+        self.total_steps += 1
+        return self._observation(), reward, True, False, {
+            "post_shift": post_shift,
+            "optimal_action": optimal_action,
+        }
+
+
 def has_uav_backend() -> bool:
     return (
         importlib.util.find_spec("gym_pybullet_drones") is not None
@@ -736,6 +805,8 @@ def make_env(spec: dict[str, Any], evaluation: bool = False) -> gym.Env:
         return StructuredFourRoomsEnv(**kwargs)
     if env_id == "ApplicationNavigationSupportShift-v0":
         return ApplicationNavigationSupportShiftEnv(**kwargs)
+    if env_id == "ReliabilityShiftBandit-v0":
+        return ReliabilityShiftBanditEnv(**kwargs)
     if env_id == "PyBulletUAVWaypointSupportShift-v0":
         return PyBulletUAVWaypointSupportShiftEnv(**kwargs)
 

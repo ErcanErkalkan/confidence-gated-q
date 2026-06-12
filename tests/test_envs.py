@@ -9,6 +9,7 @@ from hybrid_q.encoding import ObservationEncoder
 from hybrid_q.envs import (
     ApplicationNavigationSupportShiftEnv,
     PyBulletUAVWaypointSupportShiftEnv,
+    ReliabilityShiftBanditEnv,
     StructuredFourRoomsEnv,
     has_uav_backend,
 )
@@ -54,6 +55,24 @@ def test_application_navigation_goal_shift_and_seed_are_deterministic():
     second_step = train.step(0)
     assert np.array_equal(first_step[0], second_step[0])
     assert first_step[1:] == second_step[1:]
+
+
+def test_reliability_shift_bandit_changes_the_optimal_action():
+    env = ReliabilityShiftBanditEnv(
+        context_count=5,
+        regime="switch",
+        shift_after=1,
+        pre_boundary=0.75,
+        post_boundary=0.25,
+    )
+    env.context_index = 2
+    _, pre_reward, _, _, pre_info = env.step(0)
+    env.context_index = 2
+    _, post_reward, _, _, post_info = env.step(1)
+    assert pre_reward == 1.0
+    assert post_reward == 1.0
+    assert pre_info["post_shift"] is False
+    assert post_info["post_shift"] is True
 
 
 def test_step_budget_is_exact(tmp_path):

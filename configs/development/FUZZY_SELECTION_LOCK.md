@@ -28,3 +28,16 @@ confirmatory seeds 1300-1329 are executed.
 
 The development configs preserve the full candidate set and selection rule.
 Development results are not treated as confirmatory evidence.
+
+## Reliability-Shift Extension
+
+The recurring-state reliability-shift protocol uses development seeds 0-4
+only. It compares high-support/low-reliability singleton values
+`{0.10, 0.35, 0.75}` over post-shift boundaries 0.30 and 0.20.
+
+- Selection rule: lowest average return-AUC rank across both severities.
+- Locked singleton: `0.10`.
+- Remaining singleton vector: `[0.0, 0.20, 0.70, 0.10, 0.95]`.
+- Independent confirmatory seeds: 1400-1429.
+- Confirmatory parameters may not be changed after the source execution
+  commit.

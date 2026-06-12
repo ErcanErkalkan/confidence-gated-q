@@ -30,10 +30,12 @@ CONFIGS = (
     "uav_pybullet_30seed.yaml",
     "uav_pybullet_smoke.yaml",
     "fuzzy_reliability_confirmatory_30seed.yaml",
+    "fuzzy_reliability_shift_confirmatory_30seed.yaml",
     "development/fuzzy_risk_selection.yaml",
     "development/fuzzy_reliability_selection.yaml",
     "development/fuzzy_rule_selection.yaml",
     "development/fuzzy_component_screen.yaml",
+    "development/fuzzy_reliability_shift_selection.yaml",
 )
 
 
