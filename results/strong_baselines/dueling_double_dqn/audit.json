@@ -4,17 +4,19 @@
   "result_dir": "results\\strong_baselines\\dueling_double_dqn",
   "expected_runs": 30,
   "observed_runs": 30,
-  "run_shards_present": 0,
+  "run_shards_present": 30,
   "raw_rows": 8807,
   "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
   "files": {
     "seed_metrics.csv": {
-      "sha256": "58d344a1a18ed49b6481860ec62b3d335d84536f3d36c30a56efd3a30d191852",
-      "bytes": 23353
+      "sha256": "b253a5e3722b8b2fe085e60ffa046ae1ad909acf9a9e7aff44c118a25c7dd498",
+      "bytes": 23080
     },
     "summary.csv": {
-      "sha256": "cc1fbe7e9aeda4269459e766bbf57d8678c5693b987695043666dc0c2bb1cbd5",
-      "bytes": 4390
+      "sha256": "7fe35bdd3448af3aba6767410787faaa0fc6b65423020fd4ad579a3a65953052",
+      "bytes": 4393
     },
     "pairwise.csv": {
       "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
@@ -33,12 +35,12 @@
       "bytes": 274
     },
     "metadata.json": {
-      "sha256": "8681eed65c3250b74b7fa353a1ae39fad22dcd12ef812c470074dedc15efcba4",
-      "bytes": 2960
+      "sha256": "0b5e9547d6fb0a687badb794071dd9b8fde63f843d9fd376e22b4fc925ba16aa",
+      "bytes": 5811
     },
     "raw.csv.gz": {
-      "sha256": "9b954aff30c9f4352d6c2d4fc768a4ce53058cec30833c2bede429817b79a547",
-      "bytes": 486266
+      "sha256": "71a03fd759b13f25643edd840ad61d65f4d175e0053f6abfc4b80583f487bcd3",
+      "bytes": 518517
     }
   }
 }

@@ -27,11 +27,11 @@ metadata are excluded from the clean release package.
 | `results/application_navigation_case_study` | `configs/application_navigation_case_study.json` | 600-629 | PASS | `b292c8d` |
 | `results/adaptive_gate_compact_validation` | `configs/adaptive_gate_compact_validation.json` | 700-729 | PASS | `b292c8d` |
 | `results/cost_support_metrics` | `configs/cost_support_metrics.json` | 800-809 | PASS | `b292c8d` |
-| `results/strong_baselines` | `configs/strong_baselines/*.yaml` | 600-629 | PASS | result metadata |
-| `results/approx_support` | `configs/approx_support/*.yaml` | 600-629 | PASS | result metadata |
-| `results/fuzzy_ablation` | `configs/fuzzy_ablation/fuzzy_ablation_30seed.yaml` | 600-629 | PASS | result metadata |
-| `results/application_risk_variants` | `configs/application_risk_variants_30seed.yaml` | 600-629 | PASS | result metadata |
-| `results/uav_pybullet_validation` | `configs/uav_pybullet_30seed.yaml` | 900-929 | PASS | result metadata |
+| `results/strong_baselines` | `configs/strong_baselines/*.yaml` | 600-629 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
+| `results/approx_support` | `configs/approx_support/*.yaml` | 600-629 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
+| `results/fuzzy_ablation` | `configs/fuzzy_ablation/fuzzy_ablation_30seed.yaml` | 600-629 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
+| `results/application_risk_variants` | `configs/application_risk_variants_30seed.yaml` | 600-629 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
+| `results/uav_pybullet_validation` | `configs/uav_pybullet_30seed.yaml` | 900-929 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
 
 Each `metadata.json` records the complete config, config SHA-256, requested and
 resolved environment IDs, observation representation, platform, package

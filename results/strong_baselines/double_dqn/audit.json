@@ -4,17 +4,19 @@
   "result_dir": "results\\strong_baselines\\double_dqn",
   "expected_runs": 30,
   "observed_runs": 30,
-  "run_shards_present": 0,
+  "run_shards_present": 30,
   "raw_rows": 8825,
   "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
   "files": {
     "seed_metrics.csv": {
-      "sha256": "0c008fb6e8f59f83f2d6cc594e4ed0c1e32ef0ac04f75ae487c6ccbb8af9148b",
-      "bytes": 22587
+      "sha256": "610fa53e4e46f224f738d047d11af7d457815c7f76f7751b28810c234a3c46ef",
+      "bytes": 22348
     },
     "summary.csv": {
-      "sha256": "aee63106f6828ca605e2b4443c3de5ec73d1ccf3473431073f13d97da23368f8",
-      "bytes": 4288
+      "sha256": "c23901505cd3424fecef8f39359941e78d48ad6ae175bb2524784ef0974fe2e7",
+      "bytes": 4283
     },
     "pairwise.csv": {
       "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
@@ -33,12 +35,12 @@
       "bytes": 250
     },
     "metadata.json": {
-      "sha256": "59a5c582d015c95a66239c5365d9dba4cd853a2987f82f9b6f47c1e6dad6f36a",
-      "bytes": 2877
+      "sha256": "ae7ec3f25ac08d524f7abb0a2e5a998f9a9eabffdaf4be9af2aeca1b05e8b0af",
+      "bytes": 5720
     },
     "raw.csv.gz": {
-      "sha256": "00df727f3bbc6e43725b0a445b693b5612d341acdf67874dc52771fbb223686b",
-      "bytes": 484892
+      "sha256": "3fb1471a46ae99a44afb19cf686b28e7cb19bf8183443298d588c5bcd961c30c",
+      "bytes": 512233
     }
   }
 }

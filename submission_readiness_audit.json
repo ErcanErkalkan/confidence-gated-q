@@ -1,5 +1,12 @@
 {
   "status": "PASS",
   "focused_experiment_runs": 510,
+  "execution_commits": [
+    "a654625acfbaab6f0875c6312e90326207cf3149"
+  ],
+  "package_versions": [
+    "1.5.0"
+  ],
+  "source_snapshot_count": 7,
   "violations": []
 }

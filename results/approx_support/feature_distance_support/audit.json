@@ -4,17 +4,19 @@
   "result_dir": "results\\approx_support\\feature_distance_support",
   "expected_runs": 30,
   "observed_runs": 30,
-  "run_shards_present": 0,
+  "run_shards_present": 30,
   "raw_rows": 10340,
   "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
   "files": {
     "seed_metrics.csv": {
-      "sha256": "d1be82d1702d70e2d4ee9ec28e865581b7561e9a4a386344e2dde74782583162",
-      "bytes": 26457
+      "sha256": "733fdf6bf9c7720f9aad5684e74d02601897e38d6a0c6807d86b1796b957efcc",
+      "bytes": 26306
     },
     "summary.csv": {
-      "sha256": "33c89d78ae9700a2b347a40c108731eb796f580e1116c1b522bea14004889a67",
-      "bytes": 6250
+      "sha256": "05c653bfc7e78c9a394fbb5a1c6cd5cc4d7995ff63f8f343411dfa46a6f5f59b",
+      "bytes": 6254
     },
     "pairwise.csv": {
       "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
@@ -33,12 +35,12 @@
       "bytes": 307
     },
     "metadata.json": {
-      "sha256": "8df9be2d3e9825c3af79a52514c9f0eb3b4758c4da14d1aed00a5c1d896cfe4d",
-      "bytes": 3191
+      "sha256": "f0e1372612c09118a19634c28f4799438a438649bac9bcd66db66ad03f8ba75d",
+      "bytes": 6046
     },
     "raw.csv.gz": {
-      "sha256": "778697837f0d6915ee7b5be275cad8e8fcb61bfce8979b1a10e074f1caff9a10",
-      "bytes": 869149
+      "sha256": "16c76d546d7fc4f7c24db063397ab2d2b4b520f9015ab6a9d13debac37277079",
+      "bytes": 886756
     }
   }
 }
