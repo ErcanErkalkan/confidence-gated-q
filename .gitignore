@@ -7,9 +7,11 @@ __pycache__/
 .coverage
 htmlcov/
 .venv/
+.uav_smoke/
 *.egg-info/
 build/
 dist/
+.quick_repro/
 
 # Operating-system files
 .DS_Store
@@ -17,23 +19,18 @@ Thumbs.db
 
 # Experiment runtime output
 results/*/runs/
+results/**/runs/
 results/development/
 release/
 
 # Journal submission and local paper assets
 paper/
-submission_clean_asoc/
-submission_clean_asoc.zip
-submission_clean_asoc.zip.sha256
 submission_audit.json
 submission_audit.md
 FINAL_SUBMISSION_CHECK.md
 ASOC_FINAL_PACKAGE_README.txt
-STRICT_REVIEW_FIX_LOG.md
-asoc_strong_revision_audit.json
 final_audit_report.txt
 final_checksums.sha256
-manuscript_asoc_final.pdf
 
 # Local submission tooling
 scripts/audit_submission.py

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "confidence-gated-q"
-version = "1.4.0"
+version = "1.5.0"
 description = "Support-boundary diagnostics for tabular-neural RL under exact-state support shift"
 requires-python = ">=3.10"
 authors = [
@@ -17,6 +17,7 @@ dependencies = [
   "pandas>=2.2",
   "scipy>=1.13",
   "matplotlib>=3.9",
+  "pyyaml>=6.0",
   "torch>=2.4",
 ]
 
@@ -27,6 +28,10 @@ Issues = "https://github.com/ErcanErkalkan/confidence-gated-q/issues"
 
 [project.optional-dependencies]
 test = ["pytest>=8.0"]
+uav = [
+  "gym-pybullet-drones @ git+https://github.com/utiasDSL/gym-pybullet-drones.git@9bc12bc583fa3b28807b2f90a8cadf09fb06e1ff",
+  "pybullet==3.2.7",
+]
 
 [project.scripts]
 hybrid-q-run = "hybrid_q.cli:run_main"

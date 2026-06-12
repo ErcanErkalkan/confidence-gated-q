@@ -1,0 +1,13 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+crisp_threshold_gate,return_auc,1,4.0,4.0,4.0,4.0
+fuzzy_no_confidence,return_auc,1,2.0,2.0,2.0,2.0
+fuzzy_no_count,return_auc,1,1.0,1.0,1.0,1.0
+fuzzy_no_td_residual,return_auc,1,3.0,3.0,3.0,3.0
+crisp_threshold_gate,success_rate_auc,1,1.0,1.0,1.0,1.0
+fuzzy_no_confidence,success_rate_auc,1,2.0,2.0,2.0,2.0
+fuzzy_no_count,success_rate_auc,1,4.0,4.0,4.0,4.0
+fuzzy_no_td_residual,success_rate_auc,1,3.0,3.0,3.0,3.0
+crisp_threshold_gate,mean_return,1,4.0,4.0,4.0,4.0
+fuzzy_no_confidence,mean_return,1,3.0,3.0,3.0,3.0
+fuzzy_no_count,mean_return,1,1.0,1.0,1.0,1.0
+fuzzy_no_td_residual,mean_return,1,2.0,2.0,2.0,2.0

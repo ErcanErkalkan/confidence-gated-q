@@ -7,6 +7,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from hybrid_q.config import load_config
+
 
 REQUIRED_COLUMNS = {
     "experiment_name",
@@ -56,7 +58,7 @@ def expected_checkpoints(config: dict, env_spec: dict) -> set[int]:
 
 
 def audit(config_path: Path, result_dir: Path) -> dict:
-    config = json.loads(config_path.read_text(encoding="utf-8"))
+    config = load_config(config_path)
     metadata = json.loads(
         (result_dir / "metadata.json").read_text(encoding="utf-8")
     )

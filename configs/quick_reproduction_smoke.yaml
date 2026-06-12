@@ -1,0 +1,48 @@
+experiment_name: quick_reproduction_smoke
+output_dir: .quick_repro/results
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 1
+seeds: [42, 43]
+evaluation:
+  interval_steps: 60
+  episodes: 2
+analysis:
+  primary_metric: return_auc
+  analysis_status: auxiliary_smoke_check
+  planned_contrasts:
+    - name: double_dqn_vs_tabular_smoke
+      left: double_dqn_smoke
+      right: tabular_smoke
+      metric: return_auc
+envs:
+  - name: ApplicationNavigation-quick-smoke
+    id: ApplicationNavigationSupportShift-v0
+    kwargs:
+      goal_split: train
+      slip_probability: 0.05
+      max_steps: 40
+    eval_kwargs:
+      goal_split: deployment
+    training_steps: 120
+    max_steps: 40
+    success_mode: positive_terminal
+agents:
+  - name: tabular_smoke
+    kind: tabular
+    params:
+      tabular_learning_rate: 0.2
+      epsilon_decay_steps: 100
+  - name: double_dqn_smoke
+    kind: double_dqn
+    params:
+      double_dqn: true
+      learning_rate: 0.0003
+      batch_size: 8
+      replay_capacity: 500
+      replay_warmup: 16
+      train_frequency: 4
+      target_update_interval: 40
+      hidden_size: 32
+      epsilon_decay_steps: 100

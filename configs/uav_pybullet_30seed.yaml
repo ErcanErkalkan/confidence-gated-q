@@ -1,0 +1,116 @@
+experiment_name: pybullet_uav_external_validation_30seed
+output_dir: results/uav_pybullet_validation
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+seeds: [900, 901, 902, 903, 904, 905, 906, 907, 908, 909, 910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929]
+evaluation:
+  interval_steps: 2000
+  episodes: 15
+analysis:
+  primary_metric: risk_adjusted_score
+  analysis_status: main_external_physics_based_uav_validation
+  risk_objective: J_risk = success_rate - 1.0 * collision_rate - 0.05 * idle_rate
+  planned_contrasts:
+    - name: double_dqn_vs_dqn
+      left: double_dqn
+      right: dqn
+      metric: risk_adjusted_score
+    - name: fuzzy_support_vs_dqn
+      left: fuzzy_support
+      right: dqn
+      metric: risk_adjusted_score
+    - name: feature_support_vs_dqn
+      left: feature_support
+      right: dqn
+      metric: risk_adjusted_score
+    - name: feature_support_vs_pid_safe_controller
+      left: feature_support
+      right: pid_safe_controller
+      metric: risk_adjusted_score
+envs:
+  - name: Crazyflie-waypoint-physics-and-goal-shift
+    id: PyBulletUAVWaypointSupportShift-v0
+    kwargs:
+      target_split: train
+      physics: pyb
+      pyb_freq: 240
+      ctrl_freq: 30
+      action_repeat: 4
+      max_steps: 80
+      speed_fraction: 0.8
+      goal_tolerance: 0.16
+      state_quantization: 0.05
+      initial_position_jitter: 0.02
+      initial_attitude_jitter: 0.01
+      wind_force_std: 0.0
+      lambda_collision: 1.0
+      lambda_idle: 0.05
+    eval_kwargs:
+      target_split: deployment
+      physics: pyb_gnd_drag_dw
+      initial_position_jitter: 0.06
+      initial_attitude_jitter: 0.06
+      wind_force_std: 0.003
+    training_steps: 6000
+    max_steps: 80
+    success_mode: positive_terminal
+agents:
+  - name: pid_safe_controller
+    kind: uav_safe_waypoint_controller
+    params: {}
+  - name: dqn
+    kind: dqn
+    params:
+      double_dqn: false
+      learning_rate: 0.0005
+      batch_size: 64
+      replay_capacity: 100000
+      replay_warmup: 256
+      train_frequency: 4
+      target_update_interval: 250
+      hidden_size: 128
+      epsilon_decay_steps: 5000
+  - name: double_dqn
+    kind: double_dqn
+    params:
+      learning_rate: 0.0005
+      batch_size: 64
+      replay_capacity: 100000
+      replay_warmup: 256
+      train_frequency: 4
+      target_update_interval: 250
+      hidden_size: 128
+      epsilon_decay_steps: 5000
+  - name: fuzzy_support
+    kind: fuzzy_support_adaptive_gate
+    params:
+      double_dqn: true
+      learning_rate: 0.0005
+      tabular_learning_rate: 0.2
+      batch_size: 64
+      replay_capacity: 100000
+      replay_warmup: 256
+      train_frequency: 4
+      target_update_interval: 250
+      hidden_size: 128
+      fuzzy_tau_support: 4
+      fuzzy_abstain_zero_support: false
+      epsilon_decay_steps: 5000
+  - name: feature_support
+    kind: feature_distance_support_gate
+    params:
+      double_dqn: true
+      learning_rate: 0.0005
+      tabular_learning_rate: 0.2
+      batch_size: 64
+      replay_capacity: 100000
+      replay_warmup: 256
+      train_frequency: 4
+      target_update_interval: 250
+      hidden_size: 128
+      approximate_support_k: 7
+      approximate_support_bandwidth: 0.35
+      approximate_support_tau: 2.0
+      epsilon_decay_steps: 5000

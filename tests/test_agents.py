@@ -2,7 +2,14 @@ import numpy as np
 import torch
 from torch import nn
 
-from src.hybrid_q.agents import A2CAgent, AgentConfig, DQNAgent, HybridQAgent, TabularQAgent
+from hybrid_q.agents import (
+    A2CAgent,
+    AgentConfig,
+    DQNAgent,
+    HybridQAgent,
+    TabularQAgent,
+    UAVSafeWaypointControllerAgent,
+)
 
 
 def test_tabular_update_moves_toward_reward():
@@ -33,6 +40,15 @@ def test_optimizer_contains_each_online_parameter_once():
         id(parameter) for parameter in online
     }
     assert not ({id(parameter) for parameter in optimized} & target_ids)
+
+
+def test_uav_safe_waypoint_controller_climbs_near_obstacle():
+    agent = UAVSafeWaypointControllerAgent(action_dim=7, seed=3)
+    state = np.zeros(15, dtype=np.float32)
+    state[2] = 0.4
+    state[3:6] = [0.4, -0.4, 0.1]
+    state[12:15] = [0.1, -0.1, -0.1]
+    assert agent.act(state, "state", epsilon=0.0) == 4
 
 
 def test_count_gate_increases_with_visits():
@@ -219,7 +235,7 @@ def test_approximate_support_gate_retrieves_nearby_memory():
             approximate_support_bandwidth=10.0,
             approximate_support_tau=1.0,
         ),
-        gate_kind="approx_count",
+        gate_kind="feature_distance_support",
     )
     seen = np.array([1.0, 0.0], dtype=np.float32)
     nearby = np.array([0.9, 0.1], dtype=np.float32)
@@ -230,6 +246,41 @@ def test_approximate_support_gate_retrieves_nearby_memory():
     assert decision["unsupported_state"] == 1.0
     assert decision["memory_branch_weight"] > 0.0
     assert values[1] > values[0]
+
+
+def test_knn_support_rejects_neighbors_outside_radius():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(
+            replay_warmup=100,
+            approximate_support_k=1,
+            approximate_support_bandwidth=0.05,
+            approximate_support_tau=1.0,
+        ),
+        gate_kind="knn_support",
+    )
+    seen = np.array([1.0, 0.0], dtype=np.float32)
+    far = np.array([0.0, 1.0], dtype=np.float32)
+    agent.observe(seen, "seen", 1, 2.0, far, "next", True)
+    agent.q_values(far, "far")
+    assert agent.decision_diagnostics()["memory_branch_weight"] == 0.0
+
+
+def test_verified_safe_fallback_avoids_application_wall():
+    agent = HybridQAgent(
+        input_dim=4,
+        action_dim=5,
+        seed=0,
+        config=AgentConfig(
+            abstain_action=4,
+            fallback_policy="verified_safe",
+        ),
+        gate_kind="support_abstain",
+    )
+    state = np.asarray([3 / 8, 3 / 8, 7 / 8, 3 / 8], dtype=np.float32)
+    assert agent.act(state, "unseen", epsilon=0.0) != 1
 
 
 def test_dueling_dqn_network_outputs_action_values():

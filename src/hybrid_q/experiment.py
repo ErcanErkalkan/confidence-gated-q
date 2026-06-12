@@ -20,6 +20,7 @@ import torch
 
 from . import __version__ as PACKAGE_VERSION
 from .agents import BaseAgent, create_agent
+from .config import load_config
 from .encoding import ObservationEncoder
 from .envs import episode_succeeded, make_env, resolve_env_id
 
@@ -57,6 +58,8 @@ FIELDNAMES = [
     "numpy_version",
     "gymnasium_version",
     "minigrid_version",
+    "gym_pybullet_drones_version",
+    "pybullet_version",
     "mean_gate",
     "support_abstention_rate",
     "global_tabular_error",
@@ -65,6 +68,8 @@ FIELDNAMES = [
     "failure_rate",
     "collision_rate",
     "risk_zone_rate",
+    "idle_rate",
+    "risk_adjusted_score",
     "unsupported_state_ratio",
     "memory_branch_usage_ratio",
     "neural_branch_usage_ratio",
@@ -182,6 +187,9 @@ def _new_decision_trace() -> dict[str, list]:
         "inference_ns": [],
         "collision": [],
         "risk_zone": [],
+        "idle": [],
+        "lambda_collision": [],
+        "lambda_idle": [],
     }
 
 
@@ -205,6 +213,9 @@ def _append_decision_trace(
     trace["inference_ns"].append(float(inference_ns))
     trace["collision"].append(float(bool(info.get("collision", False))))
     trace["risk_zone"].append(float(bool(info.get("risk_zone", False))))
+    trace["idle"].append(float(bool(info.get("idle", False))))
+    trace["lambda_collision"].append(float(info.get("lambda_collision", 1.0)))
+    trace["lambda_idle"].append(float(info.get("lambda_idle", 0.1)))
 
 
 def _finite_mean(values: list) -> float:
@@ -226,10 +237,20 @@ def _summarize_decision_trace(
     alpha = np.asarray(trace["adaptive_alpha"], dtype=float)
     alpha = alpha[np.isfinite(alpha)]
     inference_us = np.asarray(trace["inference_ns"], dtype=float) / 1_000.0
+    collision_rate = _finite_mean(trace["collision"])
+    idle_rate = _finite_mean(trace["idle"])
+    lambda_collision = _finite_mean(trace["lambda_collision"])
+    lambda_idle = _finite_mean(trace["lambda_idle"])
     return {
         "failure_rate": float(not success),
-        "collision_rate": _finite_mean(trace["collision"]),
+        "collision_rate": collision_rate,
         "risk_zone_rate": _finite_mean(trace["risk_zone"]),
+        "idle_rate": idle_rate,
+        "risk_adjusted_score": (
+            float(success)
+            - lambda_collision * collision_rate
+            - lambda_idle * idle_rate
+        ),
         "unsupported_state_ratio": _finite_mean(
             trace["unsupported_state"]
         ),
@@ -321,6 +342,8 @@ def write_metadata(
     for name in (
         "gymnasium",
         "minigrid",
+        "gym-pybullet-drones",
+        "pybullet",
         "numpy",
         "pandas",
         "scipy",
@@ -421,6 +444,10 @@ def _write_row(
             "numpy_version": provenance["numpy_version"],
             "gymnasium_version": provenance["gymnasium_version"],
             "minigrid_version": provenance["minigrid_version"],
+            "gym_pybullet_drones_version": provenance[
+                "gym_pybullet_drones_version"
+            ],
+            "pybullet_version": provenance["pybullet_version"],
             "mean_gate": diagnostics.get("mean_gate", ""),
             "support_abstention_rate": diagnostics.get(
                 "support_abstention_rate", ""
@@ -689,7 +716,7 @@ def _combine_shards(shards: list[Path], raw_path: Path) -> None:
 
 def run_config(config_path: str | Path) -> Path:
     config_path = Path(config_path)
-    config = json.loads(config_path.read_text(encoding="utf-8"))
+    config = load_config(config_path)
     config_file = config_path.as_posix()
     commit_hash = git_commit_hash()
     config["_config_file"] = config_file
@@ -701,6 +728,10 @@ def run_config(config_path: str | Path) -> Path:
         "numpy_version": np.__version__,
         "gymnasium_version": gymnasium.__version__,
         "minigrid_version": package_version("minigrid"),
+        "gym_pybullet_drones_version": package_version(
+            "gym-pybullet-drones"
+        ),
+        "pybullet_version": package_version("pybullet"),
     }
     runtime = config.get("runtime", {})
     torch.set_num_threads(int(runtime.get("torch_threads", 1)))

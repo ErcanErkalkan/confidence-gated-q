@@ -1,0 +1,11 @@
+gym-pybullet-drones @ git+https://github.com/utiasDSL/gym-pybullet-drones.git@9bc12bc583fa3b28807b2f90a8cadf09fb06e1ff
+gymnasium==1.2.3
+matplotlib==3.10.9
+minigrid==3.1.0
+numpy==2.4.6
+pandas==3.0.3
+pybullet==3.2.7
+pyyaml==6.0.3
+pytest==9.0.3
+scipy==1.17.1
+torch==2.12.0

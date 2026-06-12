@@ -148,6 +148,8 @@ def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
         "failure_rate",
         "collision_rate",
         "risk_zone_rate",
+        "idle_rate",
+        "risk_adjusted_score",
         "unsupported_state_ratio",
         "memory_branch_usage_ratio",
         "neural_branch_usage_ratio",
@@ -194,6 +196,8 @@ def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
             failure_rate=("failure_rate", "mean"),
             collision_rate=("collision_rate", "mean"),
             risk_zone_rate=("risk_zone_rate", "mean"),
+            idle_rate=("idle_rate", "mean"),
+            risk_adjusted_score=("risk_adjusted_score", "mean"),
             unsupported_state_ratio=("unsupported_state_ratio", "mean"),
             memory_branch_usage_ratio=(
                 "memory_branch_usage_ratio",
@@ -269,6 +273,8 @@ def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
         "numpy_version",
         "gymnasium_version",
         "minigrid_version",
+        "gym_pybullet_drones_version",
+        "pybullet_version",
     ]
     available = [column for column in provenance_columns if column in evaluation]
     if available:
@@ -305,6 +311,8 @@ def summarize(seed_metrics: pd.DataFrame) -> pd.DataFrame:
             "failure_rate",
             "collision_rate",
             "risk_zone_rate",
+            "idle_rate",
+            "risk_adjusted_score",
             "unsupported_state_ratio",
             "memory_branch_usage_ratio",
             "neural_branch_usage_ratio",

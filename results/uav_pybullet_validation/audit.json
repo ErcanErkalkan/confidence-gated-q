@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "config": "configs\\uav_pybullet_30seed.yaml",
+  "result_dir": "results\\uav_pybullet_validation",
+  "expected_runs": 150,
+  "observed_runs": 150,
+  "run_shards_present": 150,
+  "raw_rows": 22242,
+  "violations": [],
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "f05a70859d7acbe75787251530dbe946f094011a5835a692d105701f162315ca",
+      "bytes": 112104
+    },
+    "summary.csv": {
+      "sha256": "3a1468026f641f3d5dcd32a24a8618f44038dea9b7f81e719a4700bdc607ad33",
+      "bytes": 23133
+    },
+    "pairwise.csv": {
+      "sha256": "b3bb384df598cb7f347d7b8496c3337fa6d8c13e3d6b152c7b35a3f62f35fc8b",
+      "bytes": 10662
+    },
+    "planned_contrasts.csv": {
+      "sha256": "c4639745e85c765ad93b771da2a3abe7de2a79ac1ce39cdfd63380b267abaaac",
+      "bytes": 2047
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "28984de09369afbcff6236480ccac321f630417a7785002abadcd95f08779c19",
+      "bytes": 2104
+    },
+    "cross_environment.csv": {
+      "sha256": "3378fd0e162801d4b0694430661bd749b3f276b2e0274b4a8254e19f253be33f",
+      "bytes": 800
+    },
+    "metadata.json": {
+      "sha256": "ebe493fe1f02dd2323e65838a485ed71e7252302f56112450abcbdaee4cf0f1d",
+      "bytes": 6004
+    },
+    "raw.csv.gz": {
+      "sha256": "e66004da51c38c71272a4b8ec3c3b6d16cb7ee1b50716de8cb99d2bff419152d",
+      "bytes": 1926993
+    }
+  }
+}

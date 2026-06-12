@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "config": "configs\\strong_baselines\\double_dqn_30seed.yaml",
+  "result_dir": "results\\strong_baselines\\double_dqn",
+  "expected_runs": 30,
+  "observed_runs": 30,
+  "run_shards_present": 0,
+  "raw_rows": 8825,
+  "violations": [],
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "0c008fb6e8f59f83f2d6cc594e4ed0c1e32ef0ac04f75ae487c6ccbb8af9148b",
+      "bytes": 22587
+    },
+    "summary.csv": {
+      "sha256": "aee63106f6828ca605e2b4443c3de5ec73d1ccf3473431073f13d97da23368f8",
+      "bytes": 4288
+    },
+    "pairwise.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "a4ed370a743b144c7f79c4d5e7faf9cf416770d8b826b804ea31944572d72be9",
+      "bytes": 522
+    },
+    "cross_environment.csv": {
+      "sha256": "99e95b3b87442c9931f1f21aa3059b49a8e2afadc1bcb5c022c8deecb1db90da",
+      "bytes": 250
+    },
+    "metadata.json": {
+      "sha256": "59a5c582d015c95a66239c5365d9dba4cd853a2987f82f9b6f47c1e6dad6f36a",
+      "bytes": 2877
+    },
+    "raw.csv.gz": {
+      "sha256": "00df727f3bbc6e43725b0a445b693b5612d341acdf67874dc52771fbb223686b",
+      "bytes": 484892
+    }
+  }
+}

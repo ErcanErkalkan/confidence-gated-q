@@ -1,0 +1,6 @@
+support_membership,uncertainty_membership,memory_weight,interpretation
+Low,Any,0.0,Prefer neural estimate; no memory evidence
+Medium,Low,0.35,Mostly neural
+Medium,High,0.65,Mostly memory
+High,Low,0.75,Memory-led mixture
+High,High,0.95,Strong memory preference

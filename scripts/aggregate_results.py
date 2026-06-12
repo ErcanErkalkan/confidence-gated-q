@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 
-from src.hybrid_q.statistics import aggregate
+from hybrid_q.statistics import aggregate
 
 
 def main() -> None:

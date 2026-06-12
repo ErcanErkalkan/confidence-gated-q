@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+from hybrid_q.envs import has_uav_backend
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,6 +52,16 @@ def run_experiments() -> None:
             "--config",
             f"configs/{name}",
         )
+    run("scripts/run_strong_baselines.py")
+    run("scripts/run_approx_support_experiments.py")
+    run("scripts/run_fuzzy_ablation.py")
+    run("scripts/run_application_risk_variants.py")
+    if not has_uav_backend():
+        raise RuntimeError(
+            "Full reproduction requires Python 3.12 and "
+            "'python -m pip install -e .[test,uav]'."
+        )
+    run("scripts/run_uav_validation.py")
 
 
 def aggregate_and_audit() -> None:
@@ -75,8 +88,40 @@ def aggregate_and_audit() -> None:
 
 
 def quick_check() -> None:
-    run("-m", "pytest", "-q")
-    aggregate_and_audit()
+    quick_dir = ROOT / ".quick_repro"
+    if quick_dir.exists():
+        shutil.rmtree(quick_dir)
+    quick_dir.mkdir()
+    run(
+        "-m",
+        "pytest",
+        "-q",
+        "--basetemp",
+        ".quick_repro/pytest",
+    )
+    smoke_config = ROOT / "configs" / "quick_reproduction_smoke.yaml"
+    run(
+        "scripts/run_benchmark.py",
+        "--config",
+        str(smoke_config.relative_to(ROOT)),
+    )
+    smoke_output = quick_dir / "results"
+    run(
+        "scripts/aggregate_results.py",
+        "--input",
+        str((smoke_output / "raw.csv").relative_to(ROOT)),
+        "--output",
+        str(smoke_output.relative_to(ROOT)),
+    )
+    run(
+        "scripts/audit_results.py",
+        "--config",
+        str(smoke_config.relative_to(ROOT)),
+        "--result-dir",
+        str(smoke_output.relative_to(ROOT)),
+        "--output",
+        str((smoke_output / "audit.json").relative_to(ROOT)),
+    )
     run(
         "scripts/audit_artifact.py",
         "--root",
@@ -84,7 +129,8 @@ def quick_check() -> None:
         "--output",
         "artifact_audit.json",
     )
-    run("scripts/audit_asoc_strong_revision.py")
+    run("scripts/audit_submission_readiness.py")
+    print("QUICK_REPRO_PASS", flush=True)
 
 
 def main() -> None:

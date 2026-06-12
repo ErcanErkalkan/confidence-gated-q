@@ -1,0 +1,45 @@
+experiment_name: asoc_feature_distance_support_30seed
+output_dir: results/approx_support/feature_distance_support
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+seeds: [600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629]
+evaluation:
+  interval_steps: 2000
+  episodes: 30
+analysis:
+  primary_metric: return_auc
+  analysis_status: main_confirmatory_approximate_support
+  planned_contrasts: []
+envs:
+  - name: ApplicationNavigation-deployment-goal-shift
+    id: ApplicationNavigationSupportShift-v0
+    kwargs:
+      goal_split: train
+      slip_probability: 0.05
+      max_steps: 120
+      lambda_collision: 1.0
+      lambda_idle: 0.1
+    eval_kwargs:
+      goal_split: deployment
+    training_steps: 12000
+    max_steps: 120
+    success_mode: positive_terminal
+agents:
+  - name: feature_distance_support_gate
+    kind: feature_distance_support_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      approximate_support_k: 5
+      approximate_support_bandwidth: 0.25
+      approximate_support_tau: 2.0
+      epsilon_decay_steps: 10000

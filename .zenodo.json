@@ -1,9 +1,9 @@
 {
   "title": "Support-Boundary Diagnostic for Tabular-Neural Reinforcement Learning: Reproducibility Artifact",
-  "description": "Code, exact-step results, an application-inspired navigation case, fuzzy adaptive arbitration, support and cost metrics, compact and MiniGrid validation, and integrity audits for a soft-computing boundary analysis.",
+  "description": "Code, exact-step results, physics-based Crazyflie UAV validation, fuzzy adaptive arbitration, support and cost metrics, compact and MiniGrid validation, and integrity audits for a soft-computing boundary analysis.",
   "upload_type": "software",
-  "publication_date": "2026-06-07",
-  "version": "1.4.0",
+  "publication_date": "2026-06-11",
+  "version": "1.5.0",
   "license": "MIT",
   "creators": [
     {
@@ -17,11 +17,6 @@
       "identifier": "https://github.com/ErcanErkalkan/confidence-gated-q",
       "relation": "isSupplementTo",
       "scheme": "url"
-    },
-    {
-      "identifier": "10.5281/zenodo.20578927",
-      "relation": "isNewVersionOf",
-      "scheme": "doi"
     }
   ],
   "keywords": [
@@ -34,6 +29,7 @@
     "tabular-neural reinforcement learning",
     "abstention",
     "negative results",
+    "physics-based UAV simulation",
     "reproducibility"
   ]
 }

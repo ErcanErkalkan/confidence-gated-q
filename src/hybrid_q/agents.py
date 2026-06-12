@@ -44,6 +44,8 @@ class AgentConfig:
     approximate_support_bandwidth: float = 0.25
     approximate_support_tau: float = 2.0
     abstain_action: int = -1
+    fallback_policy: str = "hold"
+    fuzzy_ablation_mode: str = "full"
     network_architecture: str = "mlp"
     a2c_value_coef: float = 0.5
     a2c_entropy_coef: float = 0.01
@@ -213,6 +215,50 @@ class RandomAgent(BaseAgent):
             neural_weight=0.0,
         )
         return np.zeros(self.action_dim, dtype=np.float32)
+
+    def observe(
+        self,
+        state: np.ndarray,
+        key: Hashable,
+        action: int,
+        reward: float,
+        next_state: np.ndarray,
+        next_key: Hashable,
+        done: bool,
+    ) -> None:
+        self.training_support.add(key)
+        self.environment_steps += 1
+
+
+class UAVSafeWaypointControllerAgent(BaseAgent):
+    """Deterministic high-level setpoint policy over the UAV state layout."""
+
+    def q_values(self, state: np.ndarray, key: Hashable) -> np.ndarray:
+        values = np.full(self.action_dim, -1.0, dtype=np.float32)
+        relative_target = np.asarray(state[3:6], dtype=float)
+        relative_obstacle = np.asarray(state[12:15], dtype=float)
+        horizontal_obstacle_distance = float(
+            np.linalg.norm(
+                relative_obstacle[0:2] * np.asarray([1.5, 1.5])
+            )
+        )
+        altitude = float(state[2] * 1.2)
+        if horizontal_obstacle_distance < 0.30 and altitude < 0.82:
+            action = 4
+        else:
+            axis = int(np.argmax(np.abs(relative_target)))
+            if abs(relative_target[axis]) < 0.04:
+                action = 6
+            else:
+                action = axis * 2 + int(relative_target[axis] < 0)
+        action = min(action, self.action_dim - 1)
+        values[action] = 1.0
+        self._record_decision(
+            key=key,
+            memory_weight=0.0,
+            neural_weight=0.0,
+        )
+        return values
 
     def observe(
         self,
@@ -569,6 +615,23 @@ class HybridQAgent(DQNAgent):
         uncertainty = float(
             np.clip(neural_error / (neural_error + scale), 0.0, 1.0)
         )
+        mode = self.config.fuzzy_ablation_mode
+        if mode == "no_count":
+            support = 0.5 if count > 0 else 0.0
+        elif mode == "no_td_residual":
+            uncertainty = 0.0
+        elif mode == "no_confidence":
+            uncertainty = 0.5
+        elif mode == "crisp_threshold":
+            alpha = (
+                self.config.gate_max
+                if count >= self.config.fuzzy_tau_support
+                or uncertainty >= 0.5
+                else self.config.gate_min
+            )
+            return (0.0 if count == 0 else float(alpha)), support, uncertainty
+        elif mode != "full":
+            raise ValueError(f"Unknown fuzzy ablation mode: {mode}")
 
         low_support, medium_support, high_support = (
             self._support_memberships(support)
@@ -615,7 +678,7 @@ class HybridQAgent(DQNAgent):
         return low, medium, high
 
     def _approximate_support_and_values(
-        self, state: np.ndarray
+        self, state: np.ndarray, mode: str
     ) -> tuple[float, np.ndarray]:
         if not self.state_vectors:
             return 0.0, np.zeros(self.action_dim, dtype=np.float32)
@@ -625,7 +688,12 @@ class HybridQAgent(DQNAgent):
         k = max(1, min(int(self.config.approximate_support_k), len(keys)))
         nearest = np.argpartition(distances, k - 1)[:k]
         bandwidth = max(float(self.config.approximate_support_bandwidth), 1e-8)
-        weights = np.exp(-0.5 * (distances[nearest] / bandwidth) ** 2)
+        if mode == "knn_support":
+            weights = (distances[nearest] <= bandwidth).astype(np.float64)
+        elif mode == "feature_distance_support":
+            weights = np.exp(-0.5 * (distances[nearest] / bandwidth) ** 2)
+        else:
+            raise ValueError(f"Unknown approximate-support mode: {mode}")
         mass = float(weights.sum())
         if mass <= 1e-12:
             return 0.0, np.zeros(self.action_dim, dtype=np.float32)
@@ -634,10 +702,52 @@ class HybridQAgent(DQNAgent):
             q_values += float(weight) * self.table[keys[int(index)]]
         return mass, q_values / mass
 
-    def approximate_gate(self, state: np.ndarray) -> tuple[float, np.ndarray, float]:
-        mass, values = self._approximate_support_and_values(state)
+    def approximate_gate(
+        self, state: np.ndarray, mode: str
+    ) -> tuple[float, np.ndarray, float]:
+        mass, values = self._approximate_support_and_values(state, mode)
         gate = mass / (mass + max(float(self.config.approximate_support_tau), 1e-8))
         return float(gate), values, mass
+
+    def _fallback_action(self, state: np.ndarray) -> int | None:
+        policy = self.config.fallback_policy
+        if policy == "hold":
+            return self.config.abstain_action
+        if policy == "no_hold":
+            return None
+        if state.size != 4:
+            return self.config.abstain_action
+        x, y, goal_x, goal_y = np.rint(state * 8.0).astype(int)
+        candidates = []
+        if goal_y > y:
+            candidates.append(0)
+        if goal_x > x:
+            candidates.append(1)
+        if goal_y < y:
+            candidates.append(2)
+        if goal_x < x:
+            candidates.append(3)
+        candidates.extend(action for action in range(4) if action not in candidates)
+        if policy == "shortest_path":
+            return candidates[0] if candidates else self.config.abstain_action
+        if policy != "verified_safe":
+            raise ValueError(f"Unknown fallback policy: {policy}")
+        walls = (
+            {(4, row) for row in range(9)}
+            | {(column, 4) for column in range(9)}
+        )
+        walls -= {(4, 1), (4, 7), (1, 4), (7, 4)}
+        moves = ((0, 1), (1, 0), (0, -1), (-1, 0))
+        for action in candidates:
+            dx, dy = moves[action]
+            candidate = (x + dx, y + dy)
+            if (
+                0 <= candidate[0] < 9
+                and 0 <= candidate[1] < 9
+                and candidate not in walls
+            ):
+                return action
+        return self.config.abstain_action
 
     def gate(self, key: Hashable) -> float:
         if self.gate_kind == "fixed":
@@ -687,8 +797,13 @@ class HybridQAgent(DQNAgent):
                 and uncertainty_score
                 >= self.config.fuzzy_abstain_threshold
             )
-        if self.gate_kind == "approx_count":
-            gate, approximate_values, approximate_mass = self.approximate_gate(state)
+        if self.gate_kind in {
+            "knn_support",
+            "feature_distance_support",
+        }:
+            gate, approximate_values, approximate_mass = self.approximate_gate(
+                state, self.gate_kind
+            )
             support_score = float(
                 approximate_mass
                 / (approximate_mass + max(self.config.approximate_support_tau, 1e-8))
@@ -722,9 +837,14 @@ class HybridQAgent(DQNAgent):
                 uncertainty_score=uncertainty_score,
             )
             values = np.zeros(self.action_dim, dtype=np.float32)
-            if 0 <= self.config.abstain_action < self.action_dim:
+            fallback_action = self._fallback_action(state)
+            if fallback_action is None:
+                values.fill(0.0)
+                if self.action_dim > 4:
+                    values[4:] = -1.0
+            elif 0 <= fallback_action < self.action_dim:
                 values.fill(-1.0)
-                values[self.config.abstain_action] = 0.0
+                values[fallback_action] = 0.0
             return values
         self._record_decision(
             key=key,
@@ -826,6 +946,8 @@ def create_agent(
     )
     if kind == "random":
         return RandomAgent(action_dim, seed)
+    if kind == "uav_safe_waypoint_controller":
+        return UAVSafeWaypointControllerAgent(action_dim, seed)
     if kind == "tabular":
         return TabularQAgent(action_dim, seed, config)
     if kind == "dqn":
@@ -856,7 +978,23 @@ def create_agent(
         )
     if kind == "approx_count_gated":
         return HybridQAgent(
-            input_dim, action_dim, seed, config, gate_kind="approx_count"
+            input_dim,
+            action_dim,
+            seed,
+            config,
+            gate_kind="feature_distance_support",
+        )
+    if kind == "knn_support_gate":
+        return HybridQAgent(
+            input_dim, action_dim, seed, config, gate_kind="knn_support"
+        )
+    if kind == "feature_distance_support_gate":
+        return HybridQAgent(
+            input_dim,
+            action_dim,
+            seed,
+            config,
+            gate_kind="feature_distance_support",
         )
     if kind == "fuzzy_support_adaptive_gate":
         return HybridQAgent(

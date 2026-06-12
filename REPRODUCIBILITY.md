@@ -2,7 +2,7 @@
 
 ## Environment
 
-The completed ASOC revision used:
+The reported study used:
 
 - Python 3.14.3
 - PyTorch 2.11.0 CPU
@@ -16,11 +16,26 @@ Install with `requirements.txt` or `environment.yml`. Exact tested versions are
 listed in `requirements-tested.txt` and every result directory's
 `metadata.json`.
 
+The physics-based UAV validation used a separate Python 3.12.13 environment
+with Gymnasium 1.2.3, gym-pybullet-drones 2.1.0 at commit
+`9bc12bc583fa3b28807b2f90a8cadf09fb06e1ff`, PyBullet 3.2.7, PyTorch 2.12.0,
+and NumPy 2.4.6. Exact versions are in `requirements-tested-uav.txt`.
+
+```powershell
+uv venv .venv --python 3.12
+uv pip install --python .venv\Scripts\python.exe -r requirements-uav.txt
+```
+
 ## Quick Reanalysis
 
 ```powershell
+python -m pip install -e .
 python scripts/reproduce_all.py --quick
+pytest
 ```
+
+The quick path is intentionally bounded to unit tests, one two-seed smoke
+experiment, aggregation sanity, and audits. It prints `QUICK_REPRO_PASS`.
 
 Expected outputs for every result family:
 
@@ -35,7 +50,7 @@ Expected outputs for every result family:
 - `audit.json`
 - per-environment learning-curve PNG files
 
-## Revision Experiment Commands
+## Experiment Commands
 
 ```powershell
 python scripts/run_benchmark.py --config configs/dqn_tuning_development.json
@@ -46,6 +61,12 @@ python scripts/run_benchmark.py --config configs/minigrid_extended_diagnostic.js
 python scripts/run_application_case_study.py --config configs/application_navigation_case_study.json
 python scripts/run_adaptive_gate_validation.py --config configs/adaptive_gate_compact_validation.json
 python scripts/run_benchmark.py --config configs/cost_support_metrics.json
+python scripts/run_strong_baselines.py
+python scripts/run_approx_support_experiments.py
+python scripts/run_fuzzy_ablation.py
+python scripts/run_application_risk_variants.py
+python scripts/run_uav_validation.py
+python scripts/aggregate_uav_validation.py
 ```
 
 Aggregate and audit one family:
@@ -73,6 +94,15 @@ python scripts/audit_results.py `
 - `confirmatory_application_case_study`: controlled deployment-goal shift.
 - `confirmatory_adaptive_gate_validation`: fuzzy-gate compact validation.
 - `descriptive_cost_and_support_analysis`: support, memory, and timing metrics.
+- `main_confirmatory_strong_neural_baseline`: Double and Dueling Double DQN.
+- `main_confirmatory_approximate_support`: kNN and feature-distance support.
+- `main_confirmatory_fuzzy_ablation`: fuzzy component and crisp-gate ablation.
+- `main_confirmatory_application_fallback_ablation`: hold/no-hold/planner
+  fallback risk analysis.
+- `main_external_physics_based_uav_validation`: held-out waypoint and
+  ideal-to-drag/ground-effect physics shift with seeds `900-929`.
+- `auxiliary_smoke_check`: installation and pipeline check only.
+- `preregistered_extension_protocol_not_executed`: no result claim permitted.
 
 These labels are stored in config and result metadata and are not inferred from
 outcomes.
@@ -91,6 +121,7 @@ Measured cumulative training time across independent runs:
 | application navigation | 0.47 h | 11.47 s | 14.26 s |
 | adaptive gate validation | 0.95 h | 9.29 s | 13.30 s |
 | cost/support analysis | 0.32 h | 14.61 s | 22.38 s |
+| physics-based UAV validation | 4.78 h | 103.48 s | 201.52 s |
 
 Eight independent runs were normally scheduled in parallel. Wall time depends
 on CPU contention and storage.
@@ -113,8 +144,8 @@ From the complete local submission workspace:
 
 ```powershell
 python scripts/generate_asoc_assets.py
-python scripts/generate_asoc_strong_revision_tables.py
-python scripts/generate_asoc_strong_revision_figures.py
+python scripts/generate_submission_tables.py
+python scripts/generate_submission_figures.py
 ```
 
 This writes vector figures and LaTeX tables under `paper/figures/` and
@@ -134,7 +165,7 @@ pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex
 
 ```powershell
 python scripts/audit_artifact.py --root . --output artifact_audit.json
-python scripts/audit_asoc_strong_revision.py
+python scripts/audit_submission_readiness.py
 ```
 
 The public artifact excludes journal-only paper and portal files. The journal submission package is verified separately before upload.

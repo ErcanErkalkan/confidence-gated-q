@@ -1,0 +1,4 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+dueling_double_dqn,return_auc,1,1.0,1.0,1.0,1.0
+dueling_double_dqn,success_rate_auc,1,1.0,1.0,1.0,1.0
+dueling_double_dqn,mean_return,1,1.0,1.0,1.0,1.0

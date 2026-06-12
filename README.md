@@ -6,9 +6,10 @@ deep Q-networks (DQN), fuzzy adaptive arbitration, and support abstention.
 
 The method is **not** a generally superior reinforcement-learning algorithm.
 Count gating is useful only when exact states recur. It is not a
-generalization mechanism and can fail under support shift. The application
-case is a controlled pre-deployment diagnostic, not a real-world deployment or
-safety guarantee.
+generalization mechanism and can fail under support shift. The artifact now
+includes both a controlled grid diagnostic and a physics-based Crazyflie UAV
+validation. The latter is a sim-to-real pre-deployment test, not flight-hardware
+validation or a safety guarantee.
 
 Journal submission files are intentionally excluded from the public repository.
 
@@ -34,6 +35,10 @@ Journal submission files are intentionally excluded from the public repository.
   usage, exact-memory size, and decision time under deployment goal shift.
 - The fuzzy adaptive gate improves over the validated DQN in selected tasks
   but does not generally beat tabular learning or support abstention.
+- In 150 matched physics-based UAV runs, the obstacle-aware PID controller
+  reaches `0.922` waypoint success and `0.006` collision rate. The best learned
+  support variant reaches `0.162` success, exposing a large deployment gap
+  rather than supporting an autonomy claim.
 
 ## Analysis Families
 
@@ -47,9 +52,11 @@ Journal submission files are intentionally excluded from the public repository.
 | application navigation | `configs/application_navigation_case_study.json` | 600-629 | confirmatory application case |
 | fuzzy gate validation | `configs/adaptive_gate_compact_validation.json` | 700-729 | confirmatory adaptive-gate validation |
 | cost/support analysis | `configs/cost_support_metrics.json` | 800-809 | descriptive cost and support analysis |
-
-Superseded exploratory and sensitivity families are preserved only in the
-previous archived release and are not part of the current manuscript artifact.
+| strong neural baselines | `configs/strong_baselines/*.yaml` | 600-629 | main confirmatory |
+| approximate support | `configs/approx_support/*.yaml` | 600-629 | main confirmatory |
+| fuzzy component ablation | `configs/fuzzy_ablation/fuzzy_ablation_30seed.yaml` | 600-629 | main confirmatory |
+| application fallback ablation | `configs/application_risk_variants_30seed.yaml` | 600-629 | main confirmatory |
+| physics-based Crazyflie validation | `configs/uav_pybullet_30seed.yaml` | 900-929 | main external validation |
 
 ## Install
 
@@ -63,15 +70,24 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ```
 
+The physics-based UAV family uses Python 3.12 because PyBullet is not packaged
+for every newer interpreter. With `uv`:
+
+```powershell
+uv venv .venv --python 3.12
+uv pip install --python .venv\Scripts\python.exe -r requirements-uav.txt
+```
+
 ## Quick Verification
 
 ```powershell
+python -m pip install -e .
 python scripts/reproduce_all.py --quick
+pytest
 ```
 
-This runs all tests, regenerates summaries from committed `raw.csv` or
-`raw.csv.gz` files, audits every result family, and executes the artifact
-audit.
+This runs unit tests, a two-seed smoke experiment, aggregation sanity checks,
+and artifact audits. Success ends with `QUICK_REPRO_PASS`.
 
 ## Full Reproduction
 
@@ -79,7 +95,7 @@ audit.
 python scripts/reproduce_all.py --full
 ```
 
-Individual revision families can be rerun with:
+Individual experiment families can be rerun with:
 
 ```powershell
 python scripts/run_benchmark.py --config configs/dqn_tuning_development.json
@@ -90,10 +106,31 @@ python scripts/run_benchmark.py --config configs/minigrid_extended_diagnostic.js
 python scripts/run_application_case_study.py --config configs/application_navigation_case_study.json
 python scripts/run_adaptive_gate_validation.py --config configs/adaptive_gate_compact_validation.json
 python scripts/run_benchmark.py --config configs/cost_support_metrics.json
-python scripts/generate_asoc_strong_revision_tables.py
-python scripts/generate_asoc_strong_revision_figures.py
-python scripts/audit_asoc_strong_revision.py
+python scripts/run_strong_baselines.py
+python scripts/aggregate_strong_baselines.py
+python scripts/run_approx_support_experiments.py
+python scripts/aggregate_approx_support.py
+python scripts/run_fuzzy_ablation.py
+python scripts/aggregate_fuzzy_ablation.py
+python scripts/run_application_risk_variants.py
+python scripts/aggregate_application_risk.py
+python scripts/run_uav_validation.py
+python scripts/aggregate_uav_validation.py
+python scripts/generate_submission_tables.py
+python scripts/generate_submission_figures.py
+python scripts/generate_submission_assets.py
+python scripts/audit_submission_readiness.py
 ```
+
+## Evidence Classes
+
+- **Main confirmatory experiments:** executed 30-seed baseline, approximate
+  support, fuzzy ablation, application fallback, and physics-based UAV
+  families.
+- **Auxiliary smoke checks:** the two-seed quick path; never used as performance
+  evidence.
+- **Pre-registered extension protocols:** A2C/PPO and convolutional MiniGrid;
+  not reported as completed results.
 
 Completed run shards are resumable and ignored by Git. Committed compressed
 CSV files are lossless and read directly by pandas.
@@ -106,8 +143,8 @@ CSV files are lossless and read directly by pandas.
 - Evaluation uses an isolated environment and restored agent RNG.
 - Evaluation does not update replay, estimators, or exact-state support.
 - Observation representation and resolved environment IDs are recorded.
-- Every raw row includes code, package, Python, PyTorch, NumPy, Gymnasium, and
-  MiniGrid provenance.
+- Every raw row includes code, package, Python, PyTorch, NumPy, Gymnasium,
+  MiniGrid, and optional PyBullet/UAV-backend provenance.
 - Paired effects, bootstrap intervals, Holm correction, Wilcoxon sensitivity,
   win/loss/tie counts, and heavy-tail diagnostics are generated.
 - Evaluation logs unsupported-state, branch-use, abstention, fuzzy-alpha,
@@ -124,14 +161,14 @@ CSV files are lossless and read directly by pandas.
 
 ## Citation
 
-The artifact is prepared as release `v1.4.0`. Use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927 and the source repository https://github.com/ErcanErkalkan/confidence-gated-q when citing the reproducibility package.
+The artifact is prepared as release `v1.5.0`. Use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927 and the source repository https://github.com/ErcanErkalkan/confidence-gated-q when citing the reproducibility package.
 
 ## Author
 
 - Ercan Erkalkan
 - Vocational School of Technical Sciences, Department of Electronics and
   Automation, Artificial Intelligence Operator Program, Marmara University
-- Mehmet Genç Campus, 34865 Kartal, Istanbul, Turkey
+- Mehmet Genc Campus, 34865 Kartal, Istanbul, Turkey
 - ercan.erkalkan@marmara.edu.tr
 - https://orcid.org/0000-0001-9259-7112
 

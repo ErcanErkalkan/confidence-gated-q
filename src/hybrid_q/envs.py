@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import contextlib
+import importlib.util
+import io
 from typing import Any
 
 from .gym_compat import gym, spaces, HAS_GYMNASIUM
@@ -138,6 +141,9 @@ class ApplicationNavigationSupportShiftEnv(gym.Env):
         goal_split: str = "train",
         slip_probability: float = 0.05,
         max_steps: int = 120,
+        hold_penalty: float = 0.0,
+        lambda_collision: float = 1.0,
+        lambda_idle: float = 0.1,
     ):
         if size != 9:
             raise ValueError("application navigation currently requires size=9")
@@ -149,6 +155,9 @@ class ApplicationNavigationSupportShiftEnv(gym.Env):
         self.goal_split = goal_split
         self.slip_probability = float(slip_probability)
         self.max_steps = int(max_steps)
+        self.hold_penalty = float(hold_penalty)
+        self.lambda_collision = float(lambda_collision)
+        self.lambda_idle = float(lambda_idle)
         self.action_space = spaces.Discrete(5)
         self.observation_space = spaces.Box(
             low=0.0, high=1.0, shape=(4,), dtype=np.float32
@@ -229,6 +238,7 @@ class ApplicationNavigationSupportShiftEnv(gym.Env):
         terminated = self.agent_position == self.goal_position
         truncated = self.steps >= self.max_steps and not terminated
         in_risk_zone = self.agent_position in self.risk_cells
+        idle = int(action) == 4
         if terminated:
             reward = 5.0
         else:
@@ -237,12 +247,320 @@ class ApplicationNavigationSupportShiftEnv(gym.Env):
                 reward -= 0.23
             if in_risk_zone:
                 reward -= 0.08
+            if idle:
+                reward -= self.hold_penalty
         info = {
             "collision": collision,
             "risk_zone": in_risk_zone,
+            "idle": idle,
+            "lambda_collision": self.lambda_collision,
+            "lambda_idle": self.lambda_idle,
             "goal_is_shifted": self.goal_position in self.test_goals,
         }
         return self._observation(), reward, terminated, truncated, info
+
+
+def has_uav_backend() -> bool:
+    return (
+        importlib.util.find_spec("gym_pybullet_drones") is not None
+        and importlib.util.find_spec("pybullet") is not None
+    )
+
+
+class PyBulletUAVWaypointSupportShiftEnv(gym.Env):
+    """Crazyflie waypoint task using the gym-pybullet-drones physics backend."""
+
+    metadata = {"render_modes": []}
+
+    def __init__(
+        self,
+        target_split: str = "train",
+        physics: str = "pyb",
+        pyb_freq: int = 240,
+        ctrl_freq: int = 30,
+        action_repeat: int = 4,
+        max_steps: int = 60,
+        speed_fraction: float = 0.8,
+        goal_tolerance: float = 0.13,
+        state_quantization: float = 0.05,
+        initial_position_jitter: float = 0.02,
+        initial_attitude_jitter: float = 0.01,
+        wind_force_std: float = 0.0,
+        lambda_collision: float = 1.0,
+        lambda_idle: float = 0.05,
+    ):
+        if not has_uav_backend():
+            raise ImportError(
+                "PyBullet UAV validation requires the optional 'uav' "
+                "dependencies. Install with: python -m pip install -e .[uav]"
+            )
+        if target_split not in {"train", "deployment", "all"}:
+            raise ValueError(
+                "target_split must be train, deployment, or all"
+            )
+        if action_repeat < 1:
+            raise ValueError("action_repeat must be positive")
+
+        import pybullet as pybullet
+        from gym_pybullet_drones.envs.VelocityAviary import VelocityAviary
+        from gym_pybullet_drones.utils.enums import Physics
+
+        self.target_split = target_split
+        self.action_repeat = int(action_repeat)
+        self.max_steps = int(max_steps)
+        self.speed_fraction = float(speed_fraction)
+        self.goal_tolerance = float(goal_tolerance)
+        self.state_quantization = float(state_quantization)
+        self.initial_position_jitter = float(initial_position_jitter)
+        self.initial_attitude_jitter = float(initial_attitude_jitter)
+        self.wind_force_std = float(wind_force_std)
+        self.lambda_collision = float(lambda_collision)
+        self.lambda_idle = float(lambda_idle)
+        self.action_space = spaces.Discrete(7)
+        self.observation_space = spaces.Box(
+            low=-1.0, high=1.0, shape=(15,), dtype=np.float32
+        )
+        self.train_targets = np.asarray(
+            [
+                [0.60, 0.00, 0.55],
+                [-0.60, 0.00, 0.55],
+                [0.00, 0.60, 0.65],
+                [0.00, -0.60, 0.65],
+                [0.45, 0.45, 0.75],
+                [-0.45, 0.45, 0.75],
+            ],
+            dtype=np.float32,
+        )
+        self.deployment_targets = np.asarray(
+            [
+                [0.58, -0.58, 0.70],
+                [-0.58, -0.58, 0.70],
+                [0.72, 0.30, 0.82],
+                [-0.72, 0.30, 0.82],
+            ],
+            dtype=np.float32,
+        )
+        self.targets = {
+            "train": self.train_targets,
+            "deployment": self.deployment_targets,
+            "all": np.vstack(
+                (self.train_targets, self.deployment_targets)
+            ),
+        }[target_split]
+        self.obstacle_specs = (
+            (np.asarray([0.30, -0.28, 0.36]), np.asarray([0.12, 0.12, 0.36])),
+            (np.asarray([-0.30, -0.28, 0.36]), np.asarray([0.12, 0.12, 0.36])),
+        )
+        self.initial_position = np.asarray(
+            [0.0, 0.0, 0.50], dtype=np.float32
+        )
+        self._pybullet = pybullet
+        self._obstacle_ids: list[int] = []
+        self.target = self.targets[0].copy()
+        self.steps = 0
+        self.previous_distance = 0.0
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.simulator = VelocityAviary(
+                num_drones=1,
+                initial_xyzs=self.initial_position[None, :].copy(),
+                initial_rpys=np.zeros((1, 3), dtype=np.float32),
+                physics=Physics(physics),
+                pyb_freq=int(pyb_freq),
+                ctrl_freq=int(ctrl_freq),
+                gui=False,
+                record=False,
+                obstacles=False,
+                user_debug_gui=False,
+            )
+
+    def _add_obstacles(self) -> None:
+        p = self._pybullet
+        self._obstacle_ids = []
+        for center, half_extents in self.obstacle_specs:
+            collision = p.createCollisionShape(
+                p.GEOM_BOX,
+                halfExtents=half_extents.tolist(),
+                physicsClientId=self.simulator.CLIENT,
+            )
+            visual = p.createVisualShape(
+                p.GEOM_BOX,
+                halfExtents=half_extents.tolist(),
+                rgbaColor=[0.75, 0.18, 0.16, 1.0],
+                physicsClientId=self.simulator.CLIENT,
+            )
+            body = p.createMultiBody(
+                baseMass=0.0,
+                baseCollisionShapeIndex=collision,
+                baseVisualShapeIndex=visual,
+                basePosition=center.tolist(),
+                physicsClientId=self.simulator.CLIENT,
+            )
+            self._obstacle_ids.append(int(body))
+
+    def _state(self, raw_observation: np.ndarray) -> np.ndarray:
+        raw = np.asarray(raw_observation, dtype=np.float32).reshape(1, -1)[0]
+        position = raw[0:3]
+        rpy = raw[7:10]
+        velocity = raw[10:13]
+        relative_target = self.target - position
+        obstacle_centers = np.stack(
+            [center for center, _ in self.obstacle_specs]
+        )
+        nearest = obstacle_centers[
+            np.argmin(np.linalg.norm(obstacle_centers - position, axis=1))
+        ]
+        relative_obstacle = nearest - position
+        state = np.concatenate(
+            (
+                position / np.asarray([1.0, 1.0, 1.2]),
+                relative_target / np.asarray([1.5, 1.5, 1.2]),
+                np.clip(velocity / 0.8, -1.0, 1.0),
+                np.clip(rpy / np.pi, -1.0, 1.0),
+                relative_obstacle / np.asarray([1.5, 1.5, 1.2]),
+            )
+        )
+        state = np.clip(state, -1.0, 1.0)
+        quantum = max(self.state_quantization, 1e-6)
+        return (
+            np.round(state / quantum) * quantum
+        ).astype(np.float32)
+
+    def _distance(self, raw_observation: np.ndarray) -> float:
+        position = np.asarray(raw_observation).reshape(1, -1)[0, 0:3]
+        return float(np.linalg.norm(self.target - position))
+
+    def reset(self, *, seed: int | None = None, options=None):
+        super().reset(seed=seed)
+        target_index = int(self.np_random.integers(len(self.targets)))
+        self.target = self.targets[target_index].copy()
+        position_noise = self.np_random.uniform(
+            -self.initial_position_jitter,
+            self.initial_position_jitter,
+            size=3,
+        )
+        position_noise[2] *= 0.5
+        attitude_noise = self.np_random.uniform(
+            -self.initial_attitude_jitter,
+            self.initial_attitude_jitter,
+            size=3,
+        )
+        attitude_noise[2] = 0.0
+        self.simulator.INIT_XYZS[0] = self.initial_position + position_noise
+        self.simulator.INIT_RPYS[0] = attitude_noise
+        with contextlib.redirect_stdout(io.StringIO()):
+            raw_observation, _ = self.simulator.reset(seed=seed)
+        self._add_obstacles()
+        self.steps = 0
+        self.previous_distance = self._distance(raw_observation)
+        return self._state(raw_observation), {
+            "target_split": self.target_split,
+            "target": self.target.tolist(),
+            "physics_backend": "gym-pybullet-drones",
+        }
+
+    def step(self, action: int):
+        directions = np.asarray(
+            [
+                [1.0, 0.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0],
+                [0.0, -1.0, 0.0],
+                [0.0, 0.0, 1.0],
+                [0.0, 0.0, -1.0],
+                [0.0, 0.0, 0.0],
+            ],
+            dtype=np.float32,
+        )
+        action = int(action)
+        direction = directions[action]
+        speed = 0.0 if action == 6 else self.speed_fraction
+        command = np.asarray(
+            [[direction[0], direction[1], direction[2], speed]],
+            dtype=np.float32,
+        )
+        raw_observation = None
+        for _ in range(self.action_repeat):
+            if self.wind_force_std > 0:
+                force = self.np_random.normal(
+                    0.0, self.wind_force_std, size=3
+                )
+                self._pybullet.applyExternalForce(
+                    int(self.simulator.DRONE_IDS[0]),
+                    -1,
+                    force.tolist(),
+                    [0.0, 0.0, 0.0],
+                    self._pybullet.LINK_FRAME,
+                    physicsClientId=self.simulator.CLIENT,
+                )
+            raw_observation, _, _, _, _ = self.simulator.step(command)
+
+        self.steps += 1
+        raw = np.asarray(raw_observation).reshape(1, -1)[0]
+        position = raw[0:3]
+        rpy = raw[7:10]
+        velocity = raw[10:13]
+        distance = self._distance(raw_observation)
+        progress = self.previous_distance - distance
+        self.previous_distance = distance
+        contacts = self._pybullet.getContactPoints(
+            bodyA=int(self.simulator.DRONE_IDS[0]),
+            physicsClientId=self.simulator.CLIENT,
+        )
+        out_of_bounds = (
+            abs(position[0]) > 0.95
+            or abs(position[1]) > 0.95
+            or position[2] < 0.08
+            or position[2] > 1.15
+        )
+        unstable = abs(rpy[0]) > 0.85 or abs(rpy[1]) > 0.85
+        collision = bool(contacts) or bool(out_of_bounds) or bool(unstable)
+        risk_zone = any(
+            self._pybullet.getClosestPoints(
+                int(self.simulator.DRONE_IDS[0]),
+                obstacle_id,
+                distance=0.18,
+                physicsClientId=self.simulator.CLIENT,
+            )
+            for obstacle_id in self._obstacle_ids
+        )
+        success = (
+            distance <= self.goal_tolerance
+            and float(np.linalg.norm(velocity)) <= 0.35
+        )
+        idle = action == 6
+        terminated = bool(success or collision)
+        truncated = bool(self.steps >= self.max_steps and not terminated)
+        reward = 4.0 * progress - 0.01
+        reward -= 0.03 * float(np.linalg.norm(rpy[0:2]))
+        if risk_zone:
+            reward -= 0.04
+        if idle:
+            reward -= 0.01
+        if collision:
+            reward -= 4.0
+        if success:
+            reward += 5.0
+        info = {
+            "collision": collision,
+            "risk_zone": risk_zone,
+            "idle": idle,
+            "lambda_collision": self.lambda_collision,
+            "lambda_idle": self.lambda_idle,
+            "distance_to_goal": distance,
+            "target_split": self.target_split,
+            "physics_backend": "gym-pybullet-drones",
+        }
+        return (
+            self._state(raw_observation),
+            float(reward),
+            terminated,
+            truncated,
+            info,
+        )
+
+    def close(self):
+        self.simulator.close()
+
 
 class FallbackFrozenLakeEnv(gym.Env):
     """Minimal deterministic/slippery grid task used only when gymnasium is absent."""
@@ -418,6 +736,8 @@ def make_env(spec: dict[str, Any], evaluation: bool = False) -> gym.Env:
         return StructuredFourRoomsEnv(**kwargs)
     if env_id == "ApplicationNavigationSupportShift-v0":
         return ApplicationNavigationSupportShiftEnv(**kwargs)
+    if env_id == "PyBulletUAVWaypointSupportShift-v0":
+        return PyBulletUAVWaypointSupportShiftEnv(**kwargs)
 
     if env_id.startswith("MiniGrid-"):
         if not HAS_GYMNASIUM:

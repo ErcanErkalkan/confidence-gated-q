@@ -1,0 +1,97 @@
+experiment_name: pybullet_uav_external_validation_smoke
+output_dir: .uav_smoke/results
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 3
+seeds: [900, 901, 902]
+evaluation:
+  interval_steps: 2000
+  episodes: 10
+analysis:
+  primary_metric: risk_adjusted_score
+  analysis_status: auxiliary_uav_smoke_not_performance_evidence
+envs:
+  - name: Crazyflie-waypoint-physics-shift-smoke
+    id: PyBulletUAVWaypointSupportShift-v0
+    kwargs:
+      target_split: train
+      physics: pyb
+      pyb_freq: 240
+      ctrl_freq: 30
+      action_repeat: 4
+      max_steps: 80
+      goal_tolerance: 0.16
+      state_quantization: 0.05
+      initial_position_jitter: 0.02
+      initial_attitude_jitter: 0.01
+      wind_force_std: 0.0
+      lambda_collision: 1.0
+      lambda_idle: 0.05
+    eval_kwargs:
+      target_split: deployment
+      physics: pyb_gnd_drag_dw
+      initial_position_jitter: 0.06
+      initial_attitude_jitter: 0.06
+      wind_force_std: 0.003
+    training_steps: 6000
+    max_steps: 80
+    success_mode: positive_terminal
+agents:
+  - name: pid_safe_controller
+    kind: uav_safe_waypoint_controller
+    params: {}
+  - name: dqn
+    kind: dqn
+    params:
+      double_dqn: false
+      learning_rate: 0.0005
+      batch_size: 64
+      replay_capacity: 50000
+      replay_warmup: 256
+      train_frequency: 4
+      target_update_interval: 250
+      hidden_size: 128
+      epsilon_decay_steps: 5000
+  - name: double_dqn
+    kind: double_dqn
+    params:
+      learning_rate: 0.0005
+      batch_size: 64
+      replay_capacity: 50000
+      replay_warmup: 256
+      train_frequency: 4
+      target_update_interval: 250
+      hidden_size: 128
+      epsilon_decay_steps: 5000
+  - name: fuzzy_support
+    kind: fuzzy_support_adaptive_gate
+    params:
+      double_dqn: true
+      learning_rate: 0.0005
+      tabular_learning_rate: 0.2
+      batch_size: 64
+      replay_capacity: 50000
+      replay_warmup: 256
+      train_frequency: 4
+      target_update_interval: 250
+      hidden_size: 128
+      fuzzy_tau_support: 4
+      fuzzy_abstain_zero_support: false
+      epsilon_decay_steps: 5000
+  - name: feature_support
+    kind: feature_distance_support_gate
+    params:
+      double_dqn: true
+      learning_rate: 0.0005
+      tabular_learning_rate: 0.2
+      batch_size: 64
+      replay_capacity: 50000
+      replay_warmup: 256
+      train_frequency: 4
+      target_update_interval: 250
+      hidden_size: 128
+      approximate_support_k: 7
+      approximate_support_bandwidth: 0.35
+      approximate_support_tau: 2.0
+      epsilon_decay_steps: 5000

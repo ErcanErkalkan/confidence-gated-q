@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.hybrid_q.statistics import (
+from hybrid_q.statistics import (
     bootstrap_mean_interval,
     cohen_dz,
     holm_adjust,

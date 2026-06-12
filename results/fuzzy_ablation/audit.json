@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "config": "configs\\fuzzy_ablation\\fuzzy_ablation_30seed.yaml",
+  "result_dir": "results\\fuzzy_ablation",
+  "expected_runs": 120,
+  "observed_runs": 120,
+  "run_shards_present": 0,
+  "raw_rows": 59355,
+  "violations": [],
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "4bb15c6833f2575260686e7d87afc52c1db05bbfafcfd8e763023127ee244a6d",
+      "bytes": 107198
+    },
+    "summary.csv": {
+      "sha256": "cd678f375698c18ab9e50bad24c75f5e920adaa079953c07c7c30ca93251a61d",
+      "bytes": 27003
+    },
+    "pairwise.csv": {
+      "sha256": "73fe2bcd27ad57dcdcb42b81549af0c541c2f6a80dc37e420052f6167226a95f",
+      "bytes": 7475
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "0df243170740ac5e41f267796f70a3e5d1e543c2acd11b38c454a1bde69fac55",
+      "bytes": 1736
+    },
+    "cross_environment.csv": {
+      "sha256": "be490e3edd87562fd791bd8c9d5ee6a1ee682dcc663f9dbc0ca0524acd5a871f",
+      "bytes": 739
+    },
+    "metadata.json": {
+      "sha256": "4ac1180fff7558a4d14f8fa1011c9de119b015ec27ba44182382e193abdcf00e",
+      "bytes": 5880
+    },
+    "raw.csv.gz": {
+      "sha256": "bf29c053ca127010661601245ec9623fdc5dffb6445b0b7ec667b43e039b5fa1",
+      "bytes": 6274553
+    }
+  }
+}

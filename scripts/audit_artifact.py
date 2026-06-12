@@ -16,49 +16,59 @@ PROHIBITED_BASENAMES = {
     "reinforcementTestClasses.py",
     "valueIterationAgents.py",
 }
-
 PROHIBITED_IMPORT = re.compile(
     r"^\s*(?:from|import)\s+(?:game|pacman|qlearningAgents|valueIterationAgents)\b",
     re.MULTILINE,
 )
-
-BUILD_SUFFIXES = {".aux", ".bbl", ".blg", ".log", ".out", ".spl"}
-ASOC_RESULT_SETS = (
-    "dqn_tuning_development",
-    "dqn_strong_validation",
-    "confirmatory_extended_compact",
-    "support_abstention_replication",
-    "minigrid_extended_diagnostic",
-    "application_navigation_case_study",
-    "adaptive_gate_compact_validation",
-    "cost_support_metrics",
+BUILD_SUFFIXES = {
+    ".aux",
+    ".bbl",
+    ".blg",
+    ".fdb_latexmk",
+    ".fls",
+    ".log",
+    ".out",
+    ".spl",
+    ".synctex.gz",
+}
+RESULT_DIRS = (
+    "results/dqn_tuning_development",
+    "results/dqn_strong_validation",
+    "results/confirmatory_extended_compact",
+    "results/support_abstention_replication",
+    "results/minigrid_extended_diagnostic",
+    "results/application_navigation_case_study",
+    "results/adaptive_gate_compact_validation",
+    "results/cost_support_metrics",
+    "results/strong_baselines/double_dqn",
+    "results/strong_baselines/dueling_double_dqn",
+    "results/approx_support/knn_support",
+    "results/approx_support/feature_distance_support",
+    "results/fuzzy_ablation",
+    "results/application_risk_variants",
+    "results/uav_pybullet_validation",
 )
 EXCLUDED_PARTS = {
     ".git",
     ".pytest_cache",
+    ".quick_repro",
+    ".uav_smoke",
+    ".venv",
     "__pycache__",
+    "build",
     "confidence_gated_q.egg-info",
     "development",
+    "dist",
     "paper",
     "release",
     "runs",
     "submission_clean_asoc",
-    "submission_clean_asoc_strong_revision",
 }
 EXCLUDED_FILES = {
-    "FINAL_SUBMISSION_CHECK.md",
     "artifact_audit.json",
-    "submission_audit.json",
-    "submission_audit.md",
-    "submission_clean_asoc.zip",
-    "submission_clean_asoc.zip.sha256",
-    "submission_clean_asoc_strong_revision.zip",
-    "research_asoc_strong_revision.zip",
-    "asoc_separate_figures_for_upload.zip",
-    "asoc_strong_revision_checksums.sha256",
+    "submission_readiness_audit.json",
+    "MANIFEST.sha256",
 }
-
-
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -67,8 +77,28 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def audit_manifest(root: Path, violations: list[str]) -> None:
+    manifest = root / "MANIFEST.sha256"
+    if not manifest.exists():
+        violations.append("missing required file: MANIFEST.sha256")
+        return
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            expected, relative = line.split("  ", 1)
+        except ValueError:
+            violations.append(f"invalid manifest line: {line}")
+            continue
+        path = root / relative
+        if not path.is_file():
+            violations.append(f"manifest references missing file: {relative}")
+        elif sha256(path) != expected:
+            violations.append(f"manifest checksum mismatch: {relative}")
+
+
 def audit(root: Path) -> dict:
-    violations = []
+    violations: list[str] = []
     files = []
     for path in sorted(root.rglob("*")):
         if not path.is_file():
@@ -80,6 +110,8 @@ def audit(root: Path) -> dict:
             or any(part in EXCLUDED_PARTS for part in relative.parts)
         ):
             continue
+        if path.suffix.lower() == ".zip":
+            violations.append(f"nested archive in artifact tree: {relative}")
         if path.name in PROHIBITED_BASENAMES:
             violations.append(f"prohibited assignment filename: {relative}")
         if path.suffix == ".py":
@@ -99,24 +131,36 @@ def audit(root: Path) -> dict:
         "README.md",
         "PROVENANCE.md",
         "REPRODUCIBILITY.md",
+        "MANIFEST.sha256",
         "pyproject.toml",
         "requirements.txt",
         "src/hybrid_q/agents.py",
         "scripts/reproduce_all.py",
         "tests/test_agents.py",
-        *[f"results/{name}/audit.json" for name in ASOC_RESULT_SETS],
+        "tables/table_strong_baselines.csv",
+        "tables/table_approx_support.csv",
+        "tables/table_application_risk_adjusted.csv",
+        "tables/table_uav_pybullet_validation.csv",
     ]
     for name in required:
         if not (root / name).exists():
             violations.append(f"missing required file: {name}")
-    for name in ASOC_RESULT_SETS:
-        result_dir = root / "results" / name
+    for relative in RESULT_DIRS:
+        result_dir = root / relative
+        audit_path = result_dir / "audit.json"
+        if not audit_path.exists():
+            violations.append(f"{relative}: missing audit.json")
+            continue
+        report = json.loads(audit_path.read_text(encoding="utf-8"))
+        if report.get("status") != "PASS":
+            violations.append(f"{relative}: result audit is not PASS")
         if not (
             (result_dir / "raw.csv").exists()
             or (result_dir / "raw.csv.gz").exists()
         ):
-            violations.append(f"{name}: missing raw.csv or raw.csv.gz")
+            violations.append(f"{relative}: missing raw.csv or raw.csv.gz")
 
+    audit_manifest(root, violations)
     return {
         "status": "PASS" if not violations else "FAIL",
         "violations": violations,
@@ -133,9 +177,9 @@ def main() -> None:
     report = audit(root)
     Path(args.output).write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(report["status"])
-    if report["violations"]:
-        for violation in report["violations"]:
-            print(violation)
+    for violation in report["violations"]:
+        print(violation)
+    if report["status"] != "PASS":
         raise SystemExit(1)
 
 

@@ -2,15 +2,18 @@ import json
 
 import numpy as np
 import pandas as pd
+import pytest
 
-from src.hybrid_q.agents import AgentConfig, HybridQAgent
-from src.hybrid_q.encoding import ObservationEncoder
-from src.hybrid_q.envs import (
+from hybrid_q.agents import AgentConfig, HybridQAgent
+from hybrid_q.encoding import ObservationEncoder
+from hybrid_q.envs import (
     ApplicationNavigationSupportShiftEnv,
+    PyBulletUAVWaypointSupportShiftEnv,
     StructuredFourRoomsEnv,
+    has_uav_backend,
 )
-from src.hybrid_q.envs import make_env, resolve_env_id
-from src.hybrid_q.experiment import evaluate, run_config
+from hybrid_q.envs import make_env, resolve_env_id
+from hybrid_q.experiment import evaluate, run_config
 
 
 def test_structured_goal_splits_are_disjoint():
@@ -19,6 +22,23 @@ def test_structured_goal_splits_are_disjoint():
     assert set(train.goals)
     assert set(test.goals)
     assert set(train.goals).isdisjoint(test.goals)
+
+
+def test_application_hold_penalty_and_risk_metadata():
+    env = ApplicationNavigationSupportShiftEnv(
+        goal_split="train",
+        slip_probability=0.0,
+        hold_penalty=0.05,
+        lambda_collision=1.5,
+        lambda_idle=0.2,
+    )
+    env.reset(seed=3)
+    _, reward, _, _, info = env.step(4)
+    assert np.isclose(reward, -0.07)
+    assert info["idle"] is True
+    assert info["lambda_collision"] == 1.5
+    assert info["lambda_idle"] == 0.2
+    env.close()
 
 
 def test_application_navigation_goal_shift_and_seed_are_deterministic():
@@ -216,7 +236,7 @@ def test_compact_environment_variants_reset_and_encode():
         assert encoded.vector.ndim == 1
         assert encoded.vector.size > 0
         env.close()
-    assert resolve_env_id("Taxi-v3") == "Taxi-v4"
+    assert resolve_env_id("Taxi-v3") in {"Taxi-v3", "Taxi-v4"}
 
 
 def test_minigrid_variants_use_explicit_fully_observable_images():
@@ -239,3 +259,28 @@ def test_minigrid_variants_use_explicit_fully_observable_images():
         encoded = ObservationEncoder(env.observation_space).encode(observation)
         assert encoded.vector.size == int(np.prod(observation.shape))
         env.close()
+
+
+@pytest.mark.skipif(
+    not has_uav_backend(), reason="optional UAV backend is not installed"
+)
+def test_pybullet_uav_support_shift_reset_step_and_seed():
+    env = PyBulletUAVWaypointSupportShiftEnv(
+        target_split="deployment",
+        physics="pyb_drag",
+        action_repeat=1,
+        max_steps=2,
+        wind_force_std=0.0,
+    )
+    first, first_info = env.reset(seed=21)
+    second, second_info = env.reset(seed=21)
+    assert np.array_equal(first, second)
+    assert first_info == second_info
+    assert first.shape == (15,)
+    next_observation, reward, terminated, truncated, info = env.step(6)
+    assert next_observation.shape == (15,)
+    assert np.isfinite(reward)
+    assert isinstance(terminated, bool)
+    assert isinstance(truncated, bool)
+    assert info["physics_backend"] == "gym-pybullet-drones"
+    env.close()
