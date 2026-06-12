@@ -1,0 +1,97 @@
+experiment_name: fuzzy_reliability_component_development_screen
+output_dir: results/development/fuzzy_component_screen
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+  allow_dirty_execution_inputs: true
+seeds: [0, 1, 2, 3, 4]
+evaluation:
+  interval_steps: 2000
+  episodes: 30
+analysis:
+  primary_metric: return_auc
+  analysis_status: development_only_not_confirmatory
+  purpose: >
+    Screen the frozen balanced fuzzy surface for gross component failures
+    before independent confirmatory execution. No parameter is selected here.
+  planned_contrasts:
+    - name: full_vs_count
+      left: fuzzy_relative_full
+      right: count_gate_tau_20
+      metric: return_auc
+    - name: full_vs_no_support
+      left: fuzzy_relative_full
+      right: fuzzy_no_support
+      metric: return_auc
+    - name: full_vs_no_reliability
+      left: fuzzy_relative_full
+      right: fuzzy_no_reliability
+      metric: return_auc
+    - name: full_vs_crisp
+      left: fuzzy_relative_full
+      right: crisp_relative_gate
+      metric: return_auc
+envs:
+  - name: FrozenLake-4x4-slippery-development
+    id: FrozenLake-v1
+    kwargs:
+      map_name: 4x4
+      is_slippery: true
+    training_steps: 10000
+    max_steps: 100
+    success_mode: positive_terminal
+  - name: CliffWalking-development
+    id: CliffWalking-v1
+    training_steps: 10000
+    max_steps: 500
+    success_mode: terminated
+  - name: FourRooms-9-support-shift-development
+    id: StructuredFourRooms-v0
+    kwargs:
+      size: 9
+      goal_split: train
+      slip_probability: 0.1
+      max_steps: 160
+    eval_kwargs:
+      goal_split: test
+    training_steps: 12000
+    max_steps: 160
+    success_mode: positive_terminal
+agents:
+  - name: count_gate_tau_20
+    kind: count_gated
+    params: &common
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      tau: 20
+      fuzzy_tau_support: 20
+      fallback_policy: no_hold
+      epsilon_decay_steps: 10000
+      fuzzy_reliability_consequents: [0.0, 0.35, 0.65, 0.75, 0.95]
+  - name: fuzzy_relative_full
+    kind: fuzzy_risk_aware_gate
+    params:
+      <<: *common
+  - name: fuzzy_no_support
+    kind: fuzzy_risk_aware_gate
+    params:
+      <<: *common
+      fuzzy_risk_ablation_mode: no_support
+  - name: fuzzy_no_reliability
+    kind: fuzzy_risk_aware_gate
+    params:
+      <<: *common
+      fuzzy_risk_ablation_mode: no_reliability
+  - name: crisp_relative_gate
+    kind: fuzzy_risk_aware_gate
+    params:
+      <<: *common
+      fuzzy_risk_ablation_mode: crisp_threshold

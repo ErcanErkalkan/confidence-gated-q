@@ -175,6 +175,91 @@ def test_fuzzy_gate_can_use_neural_fallback_outside_exact_support():
     assert decision["abstention"] == 0.0
 
 
+def test_fuzzy_risk_gate_uses_relative_estimator_reliability():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(
+            gate_min=0.0,
+            gate_max=1.0,
+            fuzzy_tau_support=5.0,
+            reliability_prior_strength=0.0,
+        ),
+        gate_kind="fuzzy_risk_aware",
+    )
+    agent.counts["s"] = 20
+    agent.error_counts["s"] = 20
+    agent.tabular_error["s"] = 10.0
+    agent.neural_error["s"] = 0.1
+    low_reliability_alpha, _, _ = agent.fuzzy_reliability_components("s")
+    agent.tabular_error["s"] = 0.1
+    agent.neural_error["s"] = 10.0
+    high_reliability_alpha, _, _ = agent.fuzzy_reliability_components("s")
+    assert high_reliability_alpha > low_reliability_alpha
+
+
+def test_fuzzy_risk_crisp_ablation_uses_hard_two_input_threshold():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=2,
+        seed=0,
+        config=AgentConfig(
+            gate_min=0.05,
+            gate_max=0.95,
+            fuzzy_tau_support=5.0,
+            fuzzy_risk_ablation_mode="crisp_threshold",
+            reliability_prior_strength=0.0,
+        ),
+        gate_kind="fuzzy_risk_aware",
+    )
+    agent.counts["s"] = 20
+    agent.error_counts["s"] = 20
+    agent.tabular_error["s"] = 0.1
+    agent.neural_error["s"] = 10.0
+    assert agent.fuzzy_reliability_components("s")[0] == 0.95
+    agent.tabular_error["s"] = 10.0
+    agent.neural_error["s"] = 0.1
+    assert agent.fuzzy_reliability_components("s")[0] == 0.05
+
+
+def test_fuzzy_risk_gate_falls_back_on_unsupported_flat_prediction():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=3,
+        seed=0,
+        config=AgentConfig(
+            abstain_action=2,
+            fallback_policy="hold",
+        ),
+        gate_kind="fuzzy_risk_aware",
+    )
+    agent.online = FixedQNetwork([0.0, 0.0, 0.0])
+    state = np.array([1.0, 0.0], dtype=np.float32)
+    assert agent.act(state, "unseen", epsilon=0.0) == 2
+    decision = agent.decision_diagnostics()
+    assert decision["abstention"] == 1.0
+    assert decision["uncertainty_score"] == 1.0
+
+
+def test_fuzzy_risk_gate_retains_confident_neural_action():
+    agent = HybridQAgent(
+        input_dim=2,
+        action_dim=3,
+        seed=0,
+        config=AgentConfig(
+            abstain_action=2,
+            fallback_policy="hold",
+            fuzzy_confidence_scale=0.25,
+        ),
+        gate_kind="fuzzy_risk_aware",
+    )
+    agent.online = FixedQNetwork([8.0, 0.0, -8.0])
+    state = np.array([1.0, 0.0], dtype=np.float32)
+    assert agent.act(state, "unseen", epsilon=0.0) == 0
+    assert agent.decision_diagnostics()["abstention"] == 0.0
+
+
 def test_support_abstention_can_select_a_declared_safe_action():
     agent = HybridQAgent(
         input_dim=2,

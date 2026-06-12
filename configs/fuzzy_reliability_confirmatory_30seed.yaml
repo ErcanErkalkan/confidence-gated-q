@@ -1,0 +1,123 @@
+experiment_name: fuzzy_reliability_gate_independent_confirmatory
+output_dir: results/fuzzy_reliability_confirmatory
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+seeds:
+  - 1300
+  - 1301
+  - 1302
+  - 1303
+  - 1304
+  - 1305
+  - 1306
+  - 1307
+  - 1308
+  - 1309
+  - 1310
+  - 1311
+  - 1312
+  - 1313
+  - 1314
+  - 1315
+  - 1316
+  - 1317
+  - 1318
+  - 1319
+  - 1320
+  - 1321
+  - 1322
+  - 1323
+  - 1324
+  - 1325
+  - 1326
+  - 1327
+  - 1328
+  - 1329
+evaluation:
+  interval_steps: 2000
+  episodes: 30
+analysis:
+  primary_metric: return_auc
+  analysis_status: independent_confirmatory_fuzzy_reliability_gate
+  development_seeds: [0, 1, 2, 3, 4]
+  confirmatory_seeds: 1300-1329
+  locked_selection: >
+    tau=20 and singleton consequents [0.0, 0.35, 0.65, 0.75, 0.95]
+    were selected before these runs by lowest average environment rank in
+    configs/development/fuzzy_rule_selection.yaml.
+  planned_contrasts:
+    - name: fuzzy_reliability_vs_count
+      left: fuzzy_reliability_full
+      right: count_gate_tau_20
+      metric: return_auc
+envs:
+  - name: FrozenLake-4x4-slippery-confirmatory
+    id: FrozenLake-v1
+    kwargs:
+      map_name: 4x4
+      is_slippery: true
+    training_steps: 10000
+    max_steps: 100
+    success_mode: positive_terminal
+  - name: CliffWalking-confirmatory
+    id: CliffWalking-v1
+    training_steps: 10000
+    max_steps: 500
+    success_mode: terminated
+  - name: FourRooms-9-support-shift-confirmatory
+    id: StructuredFourRooms-v0
+    kwargs:
+      size: 9
+      goal_split: train
+      slip_probability: 0.1
+      max_steps: 160
+    eval_kwargs:
+      goal_split: test
+    training_steps: 12000
+    max_steps: 160
+    success_mode: positive_terminal
+agents:
+  - name: count_gate_tau_20
+    kind: count_gated
+    params: &common
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      tau: 20
+      fuzzy_tau_support: 20
+      fuzzy_reliability_consequents: [0.0, 0.35, 0.65, 0.75, 0.95]
+      fallback_policy: no_hold
+      epsilon_decay_steps: 10000
+  - name: original_fuzzy
+    kind: fuzzy_support_adaptive_gate
+    params:
+      <<: *common
+      fuzzy_uncertainty_scale: 1.0
+      fuzzy_abstain_zero_support: false
+  - name: fuzzy_reliability_full
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *common
+  - name: fuzzy_no_support
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *common
+      fuzzy_risk_ablation_mode: no_support
+  - name: fuzzy_no_reliability
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *common
+      fuzzy_risk_ablation_mode: no_reliability
+  - name: crisp_relative_gate
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *common
+      fuzzy_risk_ablation_mode: crisp_threshold

@@ -8,8 +8,8 @@ authors:
     affiliation: "Vocational School of Technical Sciences, Department of Electronics and Automation, Artificial Intelligence Operator Program, Marmara University"
     email: "ercan.erkalkan@marmara.edu.tr"
     orcid: "https://orcid.org/0000-0001-9259-7112"
-version: 1.5.0
-date-released: 2026-06-11
+version: 1.6.0
+date-released: 2026-06-12
 license: MIT
 doi: "10.5281/zenodo.20578927"
 repository-code: "https://github.com/ErcanErkalkan/confidence-gated-q"

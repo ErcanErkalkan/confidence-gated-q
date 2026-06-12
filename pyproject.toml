@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "confidence-gated-q"
-version = "1.5.0"
+version = "1.6.0"
 description = "Support-boundary diagnostics for tabular-neural RL under exact-state support shift"
 requires-python = ">=3.10"
 authors = [

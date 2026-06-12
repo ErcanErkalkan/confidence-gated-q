@@ -1,0 +1,92 @@
+experiment_name: fuzzy_risk_controller_development_selection
+output_dir: results/development/fuzzy_risk_selection
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+  allow_dirty_execution_inputs: true
+seeds: [0, 1, 2, 3, 4]
+evaluation:
+  interval_steps: 2000
+  episodes: 30
+analysis:
+  primary_metric: risk_adjusted_score
+  analysis_status: development_only_not_confirmatory
+  selection_rule: >
+    Select the fuzzy confidence scale with the largest mean risk-adjusted
+    score across seeds 0-4; break exact ties by mean success rate.
+  risk_objective: J_risk = success_rate - collision_rate - 0.1 * idle_rate
+  planned_contrasts:
+    - name: fuzzy_scale_05_vs_count
+      left: fuzzy_risk_scale_05
+      right: count_gate
+      metric: risk_adjusted_score
+    - name: fuzzy_scale_10_vs_count
+      left: fuzzy_risk_scale_10
+      right: count_gate
+      metric: risk_adjusted_score
+    - name: fuzzy_scale_20_vs_count
+      left: fuzzy_risk_scale_20
+      right: count_gate
+      metric: risk_adjusted_score
+    - name: fuzzy_scale_40_vs_count
+      left: fuzzy_risk_scale_40
+      right: count_gate
+      metric: risk_adjusted_score
+envs:
+  - name: ApplicationNavigation-fuzzy-risk-development
+    id: ApplicationNavigationSupportShift-v0
+    kwargs:
+      goal_split: train
+      slip_probability: 0.05
+      max_steps: 120
+      hold_penalty: 0.05
+      lambda_collision: 1.0
+      lambda_idle: 0.1
+    eval_kwargs:
+      goal_split: deployment
+    training_steps: 12000
+    max_steps: 120
+    success_mode: positive_terminal
+agents:
+  - name: count_gate
+    kind: count_gated
+    params: &common
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      tau: 20
+      fuzzy_tau_support: 20
+      abstain_action: 4
+      fallback_policy: hold
+      epsilon_decay_steps: 10000
+  - name: support_hold
+    kind: support_abstain_gate
+    params:
+      <<: *common
+  - name: fuzzy_risk_scale_05
+    kind: fuzzy_risk_aware_gate
+    params:
+      <<: *common
+      fuzzy_confidence_scale: 0.5
+  - name: fuzzy_risk_scale_10
+    kind: fuzzy_risk_aware_gate
+    params:
+      <<: *common
+      fuzzy_confidence_scale: 1.0
+  - name: fuzzy_risk_scale_20
+    kind: fuzzy_risk_aware_gate
+    params:
+      <<: *common
+      fuzzy_confidence_scale: 2.0
+  - name: fuzzy_risk_scale_40
+    kind: fuzzy_risk_aware_gate
+    params:
+      <<: *common
+      fuzzy_confidence_scale: 4.0

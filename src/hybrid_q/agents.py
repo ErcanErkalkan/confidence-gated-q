@@ -40,6 +40,24 @@ class AgentConfig:
         0.75,
         0.95,
     )
+    fuzzy_reliability_consequents: tuple[float, float, float, float, float] = (
+        0.0,
+        0.35,
+        0.65,
+        0.75,
+        0.95,
+    )
+    fuzzy_risk_consequents: tuple[float, float, float, float, float] = (
+        1.0,
+        0.10,
+        0.55,
+        0.05,
+        0.0,
+    )
+    fuzzy_confidence_scale: float = 2.0
+    fuzzy_risk_ablation_mode: str = "full"
+    fuzzy_crisp_support_threshold: float = 0.5
+    fuzzy_crisp_confidence_threshold: float = 0.5
     approximate_support_k: int = 5
     approximate_support_bandwidth: float = 0.25
     approximate_support_tau: float = 2.0
@@ -660,6 +678,184 @@ class HybridQAgent(DQNAgent):
             alpha = 0.0
         return alpha, support, uncertainty
 
+    def fuzzy_reliability_components(
+        self, key: Hashable
+    ) -> tuple[float, float, float]:
+        count = self.counts.get(key, 0)
+        tau = max(float(self.config.fuzzy_tau_support), 1e-8)
+        support = float(1.0 - np.exp(-count / tau))
+        tabular_error, neural_error = self._error_estimates(key)
+        denominator = tabular_error + neural_error + 1e-8
+        tabular_reliability = float(
+            np.clip(neural_error / denominator, 0.0, 1.0)
+        )
+        mode = self.config.fuzzy_risk_ablation_mode
+        if mode == "no_support":
+            support = 0.5
+        if mode == "no_reliability":
+            tabular_reliability = 0.5
+        if mode == "crisp_threshold":
+            alpha = (
+                self.config.gate_max
+                if support >= self.config.fuzzy_crisp_support_threshold
+                and tabular_reliability >= 0.5
+                else self.config.gate_min
+            )
+            return (
+                0.0 if count == 0 else float(alpha),
+                support,
+                tabular_reliability,
+            )
+        if mode not in {
+            "full",
+            "no_support",
+            "no_confidence",
+            "no_reliability",
+            "crisp_threshold",
+        }:
+            raise ValueError(f"Unknown fuzzy risk ablation mode: {mode}")
+
+        low_support, medium_support, high_support = (
+            self._support_memberships(support)
+        )
+        low_reliability = 1.0 - tabular_reliability
+        high_reliability = tabular_reliability
+        consequents = self.config.fuzzy_reliability_consequents
+        rules = (
+            (low_support, consequents[0]),
+            (medium_support * low_reliability, consequents[1]),
+            (medium_support * high_reliability, consequents[2]),
+            (high_support * low_reliability, consequents[3]),
+            (high_support * high_reliability, consequents[4]),
+        )
+        total_membership = sum(weight for weight, _ in rules)
+        alpha = (
+            sum(weight * consequence for weight, consequence in rules)
+            / total_membership
+            if total_membership > 1e-12
+            else 0.0
+        )
+        alpha = float(
+            np.clip(alpha, self.config.gate_min, self.config.gate_max)
+        )
+        if count == 0:
+            alpha = 0.0
+        return alpha, support, tabular_reliability
+
+    def neural_action_confidence(self, values: np.ndarray) -> float:
+        values = np.asarray(values, dtype=np.float64)
+        if values.size < 2:
+            return 1.0
+        scale = float(values.std())
+        if scale <= 1e-8:
+            return 0.0
+        largest = np.partition(values, -2)[-2:]
+        margin = float(largest.max() - largest.min())
+        confidence_scale = max(
+            float(self.config.fuzzy_confidence_scale), 1e-8
+        )
+        return float(
+            np.clip(
+                1.0 - np.exp(-margin / (scale * confidence_scale)),
+                0.0,
+                1.0,
+            )
+        )
+
+    def fuzzy_fallback_risk(
+        self, support: float, confidence: float
+    ) -> float:
+        mode = self.config.fuzzy_risk_ablation_mode
+        if mode == "no_support":
+            support = 0.5
+        if mode == "no_confidence":
+            confidence = 0.5
+        if mode == "crisp_threshold":
+            return float(
+                support < self.config.fuzzy_crisp_support_threshold
+                and confidence < self.config.fuzzy_crisp_confidence_threshold
+            )
+
+        low_support, medium_support, high_support = (
+            self._support_memberships(support)
+        )
+        low_confidence = 1.0 - confidence
+        high_confidence = confidence
+        consequents = self.config.fuzzy_risk_consequents
+        rules = (
+            (low_support * low_confidence, consequents[0]),
+            (low_support * high_confidence, consequents[1]),
+            (medium_support * low_confidence, consequents[2]),
+            (medium_support * high_confidence, consequents[3]),
+            (high_support, consequents[4]),
+        )
+        total_membership = sum(weight for weight, _ in rules)
+        if total_membership <= 1e-12:
+            return 0.0
+        return float(
+            np.clip(
+                sum(weight * consequence for weight, consequence in rules)
+                / total_membership,
+                0.0,
+                1.0,
+            )
+        )
+
+    @staticmethod
+    def _normalized_action_preferences(values: np.ndarray) -> np.ndarray:
+        values = np.asarray(values, dtype=np.float64)
+        centered = values - values.mean()
+        scale = float(centered.std())
+        if scale > 1e-8:
+            centered /= scale
+        else:
+            centered.fill(0.0)
+        centered -= centered.max()
+        preferences = np.exp(centered)
+        return preferences / preferences.sum()
+
+    def _fuzzy_risk_aware_values(
+        self, state: np.ndarray, key: Hashable
+    ) -> np.ndarray:
+        neural_values = self.neural_q_values(state)
+        alpha, support, _ = self.fuzzy_reliability_components(key)
+        tabular_values = self.table.get(key)
+        if tabular_values is None:
+            tabular_values = np.zeros(
+                self.action_dim, dtype=np.float32
+            )
+        mixed_values = alpha * tabular_values + (1.0 - alpha) * neural_values
+        confidence = self.neural_action_confidence(neural_values)
+        fallback_risk = self.fuzzy_fallback_risk(support, confidence)
+        fallback_action = self._fallback_action(state)
+        if fallback_action is None or not 0 <= fallback_action < self.action_dim:
+            fallback_risk = 0.0
+            values = mixed_values
+            fallback_selected = False
+        else:
+            preferences = self._normalized_action_preferences(mixed_values)
+            fallback = np.zeros(self.action_dim, dtype=np.float64)
+            fallback[fallback_action] = 1.0
+            values = (
+                (1.0 - fallback_risk) * preferences
+                + fallback_risk * fallback
+            )
+            fallback_selected = bool(
+                np.isclose(values[fallback_action], values.max())
+            )
+        self._record_decision(
+            key=key,
+            memory_weight=(
+                alpha if self.counts.get(key, 0) > 0 else 0.0
+            ),
+            neural_weight=(1.0 - alpha) * (1.0 - fallback_risk),
+            abstention=float(fallback_selected),
+            adaptive_alpha=alpha,
+            support_score=support,
+            uncertainty_score=1.0 - confidence,
+        )
+        return np.asarray(values, dtype=np.float32)
+
     def _support_memberships(self, support: float) -> tuple[float, float, float]:
         if self.config.fuzzy_membership_shape == "shoulder":
             low = float(1.0 / (1.0 + np.exp(12.0 * (support - 0.35))))
@@ -771,9 +967,18 @@ class HybridQAgent(DQNAgent):
         if self.gate_kind == "fuzzy_support_adaptive":
             alpha, _, _ = self.fuzzy_gate_components(key)
             return alpha
+        if self.gate_kind == "fuzzy_risk_aware":
+            alpha, _, _ = self.fuzzy_reliability_components(key)
+            return alpha
         raise ValueError(f"Unknown gate kind: {self.gate_kind}")
 
     def q_values(self, state: np.ndarray, key: Hashable) -> np.ndarray:
+        if self.gate_kind == "fuzzy_risk_aware":
+            values = self._fuzzy_risk_aware_values(state, key)
+            gate = self.gate(key)
+            self.gate_sum += gate
+            self.gate_queries += 1
+            return values
         abstention = False
         adaptive_alpha = np.nan
         support_score = float(
@@ -878,7 +1083,11 @@ class HybridQAgent(DQNAgent):
         neural_residual = self.neural_td_residual(
             state, action, reward, next_state, done
         )
-        if self.gate_kind in {"reliability", "fuzzy_support_adaptive"}:
+        if self.gate_kind in {
+            "reliability",
+            "fuzzy_support_adaptive",
+            "fuzzy_risk_aware",
+        }:
             beta = self.config.reliability_beta
             tabular_squared = tabular_residual**2
             neural_squared = neural_residual**2
@@ -1003,5 +1212,13 @@ def create_agent(
             seed,
             config,
             gate_kind="fuzzy_support_adaptive",
+        )
+    if kind in {"fuzzy_risk_aware_gate", "fuzzy_reliability_gate"}:
+        return HybridQAgent(
+            input_dim,
+            action_dim,
+            seed,
+            config,
+            gate_kind="fuzzy_risk_aware",
         )
     raise ValueError(f"Unknown agent kind: {kind}")
