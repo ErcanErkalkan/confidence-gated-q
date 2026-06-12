@@ -38,6 +38,14 @@ resolved environment IDs, observation representation, platform, package
 versions, and generation commit. Each raw row repeats the key software and
 experiment provenance.
 
+Starting with release `v1.5.0`, newly executed result families also record a
+deterministic `source_snapshot_sha256` over the exact config, `src/hybrid_q`
+implementation, package metadata, and dependency files. The corresponding
+`execution_input_manifest` lists every hashed file. Public experiment runs are
+rejected when any of those execution inputs differ from the recorded git
+commit. Result audits recompute the snapshot and report `STRICT_PASS` only when
+the current artifact matches the executed inputs.
+
 ## Result Preservation
 
 Per-run shards are omitted after aggregation because the committed

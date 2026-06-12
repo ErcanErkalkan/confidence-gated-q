@@ -69,6 +69,9 @@ def raw_path(result_dir: Path) -> Path:
 def audit() -> dict:
     violations = []
     new_runs = 0
+    execution_commits = set()
+    package_versions = set()
+    source_snapshots = set()
     for config_relative, result_relative in NEW_RESULTS:
         config_path = ROOT / config_relative
         result_dir = ROOT / result_relative
@@ -78,6 +81,16 @@ def audit() -> dict:
         )
         if report.get("status") != "PASS":
             violations.append(f"{result_relative}: result audit is not PASS")
+        if report.get("provenance_status") != "STRICT_PASS":
+            violations.append(
+                f"{result_relative}: strict source provenance is not PASS"
+            )
+        metadata = json.loads(
+            (result_dir / "metadata.json").read_text(encoding="utf-8")
+        )
+        execution_commits.add(metadata.get("git_commit_hash"))
+        package_versions.add(metadata.get("package_version"))
+        source_snapshots.add(metadata.get("source_snapshot_sha256"))
         new_runs += int(report["observed_runs"])
         raw = pd.read_csv(raw_path(result_dir), nrows=5)
         for metric in ("collision_rate", "unsupported_state_ratio"):
@@ -91,6 +104,18 @@ def audit() -> dict:
             violations.append(f"executed result marked protocol-only: {result_relative}")
     if new_runs != 510:
         violations.append(f"focused experiment coverage {new_runs} != 510")
+    if len(execution_commits) != 1 or None in execution_commits:
+        violations.append(
+            "focused experiments do not share one execution commit"
+        )
+    if package_versions != {"1.5.0"}:
+        violations.append(
+            "focused experiment package versions are not exactly v1.5.0"
+        )
+    if len(source_snapshots) != len(NEW_RESULTS) or None in source_snapshots:
+        violations.append(
+            "focused experiments lack config-specific source snapshots"
+        )
 
     protocol = load_config(
         ROOT / "configs/strong_baselines/a2c_or_ppo_protocol.yaml"
@@ -139,6 +164,9 @@ def audit() -> dict:
     return {
         "status": "PASS" if not violations else "FAIL",
         "focused_experiment_runs": new_runs,
+        "execution_commits": sorted(execution_commits - {None}),
+        "package_versions": sorted(package_versions - {None}),
+        "source_snapshot_count": len(source_snapshots - {None}),
         "violations": violations,
     }
 

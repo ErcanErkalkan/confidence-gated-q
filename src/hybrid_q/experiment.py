@@ -9,7 +9,6 @@ import json
 import os
 import platform
 import re
-import subprocess
 import time
 from pathlib import Path
 from typing import Any
@@ -23,6 +22,13 @@ from .agents import BaseAgent, create_agent
 from .config import load_config
 from .encoding import ObservationEncoder
 from .envs import episode_succeeded, make_env, resolve_env_id
+from .provenance import (
+    execution_input_manifest,
+    execution_inputs_clean,
+    execution_snapshot_sha256,
+    git_commit_hash,
+    repository_root,
+)
 
 
 FIELDNAMES = [
@@ -53,6 +59,8 @@ FIELDNAMES = [
     "wall_clock_evaluation_time",
     "git_commit_hash",
     "package_version",
+    "source_snapshot_sha256",
+    "execution_inputs_clean",
     "python_version",
     "torch_version",
     "numpy_version",
@@ -85,18 +93,6 @@ FIELDNAMES = [
     "memory_cost_entries",
     "memory_cost_bytes_estimated",
 ]
-
-
-def git_commit_hash() -> str:
-    try:
-        return subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-    except (OSError, subprocess.CalledProcessError):
-        return "unknown"
 
 
 def package_version(name: str) -> str:
@@ -335,7 +331,7 @@ def write_metadata(
     config: dict[str, Any],
     output_dir: Path,
     config_file: str,
-    commit_hash: str,
+    provenance: dict[str, Any],
 ) -> None:
     config_text = json.dumps(config, sort_keys=True).encode("utf-8")
     packages = {}
@@ -366,8 +362,7 @@ def write_metadata(
         "processor": platform.processor(),
         "config_sha256": hashlib.sha256(config_text).hexdigest(),
         "config_file": config_file,
-        "git_commit_hash": commit_hash,
-        "package_version": PACKAGE_VERSION,
+        **provenance,
         "environment_observations": [
             {
                 "name": spec.get("name", spec["id"]),
@@ -439,6 +434,12 @@ def _write_row(
             "wall_clock_evaluation_time": evaluation_elapsed_seconds,
             "git_commit_hash": provenance["git_commit_hash"],
             "package_version": provenance["package_version"],
+            "source_snapshot_sha256": provenance[
+                "source_snapshot_sha256"
+            ],
+            "execution_inputs_clean": provenance[
+                "execution_inputs_clean"
+            ],
             "python_version": provenance["python_version"],
             "torch_version": provenance["torch_version"],
             "numpy_version": provenance["numpy_version"],
@@ -715,14 +716,32 @@ def _combine_shards(shards: list[Path], raw_path: Path) -> None:
 
 
 def run_config(config_path: str | Path) -> Path:
-    config_path = Path(config_path)
+    config_path = Path(config_path).resolve()
     config = load_config(config_path)
-    config_file = config_path.as_posix()
-    commit_hash = git_commit_hash()
+    root = repository_root(config_path)
+    try:
+        config_file = config_path.relative_to(root).as_posix()
+    except ValueError:
+        config_file = f"external-config/{config_path.name}"
+    input_manifest = execution_input_manifest(config_path, root)
+    input_snapshot = execution_snapshot_sha256(input_manifest)
+    inputs_clean = execution_inputs_clean(config_path, root)
+    allow_dirty = bool(
+        config.get("runtime", {}).get("allow_dirty_execution_inputs", False)
+    ) or os.environ.get("HYBRID_Q_ALLOW_DIRTY_INPUTS") == "1"
+    if inputs_clean is False and not allow_dirty:
+        raise RuntimeError(
+            "Execution inputs differ from the recorded git commit. Commit "
+            "src/config/dependency changes first, or set "
+            "HYBRID_Q_ALLOW_DIRTY_INPUTS=1 for a non-public smoke run."
+        )
+    commit_hash = git_commit_hash(root)
     config["_config_file"] = config_file
     config["_provenance"] = {
         "git_commit_hash": commit_hash,
         "package_version": PACKAGE_VERSION,
+        "source_snapshot_sha256": input_snapshot,
+        "execution_inputs_clean": inputs_clean,
         "python_version": platform.python_version(),
         "torch_version": torch.__version__,
         "numpy_version": np.__version__,
@@ -758,7 +777,15 @@ def run_config(config_path: str | Path) -> Path:
                 "Configuration changed for an output directory containing "
                 "completed runs. Use a new output_dir."
             )
-    write_metadata(public_config, output_dir, config_file, commit_hash)
+    write_metadata(
+        public_config,
+        output_dir,
+        config_file,
+        {
+            **config["_provenance"],
+            "execution_input_manifest": input_manifest,
+        },
+    )
 
     shards = []
     pending = []

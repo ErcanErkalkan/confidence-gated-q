@@ -8,6 +8,10 @@ from pathlib import Path
 import pandas as pd
 
 from hybrid_q.config import load_config
+from hybrid_q.provenance import (
+    execution_input_manifest,
+    execution_snapshot_sha256,
+)
 
 
 REQUIRED_COLUMNS = {
@@ -68,6 +72,30 @@ def audit(config_path: Path, result_dir: Path) -> dict:
     ).hexdigest()
     if metadata.get("config_sha256") != config_hash:
         violations.append("metadata config hash does not match config")
+    warnings = []
+    provenance_status = "LEGACY_COMMIT_ONLY"
+    recorded_snapshot = metadata.get("source_snapshot_sha256")
+    if recorded_snapshot:
+        current_manifest = execution_input_manifest(config_path)
+        current_snapshot = execution_snapshot_sha256(current_manifest)
+        provenance_status = "STRICT_PASS"
+        if metadata.get("execution_inputs_clean") is not True:
+            violations.append("execution inputs were not clean at run start")
+            provenance_status = "STRICT_FAIL"
+        if recorded_snapshot != current_snapshot:
+            violations.append(
+                "recorded source snapshot does not match current execution inputs"
+            )
+            provenance_status = "STRICT_FAIL"
+        if metadata.get("execution_input_manifest") != current_manifest:
+            violations.append(
+                "recorded execution input manifest does not match current inputs"
+            )
+            provenance_status = "STRICT_FAIL"
+    else:
+        warnings.append(
+            "legacy result: source snapshot unavailable; commit-only provenance"
+        )
 
     runs_dir = result_dir / "runs"
     temporary_files = list(runs_dir.glob("*.tmp"))
@@ -104,6 +132,23 @@ def audit(config_path: Path, result_dir: Path) -> dict:
         violations.append(
             f"missing raw columns: {sorted(missing_columns)}"
         )
+    if recorded_snapshot:
+        for column, expected in (
+            ("source_snapshot_sha256", recorded_snapshot),
+            ("execution_inputs_clean", True),
+            ("git_commit_hash", metadata.get("git_commit_hash")),
+            ("package_version", metadata.get("package_version")),
+        ):
+            if column not in raw:
+                violations.append(f"missing strict provenance column: {column}")
+                provenance_status = "STRICT_FAIL"
+                continue
+            observed = set(raw[column].dropna().astype(str).str.lower())
+            if observed != {str(expected).lower()}:
+                violations.append(
+                    f"raw {column} values do not match metadata"
+                )
+                provenance_status = "STRICT_FAIL"
 
     critical = [
         "environment",
@@ -205,6 +250,8 @@ def audit(config_path: Path, result_dir: Path) -> dict:
         "run_shards_present": len(shards),
         "raw_rows": len(raw),
         "violations": violations,
+        "warnings": warnings,
+        "provenance_status": provenance_status,
         "files": result_files,
     }
 

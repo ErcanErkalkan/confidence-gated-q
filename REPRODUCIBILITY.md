@@ -107,6 +107,21 @@ python scripts/audit_results.py `
 These labels are stored in config and result metadata and are not inferred from
 outcomes.
 
+## Strict Source Provenance
+
+New `v1.5.0` experiment families record:
+
+- the clean execution commit;
+- package and dependency versions;
+- the exact config hash;
+- an execution-input manifest with per-file SHA-256 values;
+- a combined `source_snapshot_sha256`.
+
+The runner refuses public experiment execution when tracked or untracked
+changes affect the exact config, `src/hybrid_q`, package metadata, or dependency
+files. `scripts/audit_results.py` independently recomputes the snapshot and
+requires the raw rows, metadata, and current source tree to agree.
+
 ## Compute
 
 Measured cumulative training time across independent runs:
