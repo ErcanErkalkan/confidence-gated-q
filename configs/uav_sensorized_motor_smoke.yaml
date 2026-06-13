@@ -1,0 +1,52 @@
+experiment_name: uav_sensorized_motor_smoke
+output_dir: .uav_smoke/sensorized_motor
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+seeds: [990, 991]
+evaluation:
+  interval_steps: 40
+  episodes: 2
+analysis:
+  primary_metric: risk_adjusted_score
+  analysis_status: auxiliary_sensorized_motor_control_smoke
+  risk_objective: J_risk = success_rate - collision_rate - 0.05 * idle_rate
+  planned_contrasts:
+    - name: dqn_vs_sensorized_controller
+      left: dqn
+      right: sensorized_controller
+      metric: risk_adjusted_score
+envs:
+  - name: Crazyflie-sensorized-motor-control-smoke
+    id: SensorizedPyBulletUAVWaypoint-v0
+    kwargs:
+      target_split: train
+      physics: pyb
+      action_repeat: 1
+      max_steps: 20
+      localization_latency_steps: 1
+      localization_dropout_probability: 0.0
+      range_dropout_probability: 0.0
+      camera_dropout_probability: 0.0
+    eval_kwargs:
+      target_split: deployment
+      physics: pyb_drag
+      vio_position_noise_std: 0.02
+      localization_latency_steps: 2
+    training_steps: 80
+    max_steps: 20
+    success_mode: positive_terminal
+agents:
+  - name: sensorized_controller
+    kind: uav_sensorized_motor_controller
+    params: {}
+  - name: dqn
+    kind: dqn
+    params:
+      batch_size: 16
+      replay_capacity: 1000
+      replay_warmup: 32
+      train_frequency: 4
+      target_update_interval: 40
+      hidden_size: 64
+      epsilon_decay_steps: 80

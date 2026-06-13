@@ -10,6 +10,7 @@ from hybrid_q.envs import (
     ApplicationNavigationSupportShiftEnv,
     PyBulletUAVWaypointSupportShiftEnv,
     ReliabilityShiftBanditEnv,
+    SensorizedPyBulletUAVWaypointEnv,
     StructuredFourRoomsEnv,
     has_uav_backend,
 )
@@ -302,4 +303,39 @@ def test_pybullet_uav_support_shift_reset_step_and_seed():
     assert isinstance(terminated, bool)
     assert isinstance(truncated, bool)
     assert info["physics_backend"] == "gym-pybullet-drones"
+    env.close()
+
+
+@pytest.mark.skipif(
+    not has_uav_backend(), reason="optional UAV backend is not installed"
+)
+def test_sensorized_uav_uses_sensor_estimates_and_low_level_commands():
+    env = SensorizedPyBulletUAVWaypointEnv(
+        target_split="deployment",
+        physics="pyb_drag",
+        action_repeat=1,
+        max_steps=2,
+        localization_latency_steps=1,
+        localization_dropout_probability=0.0,
+        range_dropout_probability=0.0,
+        camera_dropout_probability=0.0,
+        wind_force_std=0.0,
+    )
+    first, first_info = env.reset(seed=31)
+    second, second_info = env.reset(seed=31)
+    assert np.array_equal(first, second)
+    assert first_info == second_info
+    assert first.shape == (22,)
+    assert first_info["observation_source"] == (
+        "delayed_vio_imu_lidar_pinhole_target_detector"
+    )
+    assert first_info["control_interface"] == "attitude_collective_to_motor_rpm"
+    next_observation, reward, terminated, truncated, info = env.step(13)
+    assert next_observation.shape == (22,)
+    assert np.isfinite(reward)
+    assert isinstance(terminated, bool)
+    assert isinstance(truncated, bool)
+    assert np.isfinite(info["localization_error"])
+    assert 0.0 <= info["motor_saturation"] <= 1.0
+    assert info["control_interface"] == "attitude_collective_to_motor_rpm"
     env.close()

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+from collections import deque
 import importlib.util
 import io
 from typing import Any
@@ -631,6 +632,578 @@ class PyBulletUAVWaypointSupportShiftEnv(gym.Env):
         self.simulator.close()
 
 
+class SensorizedPyBulletUAVWaypointEnv(gym.Env):
+    """Crazyflie SIL task with delayed sensing and low-level flight commands."""
+
+    metadata = {"render_modes": []}
+
+    def __init__(
+        self,
+        target_split: str = "train",
+        physics: str = "pyb",
+        pyb_freq: int = 240,
+        ctrl_freq: int = 60,
+        action_repeat: int = 2,
+        max_steps: int = 100,
+        collective_delta_rpm: float = 180.0,
+        tilt_radians: float = 0.08,
+        goal_tolerance: float = 0.16,
+        state_quantization: float = 0.05,
+        lidar_range: float = 1.2,
+        lidar_noise_std: float = 0.01,
+        vio_position_noise_std: float = 0.015,
+        vio_velocity_noise_std: float = 0.025,
+        imu_attitude_noise_std: float = 0.008,
+        localization_latency_steps: int = 2,
+        localization_dropout_probability: float = 0.02,
+        range_dropout_probability: float = 0.01,
+        sensor_bias_walk_std: float = 0.0005,
+        camera_fov_degrees: float = 100.0,
+        camera_dropout_probability: float = 0.02,
+        initial_position_jitter: float = 0.02,
+        initial_attitude_jitter: float = 0.01,
+        wind_force_std: float = 0.0,
+        lambda_collision: float = 1.0,
+        lambda_idle: float = 0.05,
+    ):
+        if not has_uav_backend():
+            raise ImportError(
+                "Sensorized PyBullet UAV validation requires the optional "
+                "'uav' dependencies. Install with: "
+                "python -m pip install -e .[uav]"
+            )
+        if target_split not in {"train", "deployment", "all"}:
+            raise ValueError(
+                "target_split must be train, deployment, or all"
+            )
+        if action_repeat < 1:
+            raise ValueError("action_repeat must be positive")
+        if localization_latency_steps < 0:
+            raise ValueError("localization_latency_steps must be non-negative")
+
+        import pybullet as pybullet
+        from gym_pybullet_drones.control.DSLPIDControl import DSLPIDControl
+        from gym_pybullet_drones.envs.CtrlAviary import CtrlAviary
+        from gym_pybullet_drones.utils.enums import DroneModel, Physics
+
+        self.target_split = target_split
+        self.action_repeat = int(action_repeat)
+        self.max_steps = int(max_steps)
+        self.collective_delta_rpm = float(collective_delta_rpm)
+        self.tilt_radians = float(tilt_radians)
+        self.goal_tolerance = float(goal_tolerance)
+        self.state_quantization = float(state_quantization)
+        self.lidar_range = float(lidar_range)
+        self.lidar_noise_std = float(lidar_noise_std)
+        self.vio_position_noise_std = float(vio_position_noise_std)
+        self.vio_velocity_noise_std = float(vio_velocity_noise_std)
+        self.imu_attitude_noise_std = float(imu_attitude_noise_std)
+        self.localization_latency_steps = int(localization_latency_steps)
+        self.localization_dropout_probability = float(
+            localization_dropout_probability
+        )
+        self.range_dropout_probability = float(range_dropout_probability)
+        self.sensor_bias_walk_std = float(sensor_bias_walk_std)
+        self.camera_fov_cosine = float(
+            np.cos(np.deg2rad(camera_fov_degrees / 2.0))
+        )
+        self.camera_dropout_probability = float(
+            camera_dropout_probability
+        )
+        self.initial_position_jitter = float(initial_position_jitter)
+        self.initial_attitude_jitter = float(initial_attitude_jitter)
+        self.wind_force_std = float(wind_force_std)
+        self.lambda_collision = float(lambda_collision)
+        self.lambda_idle = float(lambda_idle)
+        self.action_space = spaces.Discrete(27)
+        self.observation_space = spaces.Box(
+            low=-1.0, high=1.0, shape=(22,), dtype=np.float32
+        )
+        self.train_targets = np.asarray(
+            [
+                [0.60, 0.00, 0.55],
+                [-0.60, 0.00, 0.55],
+                [0.00, 0.60, 0.65],
+                [0.00, -0.60, 0.65],
+                [0.45, 0.45, 0.75],
+                [-0.45, 0.45, 0.75],
+            ],
+            dtype=np.float32,
+        )
+        self.deployment_targets = np.asarray(
+            [
+                [0.58, -0.58, 0.70],
+                [-0.58, -0.58, 0.70],
+                [0.72, 0.30, 0.82],
+                [-0.72, 0.30, 0.82],
+            ],
+            dtype=np.float32,
+        )
+        self.targets = {
+            "train": self.train_targets,
+            "deployment": self.deployment_targets,
+            "all": np.vstack(
+                (self.train_targets, self.deployment_targets)
+            ),
+        }[target_split]
+        self.obstacle_specs = (
+            (
+                np.asarray([0.30, -0.28, 0.36]),
+                np.asarray([0.12, 0.12, 0.36]),
+            ),
+            (
+                np.asarray([-0.30, -0.28, 0.36]),
+                np.asarray([0.12, 0.12, 0.36]),
+            ),
+        )
+        self.initial_position = np.asarray(
+            [0.0, 0.0, 0.50], dtype=np.float32
+        )
+        self._pybullet = pybullet
+        self._obstacle_ids: list[int] = []
+        self.target = self.targets[0].copy()
+        self.steps = 0
+        self.previous_distance = 0.0
+        self.localization_age = 0
+        self.localization_valid = True
+        self.camera_visible = False
+        self.sensor_dropout = False
+        self.position_bias = np.zeros(3, dtype=np.float32)
+        self.estimate = {
+            "position": self.initial_position.copy(),
+            "velocity": np.zeros(3, dtype=np.float32),
+            "rpy": np.zeros(3, dtype=np.float32),
+            "angular_velocity": np.zeros(3, dtype=np.float32),
+        }
+        self._localization_buffer: deque[dict[str, np.ndarray] | None] = deque(
+            maxlen=self.localization_latency_steps + 1
+        )
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.simulator = CtrlAviary(
+                num_drones=1,
+                initial_xyzs=self.initial_position[None, :].copy(),
+                initial_rpys=np.zeros((1, 3), dtype=np.float32),
+                physics=Physics(physics),
+                pyb_freq=int(pyb_freq),
+                ctrl_freq=int(ctrl_freq),
+                gui=False,
+                record=False,
+                obstacles=False,
+                user_debug_gui=False,
+            )
+        self.stabilizer = DSLPIDControl(drone_model=DroneModel.CF2X)
+        self.hover_pwm = (
+            self.simulator.HOVER_RPM - self.stabilizer.PWM2RPM_CONST
+        ) / self.stabilizer.PWM2RPM_SCALE
+        self.altitude_setpoint = float(self.initial_position[2])
+
+    def _add_obstacles(self) -> None:
+        p = self._pybullet
+        self._obstacle_ids = []
+        for center, half_extents in self.obstacle_specs:
+            collision = p.createCollisionShape(
+                p.GEOM_BOX,
+                halfExtents=half_extents.tolist(),
+                physicsClientId=self.simulator.CLIENT,
+            )
+            visual = p.createVisualShape(
+                p.GEOM_BOX,
+                halfExtents=half_extents.tolist(),
+                rgbaColor=[0.75, 0.18, 0.16, 1.0],
+                physicsClientId=self.simulator.CLIENT,
+            )
+            body = p.createMultiBody(
+                baseMass=0.0,
+                baseCollisionShapeIndex=collision,
+                baseVisualShapeIndex=visual,
+                basePosition=center.tolist(),
+                physicsClientId=self.simulator.CLIENT,
+            )
+            self._obstacle_ids.append(int(body))
+
+    @staticmethod
+    def _raw(raw_observation: np.ndarray) -> np.ndarray:
+        return np.asarray(raw_observation, dtype=np.float32).reshape(1, -1)[0]
+
+    def _new_localization_measurement(
+        self, raw_observation: np.ndarray
+    ) -> dict[str, np.ndarray] | None:
+        if self.np_random.random() < self.localization_dropout_probability:
+            return None
+        raw = self._raw(raw_observation)
+        self.position_bias += self.np_random.normal(
+            0.0, self.sensor_bias_walk_std, size=3
+        ).astype(np.float32)
+        return {
+            "position": (
+                raw[0:3]
+                + self.position_bias
+                + self.np_random.normal(
+                    0.0, self.vio_position_noise_std, size=3
+                )
+            ).astype(np.float32),
+            "velocity": (
+                raw[10:13]
+                + self.np_random.normal(
+                    0.0, self.vio_velocity_noise_std, size=3
+                )
+            ).astype(np.float32),
+            "rpy": (
+                raw[7:10]
+                + self.np_random.normal(
+                    0.0, self.imu_attitude_noise_std, size=3
+                )
+            ).astype(np.float32),
+            "angular_velocity": (
+                raw[13:16]
+                + self.np_random.normal(
+                    0.0, self.imu_attitude_noise_std, size=3
+                )
+            ).astype(np.float32),
+        }
+
+    def _update_localization(self, raw_observation: np.ndarray) -> None:
+        measurement = self._new_localization_measurement(raw_observation)
+        self._localization_buffer.append(measurement)
+        delayed = self._localization_buffer[0]
+        self.localization_valid = delayed is not None
+        if delayed is None:
+            self.localization_age += 1
+        else:
+            self.estimate = {
+                key: value.copy() for key, value in delayed.items()
+            }
+            self.localization_age = 0
+        raw = self._raw(raw_observation)
+        self.estimate["rpy"] = (
+            raw[7:10]
+            + self.np_random.normal(
+                0.0, self.imu_attitude_noise_std, size=3
+            )
+        ).astype(np.float32)
+        self.estimate["angular_velocity"] = (
+            raw[13:16]
+            + self.np_random.normal(
+                0.0, self.imu_attitude_noise_std, size=3
+            )
+        ).astype(np.float32)
+
+    def _lidar_ranges(
+        self, raw_observation: np.ndarray
+    ) -> tuple[np.ndarray, bool]:
+        raw = self._raw(raw_observation)
+        position = raw[0:3]
+        rotation = np.asarray(
+            self._pybullet.getMatrixFromQuaternion(raw[3:7])
+        ).reshape(3, 3)
+        body_directions = np.asarray(
+            [
+                [1.0, 0.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0],
+                [0.0, -1.0, 0.0],
+                [0.0, 0.0, 1.0],
+                [0.0, 0.0, -1.0],
+                [1.0, 1.0, 0.0],
+                [1.0, -1.0, 0.0],
+                [-1.0, 1.0, 0.0],
+                [-1.0, -1.0, 0.0],
+            ],
+            dtype=np.float32,
+        )
+        body_directions[6:10] /= np.sqrt(2.0)
+        world_directions = body_directions @ rotation.T
+        starts = position[None, :] + 0.08 * world_directions
+        ends = position[None, :] + self.lidar_range * world_directions
+        hits = self._pybullet.rayTestBatch(
+            starts.tolist(),
+            ends.tolist(),
+            physicsClientId=self.simulator.CLIENT,
+        )
+        ranges = np.asarray(
+            [
+                self.lidar_range
+                if int(hit[0]) == int(self.simulator.DRONE_IDS[0])
+                else max(0.0, float(hit[2]) * self.lidar_range - 0.08)
+                for hit in hits
+            ],
+            dtype=np.float32,
+        )
+        ranges += self.np_random.normal(
+            0.0, self.lidar_noise_std, size=ranges.shape
+        ).astype(np.float32)
+        dropped = (
+            self.np_random.random(ranges.shape)
+            < self.range_dropout_probability
+        )
+        ranges[dropped] = self.lidar_range
+        return np.clip(ranges, 0.0, self.lidar_range), bool(dropped.any())
+
+    def _camera_target_visible(self, raw_observation: np.ndarray) -> bool:
+        if self.np_random.random() < self.camera_dropout_probability:
+            return False
+        raw = self._raw(raw_observation)
+        position = raw[0:3]
+        target_vector = self.target - position
+        distance = float(np.linalg.norm(target_vector))
+        if distance <= 1e-8:
+            return True
+        rotation = np.asarray(
+            self._pybullet.getMatrixFromQuaternion(raw[3:7])
+        ).reshape(3, 3)
+        forward = rotation[:, 0]
+        in_view = (
+            float(np.dot(forward, target_vector / distance))
+            >= self.camera_fov_cosine
+        )
+        if not in_view:
+            return False
+        hit = self._pybullet.rayTest(
+            position.tolist(),
+            self.target.tolist(),
+            physicsClientId=self.simulator.CLIENT,
+        )[0]
+        return int(hit[0]) in {-1, int(self.simulator.DRONE_IDS[0])}
+
+    def _state(self, raw_observation: np.ndarray) -> np.ndarray:
+        lidar_ranges, range_dropout = self._lidar_ranges(raw_observation)
+        self.camera_visible = self._camera_target_visible(raw_observation)
+        self.sensor_dropout = bool(
+            range_dropout or not self.localization_valid
+        )
+        relative_target = self.target - self.estimate["position"]
+        state = np.concatenate(
+            (
+                relative_target / np.asarray([1.5, 1.5, 1.2]),
+                np.clip(self.estimate["velocity"] / 0.8, -1.0, 1.0),
+                np.clip(self.estimate["rpy"] / np.pi, -1.0, 1.0),
+                2.0 * lidar_ranges / self.lidar_range - 1.0,
+                np.asarray(
+                    [
+                        min(self.localization_age, 10) / 5.0 - 1.0,
+                        1.0 if self.localization_valid else -1.0,
+                        1.0 if self.camera_visible else -1.0,
+                    ]
+                ),
+            )
+        )
+        quantum = max(self.state_quantization, 1e-6)
+        return (
+            np.round(np.clip(state, -1.0, 1.0) / quantum) * quantum
+        ).astype(np.float32)
+
+    def _distance(self, raw_observation: np.ndarray) -> float:
+        position = self._raw(raw_observation)[0:3]
+        return float(np.linalg.norm(self.target - position))
+
+    def _motor_command(self, action: int) -> np.ndarray:
+        action = int(action)
+        x_command = action // 9 - 1
+        y_command = (action % 9) // 3 - 1
+        z_command = action % 3 - 1
+        estimated_position = self.estimate["position"]
+        estimated_velocity = self.estimate["velocity"]
+        estimated_rpy = self.estimate["rpy"]
+        if z_command > 0:
+            self.altitude_setpoint = min(1.0, self.altitude_setpoint + 0.025)
+        elif z_command < 0:
+            self.altitude_setpoint = max(0.18, self.altitude_setpoint - 0.025)
+        altitude_error = self.altitude_setpoint - float(estimated_position[2])
+        pwm = (
+            self.hover_pwm
+            + 5000.0 * altitude_error
+            - 900.0 * float(estimated_velocity[2])
+        )
+        estimated_quaternion = np.asarray(
+            self._pybullet.getQuaternionFromEuler(estimated_rpy.tolist())
+        )
+        target_rpy = np.asarray(
+            [
+                -y_command * self.tilt_radians,
+                x_command * self.tilt_radians,
+                0.0,
+            ],
+            dtype=np.float32,
+        )
+        stabilizing_rpm = self.stabilizer._dslPIDAttitudeControl(
+            1.0 / self.simulator.CTRL_FREQ,
+            pwm,
+            estimated_quaternion,
+            target_rpy,
+            np.zeros(3),
+        )
+        collective_delta = (
+            self.collective_delta_rpm
+            * z_command
+            * np.ones(4, dtype=np.float32)
+        )
+        rpm = stabilizing_rpm + collective_delta
+        return np.clip(rpm, 0.0, self.simulator.MAX_RPM).astype(np.float32)
+
+    def reset(self, *, seed: int | None = None, options=None):
+        super().reset(seed=seed)
+        target_index = int(self.np_random.integers(len(self.targets)))
+        self.target = self.targets[target_index].copy()
+        position_noise = self.np_random.uniform(
+            -self.initial_position_jitter,
+            self.initial_position_jitter,
+            size=3,
+        )
+        position_noise[2] *= 0.5
+        attitude_noise = self.np_random.uniform(
+            -self.initial_attitude_jitter,
+            self.initial_attitude_jitter,
+            size=3,
+        )
+        attitude_noise[2] = 0.0
+        self.simulator.INIT_XYZS[0] = self.initial_position + position_noise
+        self.simulator.INIT_RPYS[0] = attitude_noise
+        with contextlib.redirect_stdout(io.StringIO()):
+            raw_observation, _ = self.simulator.reset(seed=seed)
+        self._add_obstacles()
+        self.stabilizer.reset()
+        self.steps = 0
+        self.position_bias = np.zeros(3, dtype=np.float32)
+        self.localization_age = 0
+        self.localization_valid = True
+        self._localization_buffer.clear()
+        first_measurement = self._new_localization_measurement(raw_observation)
+        if first_measurement is None:
+            raw = self._raw(raw_observation)
+            first_measurement = {
+                "position": raw[0:3].copy(),
+                "velocity": raw[10:13].copy(),
+                "rpy": raw[7:10].copy(),
+                "angular_velocity": raw[13:16].copy(),
+            }
+        self.estimate = {
+            key: value.copy() for key, value in first_measurement.items()
+        }
+        for _ in range(self.localization_latency_steps + 1):
+            self._localization_buffer.append(
+                {
+                    key: value.copy()
+                    for key, value in first_measurement.items()
+                }
+            )
+        self.altitude_setpoint = float(self.estimate["position"][2])
+        self.previous_distance = self._distance(raw_observation)
+        observation = self._state(raw_observation)
+        return observation, {
+            "target_split": self.target_split,
+            "physics_backend": "gym-pybullet-drones",
+            "observation_source": (
+                "delayed_vio_imu_lidar_pinhole_target_detector"
+            ),
+            "control_interface": "attitude_collective_to_motor_rpm",
+        }
+
+    def step(self, action: int):
+        action = int(action)
+        raw_observation = None
+        rpm = None
+        for _ in range(self.action_repeat):
+            if self.wind_force_std > 0:
+                force = self.np_random.normal(
+                    0.0, self.wind_force_std, size=3
+                )
+                self._pybullet.applyExternalForce(
+                    int(self.simulator.DRONE_IDS[0]),
+                    -1,
+                    force.tolist(),
+                    [0.0, 0.0, 0.0],
+                    self._pybullet.LINK_FRAME,
+                    physicsClientId=self.simulator.CLIENT,
+                )
+            rpm = self._motor_command(action)
+            raw_observation, _, _, _, _ = self.simulator.step(rpm[None, :])
+            self._update_localization(raw_observation)
+
+        self.steps += 1
+        raw = self._raw(raw_observation)
+        position = raw[0:3]
+        rpy = raw[7:10]
+        velocity = raw[10:13]
+        distance = self._distance(raw_observation)
+        progress = self.previous_distance - distance
+        self.previous_distance = distance
+        contacts = self._pybullet.getContactPoints(
+            bodyA=int(self.simulator.DRONE_IDS[0]),
+            physicsClientId=self.simulator.CLIENT,
+        )
+        out_of_bounds = (
+            abs(position[0]) > 0.95
+            or abs(position[1]) > 0.95
+            or position[2] < 0.08
+            or position[2] > 1.15
+        )
+        unstable = abs(rpy[0]) > 0.85 or abs(rpy[1]) > 0.85
+        collision = bool(contacts) or bool(out_of_bounds) or bool(unstable)
+        risk_zone = any(
+            self._pybullet.getClosestPoints(
+                int(self.simulator.DRONE_IDS[0]),
+                obstacle_id,
+                distance=0.18,
+                physicsClientId=self.simulator.CLIENT,
+            )
+            for obstacle_id in self._obstacle_ids
+        )
+        success = (
+            distance <= self.goal_tolerance
+            and float(np.linalg.norm(velocity)) <= 0.35
+        )
+        idle = action == 13
+        terminated = bool(success or collision)
+        truncated = bool(self.steps >= self.max_steps and not terminated)
+        reward = 4.0 * progress - 0.01
+        reward -= 0.03 * float(np.linalg.norm(rpy[0:2]))
+        if risk_zone:
+            reward -= 0.04
+        if idle:
+            reward -= 0.01
+        if collision:
+            reward -= 4.0
+        if success:
+            reward += 5.0
+        localization_error = float(
+            np.linalg.norm(position - self.estimate["position"])
+        )
+        motor_saturation = float(
+            np.mean(
+                (rpm <= 1.0)
+                | (rpm >= 0.99 * float(self.simulator.MAX_RPM))
+            )
+        )
+        info = {
+            "collision": collision,
+            "risk_zone": risk_zone,
+            "idle": idle,
+            "lambda_collision": self.lambda_collision,
+            "lambda_idle": self.lambda_idle,
+            "distance_to_goal": distance,
+            "target_split": self.target_split,
+            "physics_backend": "gym-pybullet-drones",
+            "observation_source": (
+                "delayed_vio_imu_lidar_pinhole_target_detector"
+            ),
+            "control_interface": "attitude_collective_to_motor_rpm",
+            "localization_error": localization_error,
+            "sensor_dropout": self.sensor_dropout,
+            "camera_visible": self.camera_visible,
+            "motor_saturation": motor_saturation,
+        }
+        return (
+            self._state(raw_observation),
+            float(reward),
+            terminated,
+            truncated,
+            info,
+        )
+
+    def close(self):
+        self.simulator.close()
+
+
 class FallbackFrozenLakeEnv(gym.Env):
     """Minimal deterministic/slippery grid task used only when gymnasium is absent."""
 
@@ -809,6 +1382,8 @@ def make_env(spec: dict[str, Any], evaluation: bool = False) -> gym.Env:
         return ReliabilityShiftBanditEnv(**kwargs)
     if env_id == "PyBulletUAVWaypointSupportShift-v0":
         return PyBulletUAVWaypointSupportShiftEnv(**kwargs)
+    if env_id == "SensorizedPyBulletUAVWaypoint-v0":
+        return SensorizedPyBulletUAVWaypointEnv(**kwargs)
 
     if env_id.startswith("MiniGrid-"):
         if not HAS_GYMNASIUM:

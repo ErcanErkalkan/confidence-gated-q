@@ -92,6 +92,10 @@ FIELDNAMES = [
     "memory_cost_states",
     "memory_cost_entries",
     "memory_cost_bytes_estimated",
+    "localization_error_mean",
+    "sensor_dropout_rate",
+    "camera_visible_rate",
+    "motor_saturation_rate",
 ]
 
 
@@ -186,6 +190,10 @@ def _new_decision_trace() -> dict[str, list]:
         "idle": [],
         "lambda_collision": [],
         "lambda_idle": [],
+        "localization_error": [],
+        "sensor_dropout": [],
+        "camera_visible": [],
+        "motor_saturation": [],
     }
 
 
@@ -212,6 +220,18 @@ def _append_decision_trace(
     trace["idle"].append(float(bool(info.get("idle", False))))
     trace["lambda_collision"].append(float(info.get("lambda_collision", 1.0)))
     trace["lambda_idle"].append(float(info.get("lambda_idle", 0.1)))
+    trace["localization_error"].append(
+        float(info.get("localization_error", float("nan")))
+    )
+    trace["sensor_dropout"].append(
+        float(bool(info.get("sensor_dropout", False)))
+    )
+    trace["camera_visible"].append(
+        float(bool(info.get("camera_visible", False)))
+    )
+    trace["motor_saturation"].append(
+        float(info.get("motor_saturation", float("nan")))
+    )
 
 
 def _finite_mean(values: list) -> float:
@@ -247,6 +267,12 @@ def _summarize_decision_trace(
             - lambda_collision * collision_rate
             - lambda_idle * idle_rate
         ),
+        "localization_error_mean": _finite_mean(
+            trace["localization_error"]
+        ),
+        "sensor_dropout_rate": _finite_mean(trace["sensor_dropout"]),
+        "camera_visible_rate": _finite_mean(trace["camera_visible"]),
+        "motor_saturation_rate": _finite_mean(trace["motor_saturation"]),
         "unsupported_state_ratio": _finite_mean(
             trace["unsupported_state"]
         ),

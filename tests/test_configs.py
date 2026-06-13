@@ -29,6 +29,8 @@ CONFIGS = (
     "application_risk_variants_30seed.yaml",
     "uav_pybullet_30seed.yaml",
     "uav_pybullet_smoke.yaml",
+    "uav_sensorized_motor_30seed.yaml",
+    "uav_sensorized_motor_smoke.yaml",
     "fuzzy_reliability_confirmatory_30seed.yaml",
     "fuzzy_reliability_shift_confirmatory_30seed.yaml",
     "development/fuzzy_risk_selection.yaml",
@@ -61,7 +63,11 @@ def test_every_added_environment_can_reset_with_declared_encoding():
         config = load_config(ROOT / "configs" / name)
         for spec in config["envs"]:
             if (
-                spec["id"] == "PyBulletUAVWaypointSupportShift-v0"
+                spec["id"]
+                in {
+                    "PyBulletUAVWaypointSupportShift-v0",
+                    "SensorizedPyBulletUAVWaypoint-v0",
+                }
                 and not has_uav_backend()
             ):
                 continue

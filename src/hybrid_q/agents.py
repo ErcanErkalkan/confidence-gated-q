@@ -292,6 +292,92 @@ class UAVSafeWaypointControllerAgent(BaseAgent):
         self.environment_steps += 1
 
 
+class UAVSensorizedMotorControllerAgent(BaseAgent):
+    """Rule baseline using only the sensorized UAV observation layout."""
+
+    def q_values(self, state: np.ndarray, key: Hashable) -> np.ndarray:
+        values = np.full(self.action_dim, -1.0, dtype=np.float32)
+        relative_target = (
+            np.asarray(state[0:3], dtype=float)
+            * np.asarray([1.5, 1.5, 1.2])
+        )
+        estimated_velocity = (
+            np.asarray(state[3:6], dtype=float) * 0.8
+        )
+        lidar = (np.asarray(state[9:19], dtype=float) + 1.0) / 2.0
+        desired_velocity = np.clip(0.8 * relative_target, -0.18, 0.18)
+        velocity_error = desired_velocity - estimated_velocity
+        command = np.zeros(3, dtype=int)
+        if lidar[5] < 0.10:
+            command[2] = 1
+        elif (
+            np.linalg.norm(relative_target) < 0.12
+            and np.linalg.norm(estimated_velocity) < 0.12
+        ):
+            command[:] = 0
+        else:
+            command[np.abs(velocity_error) >= 0.06] = np.sign(
+                velocity_error[np.abs(velocity_error) >= 0.06]
+            ).astype(int)
+        ray_for_command = {
+            (0, 1): 0,
+            (0, -1): 1,
+            (1, 1): 2,
+            (1, -1): 3,
+            (2, 1): 4,
+            (2, -1): 5,
+        }
+        for axis in range(3):
+            ray_index = ray_for_command.get((axis, int(command[axis])))
+            if ray_index is not None and lidar[ray_index] < 0.23:
+                command[axis] = 0
+                if axis < 2 and lidar[4] >= 0.23:
+                    command[2] = 1
+        diagonal_rays = {
+            (0, 1): (6, 7),
+            (0, -1): (8, 9),
+            (1, 1): (6, 8),
+            (1, -1): (7, 9),
+        }
+        blocked_horizontally = any(
+            command[axis] != 0
+            and min(
+                lidar[index]
+                for index in diagonal_rays[(axis, int(command[axis]))]
+            )
+            < 0.40
+            for axis in (0, 1)
+        )
+        if blocked_horizontally:
+            command[2] = 1 if lidar[4] >= 0.23 else 0
+        action = int(
+            (command[0] + 1) * 9
+            + (command[1] + 1) * 3
+            + command[2]
+            + 1
+        )
+        values[min(action, self.action_dim - 1)] = 1.0
+        self._record_decision(
+            key=key,
+            memory_weight=0.0,
+            neural_weight=0.0,
+        )
+        return values
+
+    def observe(
+        self,
+        state: np.ndarray,
+        key: Hashable,
+        action: int,
+        reward: float,
+        next_state: np.ndarray,
+        next_key: Hashable,
+        done: bool,
+    ) -> None:
+        self.training_support.add(key)
+        self.environment_steps += 1
+
+
 class TabularQAgent(BaseAgent):
     def __init__(
         self,
@@ -1157,6 +1243,8 @@ def create_agent(
         return RandomAgent(action_dim, seed)
     if kind == "uav_safe_waypoint_controller":
         return UAVSafeWaypointControllerAgent(action_dim, seed)
+    if kind == "uav_sensorized_motor_controller":
+        return UAVSensorizedMotorControllerAgent(action_dim, seed)
     if kind == "tabular":
         return TabularQAgent(action_dim, seed, config)
     if kind == "dqn":

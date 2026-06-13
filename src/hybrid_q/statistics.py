@@ -163,6 +163,10 @@ def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
         "memory_cost_states",
         "memory_cost_entries",
         "memory_cost_bytes_estimated",
+        "localization_error_mean",
+        "sensor_dropout_rate",
+        "camera_visible_rate",
+        "motor_saturation_rate",
     )
     for column in optional_metrics:
         if column not in raw:
@@ -198,6 +202,10 @@ def seed_level_metrics(raw: pd.DataFrame) -> pd.DataFrame:
             risk_zone_rate=("risk_zone_rate", "mean"),
             idle_rate=("idle_rate", "mean"),
             risk_adjusted_score=("risk_adjusted_score", "mean"),
+            localization_error_mean=("localization_error_mean", "mean"),
+            sensor_dropout_rate=("sensor_dropout_rate", "mean"),
+            camera_visible_rate=("camera_visible_rate", "mean"),
+            motor_saturation_rate=("motor_saturation_rate", "mean"),
             unsupported_state_ratio=("unsupported_state_ratio", "mean"),
             memory_branch_usage_ratio=(
                 "memory_branch_usage_ratio",
@@ -313,6 +321,10 @@ def summarize(seed_metrics: pd.DataFrame) -> pd.DataFrame:
             "risk_zone_rate",
             "idle_rate",
             "risk_adjusted_score",
+            "localization_error_mean",
+            "sensor_dropout_rate",
+            "camera_visible_rate",
+            "motor_saturation_rate",
             "unsupported_state_ratio",
             "memory_branch_usage_ratio",
             "neural_branch_usage_ratio",
