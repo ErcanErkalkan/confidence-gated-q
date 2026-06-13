@@ -9,12 +9,12 @@
     },
     {
       "path": ".zenodo.json",
-      "sha256": "99073968a3ee120f396058cf2003f5cab72a2570f2b161b8e8a6efd478dd7e81",
-      "bytes": 1315
+      "sha256": "5d1ee5c4d474235116ed871593972f34d33d9fff69ba9b5550cd197d23932408",
+      "bytes": 1404
     },
     {
       "path": "CITATION.cff",
-      "sha256": "36e0793962f38d6e935fc9ec0b9ecec952adafcc7f669207d60cac3d0fe42e4a",
+      "sha256": "fab088f955c5b3c3d398c5420bbf7094481eaa231e1756283e2a7157c83def66",
       "bytes": 866
     },
     {
@@ -138,6 +138,16 @@
       "bytes": 2561
     },
     {
+      "path": "configs/uav_sensorized_motor_30seed.yaml",
+      "sha256": "be567e43cd009668fd44e66865699e86f10fabd610c6f5f5b3b7d393def872c5",
+      "bytes": 3542
+    },
+    {
+      "path": "configs/uav_sensorized_motor_smoke.yaml",
+      "sha256": "1e53a1ade508ff00f131066b5441fb1a15f6a91cd5036feba5c1653e6b92af3b",
+      "bytes": 1428
+    },
+    {
       "path": "environment.yml",
       "sha256": "4ca257a4375903f38b34ec6241115a84f7fdafcf8101211100c8718de3130606",
       "bytes": 118
@@ -159,8 +169,8 @@
     },
     {
       "path": "figures/fig_fuzzy_memberships.pdf",
-      "sha256": "5c8691212a09ff2e4a98d9c26fac4876364f26889d1aa246238227355ddd480e",
-      "bytes": 14222
+      "sha256": "b8ef129be836c6c01f96a1c9a7ecf4901845bc96fd3d3df1100db67df7bef127",
+      "bytes": 14275
     },
     {
       "path": "figures/fig_fuzzy_reliability_shift.pdf",
@@ -188,29 +198,39 @@
       "bytes": 13464
     },
     {
+      "path": "figures/fig_uav_sensorized_tradeoff.pdf",
+      "sha256": "20cc085e8e41c9dc31bc8cc809404216adbec9898bcf1dc327e676a2256a27a9",
+      "bytes": 17546
+    },
+    {
+      "path": "figures/fig_uav_sensorized_validation.pdf",
+      "sha256": "482ea4cfddbfde65f63e80479c93aa2e1c3c78d4e1a429a323f8a1d0ea3f3f06",
+      "bytes": 13500
+    },
+    {
       "path": "LICENSE",
       "sha256": "a5a5bde30ccc75cb8d42bc89b663c6962c136efabec411bed5b0619edf39977f",
       "bytes": 1072
     },
     {
       "path": "PROVENANCE.md",
-      "sha256": "4cfddd5b6d80b6568409e4993b110799c889dd30da307455443adf828483a8df",
-      "bytes": 4445
+      "sha256": "120de1a6145e4bfe40ec9d533a531ebdf1e3d33100bdaaef055298f2b89a1f54",
+      "bytes": 4970
     },
     {
       "path": "pyproject.toml",
-      "sha256": "77714421480a761de4e741222cb63fd1498174214aca7a2cf250bcf064e26136",
+      "sha256": "a8e8db7c09fde6529974c348a18e199a4e847b422b92499db4fcfe8ab1dcbf4c",
       "bytes": 1159
     },
     {
       "path": "README.md",
-      "sha256": "c0fce22294e1624708bb07981f4e5b85f955823cfec2378f2a81fd6564092995",
-      "bytes": 9320
+      "sha256": "5a27c603060cd8794c3a54df3b8120b82e864932afe3ac3efedced340778913d",
+      "bytes": 10252
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "2d91688baf310fe7a1b747ac37b3c462c1da97f6a3778386ab24b1850584289a",
-      "bytes": 7417
+      "sha256": "d4cc44f74266aefa5ac4c600b94f758cc29b4f02eba53ea4731ced3c3c3594cc",
+      "bytes": 7848
     },
     {
       "path": "requirements-tested-uav.txt",
@@ -1578,6 +1598,71 @@
       "bytes": 23126
     },
     {
+      "path": "results/uav_sensorized_motor_validation/audit.json",
+      "sha256": "ed637664fbd1f6fda81300a1fd8c439838babf56a48acbda753eb3461e91c43b",
+      "bytes": 1494
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/cross_environment.csv",
+      "sha256": "cf1e86b009e82b5002805524ac24f8808753a1393c72a721ba91affbd2428b9b",
+      "bytes": 673
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/heavy_tail_diagnostics.csv",
+      "sha256": "52092eb5372c2aefd56bbef6579df8edebd5a47886be50fa7a5ed93934070515",
+      "bytes": 1736
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/learning_curve_Crazyflie-sensorized-motor-control-shift.png",
+      "sha256": "c28effa9c0e44dd36b7a5310734088d277995ef314fab453911d144a04789acf",
+      "bytes": 97516
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/metadata.json",
+      "sha256": "a147ec68c15ebf98cb43b56961d187ae59347e830165c4b0058e92cf3c92d4d3",
+      "bytes": 8938
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/pairwise.csv",
+      "sha256": "3bc1719b1203ce2cf9f8850d3058ff372215fa0f4d034b382aab99ef99920151",
+      "bytes": 6209
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/planned_contrasts.csv",
+      "sha256": "e272d4ffcc94c1d123199ed12f2063028f30f61782c102c05af86623e91707b0",
+      "bytes": 1730
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/raw.csv.gz",
+      "sha256": "8112b3705615602fd5d67dc0959c682b64d03929315a73e0cc3e5d97e416b261",
+      "bytes": 1102681
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/reported/planned_contrasts.csv",
+      "sha256": "102e344c90acce78dc2b16a493d31599f3b50ed2434b868b0d0828c0a171599f",
+      "bytes": 1576
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/reported/seed_metrics.csv",
+      "sha256": "a02f76f27b3feaf9ec65d0a742a89bf1c667a0a2aefda81f074745b8923ee0b6",
+      "bytes": 90533
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/reported/summary.csv",
+      "sha256": "5fa0b2c6024393a55ba9eaec81b21f6326b0c7f2e47cdcd1d4bc7017abad981f",
+      "bytes": 20424
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/seed_metrics.csv",
+      "sha256": "94a840a75840cae6da25f1806d6998943d37715db656daf650a9591b2ed29665",
+      "bytes": 91569
+    },
+    {
+      "path": "results/uav_sensorized_motor_validation/summary.csv",
+      "sha256": "f29eb5321375cedd0d0a0e755c412a1ec170dd37f3d18dc3da27775890434f70",
+      "bytes": 20455
+    },
+    {
       "path": "scripts/aggregate_application_risk.py",
       "sha256": "cbaeff25aa38b6e454efba52f7f7be2d26846fd10686fbd45b41deddcc62cedb",
       "bytes": 3263
@@ -1608,14 +1693,19 @@
       "bytes": 1712
     },
     {
+      "path": "scripts/aggregate_uav_sensorized_validation.py",
+      "sha256": "7b4fff18646001c6e83bdc037b70ed4fa79a55ea60558d12b61ede4900c3afa1",
+      "bytes": 2861
+    },
+    {
       "path": "scripts/aggregate_uav_validation.py",
       "sha256": "4a4b72ccb8835cecbbcbdff4b154796f953e2a33864cee1ebebbd1c9868ec0b1",
       "bytes": 3104
     },
     {
       "path": "scripts/audit_artifact.py",
-      "sha256": "f865aeaa7bc6b3fe39a56aded30202ae676e7377255249f1bc3241603aa05641",
-      "bytes": 5979
+      "sha256": "bb16263298b46f03ca9c00f3bda6bf5187f1243a15248dd86af787561b66459d",
+      "bytes": 6080
     },
     {
       "path": "scripts/audit_results.py",
@@ -1624,13 +1714,13 @@
     },
     {
       "path": "scripts/audit_submission_readiness.py",
-      "sha256": "28369fbf6f19496d59b43595f356b39db8746f75a347b57d2eb4a48641816fb0",
-      "bytes": 7108
+      "sha256": "596c9fd92ce1b15fd8a4b5ab533925ea68846f0942877ec01b40e1794062c0f8",
+      "bytes": 8804
     },
     {
       "path": "scripts/generate_submission_assets.py",
-      "sha256": "bea7a3c63e4328e3db3caba8b6245ff1370714f08c4a881dd6208e0d2bfa9021",
-      "bytes": 6625
+      "sha256": "437aedcc356e2ad38d67f40336e7b52bbfa19fd7f42bfacbe832296e9bf40758",
+      "bytes": 7044
     },
     {
       "path": "scripts/generate_submission_figures.py",
@@ -1704,13 +1794,13 @@
     },
     {
       "path": "src/hybrid_q/__init__.py",
-      "sha256": "56d40a447a486618f08cea38ad5d26895f14a63a5b04f2ada95f95a70514d38d",
+      "sha256": "211994cc7337f36b2ecdeb978de6d3b7cf3615803edcb07dcb15ac52f69fdd09",
       "bytes": 92
     },
     {
       "path": "src/hybrid_q/agents.py",
-      "sha256": "635f8dba2eec6943accb0a2a56ce07065322198bef55284828b110056f916379",
-      "bytes": 43786
+      "sha256": "0a1b5a140e9be5500a9e866c8121048bac76da0ca3843f0e1f38a74909e83c80",
+      "bytes": 46621
     },
     {
       "path": "src/hybrid_q/cli.py",
@@ -1729,13 +1819,13 @@
     },
     {
       "path": "src/hybrid_q/envs.py",
-      "sha256": "bff23bd66e99a3eb1291f95a0ea2ca128237091ecfcabfe9dac5e93ef74511f0",
-      "bytes": 30031
+      "sha256": "f2adff51e521c303f3960ef0dae8529ec45a6f38982947e00422abad749702d0",
+      "bytes": 51977
     },
     {
       "path": "src/hybrid_q/experiment.py",
-      "sha256": "8e3c5b67b538d065f6fc2bfad730417e5aa31f5e28a3c4c5a1a8c47b0f34a974",
-      "bytes": 28743
+      "sha256": "5e0ba52aa68d84d97ac2b0ec541837001bd584c533b71488360053fcc20ee24c",
+      "bytes": 29699
     },
     {
       "path": "src/hybrid_q/gym_compat.py",
@@ -1749,8 +1839,8 @@
     },
     {
       "path": "src/hybrid_q/statistics.py",
-      "sha256": "07869267739e07f8c9a03ffcd477afff6edf092c44b798d50c72764dd9ffb964",
-      "bytes": 24260
+      "sha256": "325ffcb4d1ec2860a59823dcdb9ca3714561cc789e23b29bca508de56b482f79",
+      "bytes": 24808
     },
     {
       "path": "tables/table_application_risk_adjusted.csv",
@@ -1793,19 +1883,24 @@
       "bytes": 5965
     },
     {
+      "path": "tables/table_uav_sensorized_validation.csv",
+      "sha256": "384f4034461c37aada591458f98845e2b1b5912fc527c4808edeb4f709ab5ec1",
+      "bytes": 5748
+    },
+    {
       "path": "tests/test_agents.py",
       "sha256": "aeda06ae70d735e60301eaeb0120d3d7dc156ba6f8395534c4ce02fa29ce918b",
       "bytes": 12069
     },
     {
       "path": "tests/test_configs.py",
-      "sha256": "0e533abaf5182f25ad606a4d2d79ca377ebe5bd2ad480c92f56a5be33ccb1525",
-      "bytes": 3159
+      "sha256": "670819fa68a1b5b644fb22eee4a6cc7b0384091cc0da06ed90c7f14fa2d8ef6b",
+      "bytes": 3351
     },
     {
       "path": "tests/test_envs.py",
-      "sha256": "1316b7d6b7f90cd3a68c6cc0904d5ee35066fe5fc4423eda70a079212ad2ba91",
-      "bytes": 10031
+      "sha256": "26ad4379e2c1907819ad049d016d6a10ecc5279c4d4d539c58b92c809635ba44",
+      "bytes": 11398
     },
     {
       "path": "tests/test_provenance.py",

@@ -43,6 +43,10 @@ NEW_RESULTS = (
         "results/uav_pybullet_validation",
     ),
 )
+SENSORIZED_UAV_RESULT = (
+    "configs/uav_sensorized_motor_30seed.yaml",
+    "results/uav_sensorized_motor_validation",
+)
 PAPER_FILES = (
     "paper/generated/table_strong_baselines.tex",
     "paper/generated/table_approx_support.tex",
@@ -50,6 +54,7 @@ PAPER_FILES = (
     "paper/generated/table_fuzzy_ablation.tex",
     "paper/generated/table_application_risk_adjusted.tex",
     "paper/generated/table_uav_pybullet_validation.tex",
+    "paper/generated/table_uav_sensorized_validation.tex",
     "paper/generated/table_fuzzy_reliability_stationary.tex",
     "paper/generated/table_fuzzy_reliability_shift.tex",
     "paper/figures/fig_strong_baselines.pdf",
@@ -59,6 +64,8 @@ PAPER_FILES = (
     "paper/figures/fig_application_tradeoff.pdf",
     "paper/figures/fig_uav_pybullet_validation.pdf",
     "paper/figures/fig_uav_pybullet_tradeoff.pdf",
+    "paper/figures/fig_uav_sensorized_validation.pdf",
+    "paper/figures/fig_uav_sensorized_tradeoff.pdf",
     "paper/figures/fig_fuzzy_reliability_stationary.pdf",
     "paper/figures/fig_fuzzy_reliability_shift.pdf",
 )
@@ -121,6 +128,29 @@ def audit() -> dict:
             "focused experiments lack config-specific source snapshots"
         )
 
+    sensor_config, sensor_result = SENSORIZED_UAV_RESULT
+    sensor_dir = ROOT / sensor_result
+    sensor_report = json.loads(
+        (sensor_dir / "audit.json").read_text(encoding="utf-8")
+    )
+    sensor_metadata = json.loads(
+        (sensor_dir / "metadata.json").read_text(encoding="utf-8")
+    )
+    if sensor_report.get("status") != "PASS":
+        violations.append("sensorized UAV result audit is not PASS")
+    if sensor_report.get("provenance_status") != "STRICT_PASS":
+        violations.append("sensorized UAV strict provenance is not PASS")
+    if int(sensor_report.get("observed_runs", 0)) != 120:
+        violations.append("sensorized UAV coverage is not 120 runs")
+    if sensor_metadata.get("git_commit_hash") != (
+        "4b0893d9f202bdc3afe445690fca8389be5b953f"
+    ):
+        violations.append("sensorized UAV execution commit mismatch")
+    if sensor_metadata.get("package_version") != "1.7.0":
+        violations.append("sensorized UAV package version is not v1.7.0")
+    if sensor_metadata.get("execution_inputs_clean") is not True:
+        violations.append("sensorized UAV execution inputs were not clean")
+
     protocol = load_config(
         ROOT / "configs/strong_baselines/a2c_or_ppo_protocol.yaml"
     )
@@ -151,6 +181,9 @@ def audit() -> dict:
         "fig_application_tradeoff.pdf",
         "physics-based Crazyflie",
         "not flight-hardware validation",
+        "sensorized software-in-the-loop validation",
+        "true target displacement, or known obstacle centers",
+        "world-frame velocity commands are not used",
     )
     for phrase in required_phrases:
         if phrase.lower() not in normalized.lower():
@@ -168,6 +201,9 @@ def audit() -> dict:
     return {
         "status": "PASS" if not violations else "FAIL",
         "focused_experiment_runs": new_runs,
+        "sensorized_uav_runs": int(
+            sensor_report.get("observed_runs", 0)
+        ),
         "execution_commits": sorted(execution_commits - {None}),
         "package_versions": sorted(package_versions - {None}),
         "source_snapshot_count": len(source_snapshots - {None}),

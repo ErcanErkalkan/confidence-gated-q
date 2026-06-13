@@ -67,6 +67,8 @@ python scripts/run_fuzzy_ablation.py
 python scripts/run_application_risk_variants.py
 python scripts/run_uav_validation.py
 python scripts/aggregate_uav_validation.py
+python scripts/run_uav_validation.py --config configs/uav_sensorized_motor_30seed.yaml
+python scripts/aggregate_uav_sensorized_validation.py
 ```
 
 Aggregate and audit one family:
@@ -99,8 +101,11 @@ python scripts/audit_results.py `
 - `main_confirmatory_fuzzy_ablation`: fuzzy component and crisp-gate ablation.
 - `main_confirmatory_application_fallback_ablation`: hold/no-hold/planner
   fallback risk analysis.
-- `main_external_physics_based_uav_validation`: held-out waypoint and
-  ideal-to-drag/ground-effect physics shift with seeds `900-929`.
+- `main_external_physics_based_uav_validation`: legacy label for the
+  state-accessible held-out-waypoint simulator benchmark with seeds `900-929`.
+- `main_sensorized_motor_control_sil_validation`: delayed/lossy VIO, high-rate
+  IMU, ten-ray ranging, pinhole target visibility, and roll/pitch/collective
+  commands converted to motor RPM with seeds `1000-1029`.
 - `independent_confirmatory_fuzzy_reliability_stationary`: stationary
   relative-reliability validation with seeds `1300-1329`.
 - `independent_confirmatory_reliability_shift`: recurring-state stale-support
@@ -141,6 +146,7 @@ Measured cumulative training time across independent runs:
 | adaptive gate validation | 0.95 h | 9.29 s | 13.30 s |
 | cost/support analysis | 0.32 h | 14.61 s | 22.38 s |
 | physics-based UAV validation | 4.78 h | 103.48 s | 201.52 s |
+| sensorized UAV SIL validation | 2.04 h | 59.73 s | 111.65 s |
 | stationary fuzzy reliability | 2.05 h | 12.89 s | 20.77 s |
 | recurring-state reliability shift | 2.17 h | 22.42 s | 25.95 s |
 

@@ -15,7 +15,7 @@ metadata are excluded from the clean release package.
 - Persistent concept DOI: https://doi.org/10.5281/zenodo.20578927
 - Latest archived release DOI before v1.6.0:
   https://doi.org/10.5281/zenodo.20661403 (`v1.5.0`).
-- The `v1.6.0` DOI must be added after the new Zenodo version is minted.
+- The `v1.7.0` DOI must be added after the new Zenodo version is minted.
 
 ## ASOC Result Lineage
 
@@ -34,6 +34,7 @@ metadata are excluded from the clean release package.
 | `results/fuzzy_ablation` | `configs/fuzzy_ablation/fuzzy_ablation_30seed.yaml` | 600-629 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
 | `results/application_risk_variants` | `configs/application_risk_variants_30seed.yaml` | 600-629 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
 | `results/uav_pybullet_validation` | `configs/uav_pybullet_30seed.yaml` | 900-929 | PASS | `a654625acfbaab6f0875c6312e90326207cf3149` |
+| `results/uav_sensorized_motor_validation` | `configs/uav_sensorized_motor_30seed.yaml` | 1000-1029 | PASS | `4b0893d9f202bdc3afe445690fca8389be5b953f` |
 | `results/fuzzy_reliability_confirmatory` | `configs/fuzzy_reliability_confirmatory_30seed.yaml` | 1300-1329 | PASS | `ce81c103cc524029aa4bbeda841e350b8f9266ec` |
 | `results/fuzzy_reliability_shift_confirmatory` | `configs/fuzzy_reliability_shift_confirmatory_30seed.yaml` | 1400-1429 | PASS | `ce81c103cc524029aa4bbeda841e350b8f9266ec` |
 
@@ -53,6 +54,12 @@ the current artifact matches the executed inputs.
 The two `v1.6.0` result families share execution commit `ce81c10` and package
 version `1.6.0`. The large reliability-shift raw table is losslessly split by
 environment and agent under `raw_parts/`; its manifest records each part hash.
+
+The `v1.7.0` sensorized UAV SIL family was executed from clean commit
+`4b0893d9f202bdc3afe445690fca8389be5b953f` with package version `1.7.0`.
+Its audit reports `STRICT_PASS`; the observation and control implementation,
+frozen config, dependency files, and source snapshot are therefore recoverable
+from the recorded commit without later manuscript or reporting edits.
 
 ## Result Preservation
 

@@ -1,6 +1,7 @@
 {
   "status": "PASS",
   "focused_experiment_runs": 510,
+  "sensorized_uav_runs": 120,
   "execution_commits": [
     "a654625acfbaab6f0875c6312e90326207cf3149"
   ],

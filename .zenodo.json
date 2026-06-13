@@ -1,9 +1,9 @@
 {
   "title": "Support-Boundary Diagnostic for Tabular-Neural Reinforcement Learning: Reproducibility Artifact",
-  "description": "Code, exact-step results, relative-reliability and fuzzy arbitration studies, physics-based Crazyflie UAV validation, support and cost metrics, compact and MiniGrid validation, and integrity audits for a soft-computing boundary analysis.",
+  "description": "Code, exact-step results, relative-reliability and fuzzy arbitration studies, state-accessible and sensorized Crazyflie UAV software-in-the-loop validation, support and cost metrics, compact and MiniGrid validation, and integrity audits for a soft-computing boundary analysis.",
   "upload_type": "software",
-  "publication_date": "2026-06-12",
-  "version": "1.6.0",
+  "publication_date": "2026-06-13",
+  "version": "1.7.0",
   "license": "MIT",
   "creators": [
     {
@@ -32,6 +32,7 @@
     "abstention",
     "negative results",
     "physics-based UAV simulation",
+    "sensorized software-in-the-loop validation",
     "reproducibility"
   ]
 }

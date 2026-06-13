@@ -80,6 +80,8 @@ def copy_submission_figures() -> None:
         "fig_application_tradeoff.pdf",
         "fig_uav_pybullet_validation.pdf",
         "fig_uav_pybullet_tradeoff.pdf",
+        "fig_uav_sensorized_validation.pdf",
+        "fig_uav_sensorized_tradeoff.pdf",
         "fig_fuzzy_reliability_stationary.pdf",
         "fig_fuzzy_reliability_shift.pdf",
     ):
@@ -107,6 +109,10 @@ def submission_result_tables() -> None:
         (
             TABLES / "table_uav_pybullet_validation.csv",
             "table_uav_pybullet_validation.tex",
+        ),
+        (
+            TABLES / "table_uav_sensorized_validation.csv",
+            "table_uav_sensorized_validation.tex",
         ),
         (
             TABLES / "table_fuzzy_reliability_stationary.csv",
@@ -174,7 +180,16 @@ def benchmark_status() -> None:
         ("approximate support", "main confirmatory", 60),
         ("fuzzy component ablation", "main confirmatory", 120),
         ("application fallback ablation", "main confirmatory", 120),
-        ("physics-based UAV validation", "main external validation", 150),
+        (
+            "physics-based state-accessible UAV benchmark",
+            "main simulator benchmark",
+            150,
+        ),
+        (
+            "sensorized low-level-control UAV SIL",
+            "main sensorized SIL validation",
+            120,
+        ),
         ("fuzzy reliability stationary", "independent confirmatory", 540),
         ("reliability shift", "independent confirmatory", 360),
     )

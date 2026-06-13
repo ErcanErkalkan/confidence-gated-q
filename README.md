@@ -8,9 +8,10 @@ arbitration, and support abstention.
 The method is **not** a generally superior reinforcement-learning algorithm.
 Count gating is useful only when exact states recur. It is not a
 generalization mechanism and can fail under support shift. The artifact now
-includes both a controlled grid diagnostic and a physics-based Crazyflie UAV
-validation. The latter is a sim-to-real pre-deployment test, not flight-hardware
-validation or a safety guarantee.
+includes a controlled grid diagnostic, a state-accessible physics benchmark,
+and a sensorized Crazyflie software-in-the-loop (SIL) validation. The SIL
+experiment is a pre-deployment stress test, not flight-hardware validation or
+a safety guarantee.
 
 Journal submission files are intentionally excluded from the public repository.
 
@@ -48,6 +49,13 @@ Journal submission files are intentionally excluded from the public repository.
   reaches `0.922` waypoint success and `0.006` collision rate. The best learned
   support variant reaches `0.162` success, exposing a large deployment gap
   rather than supporting an autonomy claim.
+- In a separate 120-run sensorized SIL family, policies receive delayed,
+  noisy, and lossy VIO/IMU estimates, ten PyBullet ray ranges, and a pinhole
+  target-visibility signal rather than simulator ground truth. Actions are
+  27 combined roll/pitch/collective commands converted to four motor RPMs.
+  The sensorized flight controller reaches `0.478` success and `0.006`
+  collision rate; DQN, Double DQN, and the fuzzy reliability gate reach zero
+  success. Mean localization error is about `0.035` m.
 
 ## Analysis Families
 
@@ -65,7 +73,8 @@ Journal submission files are intentionally excluded from the public repository.
 | approximate support | `configs/approx_support/*.yaml` | 600-629 | main confirmatory |
 | fuzzy component ablation | `configs/fuzzy_ablation/fuzzy_ablation_30seed.yaml` | 600-629 | main confirmatory |
 | application fallback ablation | `configs/application_risk_variants_30seed.yaml` | 600-629 | main confirmatory |
-| physics-based Crazyflie validation | `configs/uav_pybullet_30seed.yaml` | 900-929 | main external validation |
+| state-accessible Crazyflie benchmark | `configs/uav_pybullet_30seed.yaml` | 900-929 | main simulator benchmark |
+| sensorized low-level-control Crazyflie SIL | `configs/uav_sensorized_motor_30seed.yaml` | 1000-1029 | main sensorized SIL validation |
 | stationary fuzzy reliability | `configs/fuzzy_reliability_confirmatory_30seed.yaml` | 1300-1329 | independent confirmatory |
 | recurring-state reliability shift | `configs/fuzzy_reliability_shift_confirmatory_30seed.yaml` | 1400-1429 | independent confirmatory |
 
@@ -130,6 +139,8 @@ python scripts/aggregate_uav_validation.py
 python scripts/run_benchmark.py --config configs/fuzzy_reliability_confirmatory_30seed.yaml
 python scripts/run_benchmark.py --config configs/fuzzy_reliability_shift_confirmatory_30seed.yaml
 python scripts/aggregate_fuzzy_reliability.py
+python scripts/run_uav_validation.py --config configs/uav_sensorized_motor_30seed.yaml
+python scripts/aggregate_uav_sensorized_validation.py
 python scripts/generate_submission_tables.py
 python scripts/generate_submission_figures.py
 python scripts/generate_submission_assets.py
@@ -139,8 +150,9 @@ python scripts/audit_submission_readiness.py
 ## Evidence Classes
 
 - **Main confirmatory experiments:** executed 30-seed baseline, approximate
-  support, fuzzy ablation, application fallback, and physics-based UAV
-  families, plus stationary and recurring-state relative-reliability tests.
+  support, fuzzy ablation, application fallback, state-accessible UAV, and
+  sensorized UAV SIL families, plus stationary and recurring-state
+  relative-reliability tests.
 - **Auxiliary smoke checks:** the two-seed quick path; never used as performance
   evidence.
 - **Pre-registered extension protocols:** A2C/PPO and convolutional MiniGrid;
@@ -165,7 +177,8 @@ formats.
 - Paired effects, bootstrap intervals, Holm correction, Wilcoxon sensitivity,
   win/loss/tie counts, and heavy-tail diagnostics are generated.
 - Evaluation logs unsupported-state, branch-use, abstention, fuzzy-alpha,
-  exact-memory, collision/risk, and decision-time metrics.
+  exact-memory, collision/risk, decision time, localization error, sensor
+  dropout, camera visibility, and motor saturation.
 
 ## Repository Contents
 
@@ -178,7 +191,7 @@ formats.
 
 ## Citation
 
-The artifact is prepared as release `v1.6.0`. Use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927 and the source repository https://github.com/ErcanErkalkan/confidence-gated-q when citing the reproducibility package.
+The artifact is prepared as release `v1.7.0`. Use the persistent concept DOI https://doi.org/10.5281/zenodo.20578927 and the source repository https://github.com/ErcanErkalkan/confidence-gated-q when citing the reproducibility package.
 
 ## Author
 
