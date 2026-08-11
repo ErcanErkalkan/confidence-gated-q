@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "evidence_class": "descriptive_safety_rerun",
+  "expected_runs": 100,
+  "observed_runs": 100,
+  "evaluation_rows": 800,
+  "trace_shards": 100,
+  "trace_schema_version": "sensorized_sil_trace_v3",
+  "seed_range": "16030-16039",
+  "excluded_seeds": [],
+  "violations": [],
+  "standard_result_audit": "PASS",
+  "standard_provenance_audit": "STRICT_PASS",
+  "protocol_sha256": "e1b345fede96a39c18382821d4e459d22da18e3ba2f56cdac6c341153adc7d37"
+}

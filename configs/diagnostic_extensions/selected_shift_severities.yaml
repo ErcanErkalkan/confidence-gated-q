@@ -1,0 +1,14 @@
+schema_version: 2
+status: frozen_development_selection
+selection_metric: post_shift_success_auc
+selection_uses_p_values: false
+final_seed_results_used: false
+selected_severities:
+  transition_dynamics_shift: transition_slip_035
+  observation_shift: observation_gain_085
+  localized_multistep_reward_or_policy_shift: localized_risk_penalty_064
+source_files:
+- results/diagnostic_extensions/final_shifts/severity_development/severity_candidate_results.csv
+- results/diagnostic_extensions/final_shifts/severity_development/severity_selection_audit.csv
+provenance:
+  historical_selection_sha256: 0310fbd43ccbe0557c3733fc87a8de559ef5faf258c602b8ba978efea8f40a5b

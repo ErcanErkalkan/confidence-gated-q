@@ -1,0 +1,115 @@
+# ============================================================
+# confidence-gated-q public artifact guard
+# This repository must contain reproducibility code/data only.
+# Manuscript, submission, editorial, and private material are excluded.
+# ============================================================
+
+# --- Python environments and caches ---
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.ipynb_checkpoints/
+
+# --- Packaging / generated Python metadata ---
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# --- Local IDE / OS metadata ---
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+
+# --- Local temporary and smoke-run artifacts ---
+.quick_repro/
+.uav_smoke/
+runs/
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+*.log
+
+# --- Secrets / machine-local credentials ---
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
+token*.json
+
+# --- HARD PUBLICATION BOUNDARY: manuscript / paper ---
+# The actual paper lives outside this repository under 01_PRIVATE_PAPER/.
+01_PRIVATE_PAPER/
+paper/
+manuscript*
+supplementary*
+references.bib
+
+# --- Submission / editorial correspondence ---
+reviewer*
+Reviewer*
+response_to_reviewers*
+RESPONSE_TO_REVIEWERS*
+cover_letter*
+title_page*
+highlights*
+editorial*
+submission*
+submission_clean_*/
+project_admin/
+
+# --- Legacy release-management material ---
+release/
+RELEASE_CHECKLIST_*.md
+RELEASE_NOTES_*.md
+PUSH_*RELEASE*.ps1
+DISABLED_PUSH_*RELEASE*.ps1
+RECOVERY_AUDIT_*.md
+*REMEDIATION*.md
+
+# --- LaTeX build by-products (defense in depth) ---
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+
+# --- Local archives / transfer bundles ---
+*.zip
+*.7z
+*.rar
+
+# IMPORTANT:
+# Do NOT ignore configs/, src/, scripts/, tests/, results/, tables/, figures/,
+# audits/, requirements*.txt, pyproject.toml, CITATION.cff, PROVENANCE.md,
+# REPRODUCIBILITY.md, README.md, LICENSE, or MANIFEST.sha256.

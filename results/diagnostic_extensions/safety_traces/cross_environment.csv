@@ -1,0 +1,16 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+feed_forward_dqn,return_auc,2,5.0,5.0,5.0,5.0
+fuzzy_relative_reliability,return_auc,2,3.5,3.5,3.0,4.0
+selected_approximate_support,return_auc,2,3.5,3.5,3.0,4.0
+selected_temporal_drqn,return_auc,2,2.0,2.0,2.0,2.0
+sensorized_controller,return_auc,2,1.0,1.0,1.0,1.0
+feed_forward_dqn,success_rate_auc,2,3.0,3.0,3.0,3.0
+fuzzy_relative_reliability,success_rate_auc,2,3.0,3.0,3.0,3.0
+selected_approximate_support,success_rate_auc,2,3.0,3.0,3.0,3.0
+selected_temporal_drqn,success_rate_auc,2,3.0,3.0,3.0,3.0
+sensorized_controller,success_rate_auc,2,3.0,3.0,3.0,3.0
+feed_forward_dqn,mean_return,2,4.5,4.5,4.0,5.0
+fuzzy_relative_reliability,mean_return,2,3.5,3.5,3.0,4.0
+selected_approximate_support,mean_return,2,4.0,4.0,3.0,5.0
+selected_temporal_drqn,mean_return,2,2.0,2.0,2.0,2.0
+sensorized_controller,mean_return,2,1.0,1.0,1.0,1.0

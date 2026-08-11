@@ -1,0 +1,80 @@
+experiment_name: support_estimators_smoke
+output_dir: results/diagnostic_extensions/smoke/support_estimators
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 1
+seeds: [13000, 13001]
+evaluation:
+  interval_steps: 60
+  episodes: 2
+analysis:
+  primary_metric: return_auc
+  analysis_status: implementation_smoke_only_not_scientific_evidence
+  planned_contrasts: []
+  final_seed_ranges_prohibited: [14000-14099]
+envs:
+  - name: ApplicationNavigation-support-estimator-smoke
+    id: ApplicationNavigationSupportShift-v0
+    kwargs:
+      goal_split: train
+      slip_probability: 0.05
+      max_steps: 40
+    eval_kwargs:
+      goal_split: deployment
+    training_steps: 120
+    max_steps: 40
+    success_mode: positive_terminal
+agents:
+  - name: exact_count_legacy
+    kind: count_gated
+    params: &common
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 8
+      replay_capacity: 500
+      replay_warmup: 16
+      train_frequency: 4
+      target_update_interval: 40
+      hidden_size: 32
+      tau: 20
+      approximate_support_k: 5
+      approximate_support_bandwidth: 0.25
+      approximate_support_tau: 2.0
+      epsilon_decay_steps: 100
+  - name: tolerance_knn_legacy
+    kind: knn_support_gate
+    params: *common
+  - name: gaussian_affinity_legacy
+    kind: feature_distance_support_gate
+    params: *common
+  - name: zscore_knn
+    kind: support_estimator_gate
+    params:
+      <<: *common
+      support_estimator_type: zscore_knn
+      support_scale_epsilon: 1.0e-8
+      support_index_type: auto
+  - name: regularized_mahalanobis
+    kind: support_estimator_gate
+    params:
+      <<: *common
+      support_estimator_type: regularized_mahalanobis
+      support_covariance_regularization: 0.001
+      support_index_type: brute_force
+  - name: regularized_gaussian_density
+    kind: support_estimator_gate
+    params:
+      <<: *common
+      support_estimator_type: regularized_gaussian_density
+      support_covariance_regularization: 0.001
+      support_index_type: brute_force
+  - name: frozen_embedding_gaussian_affinity
+    kind: support_estimator_gate
+    params:
+      <<: *common
+      support_estimator_type: gaussian_affinity
+      support_representation_type: frozen_dqn_penultimate
+      support_embedding_freeze_step: 60
+      support_index_type: auto

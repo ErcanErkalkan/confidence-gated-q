@@ -1,0 +1,74 @@
+experiment_name: sensorized_sil_aliasing_smoke
+output_dir: results/diagnostic_extensions/sensor_aliasing/smoke
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 1
+trace_logging:
+  enabled: true
+  phases: [eval]
+  compression: gzip
+  schema_version: sensorized_sil_trace_v1
+seeds: [15000, 15001]
+evaluation:
+  interval_steps: 40
+  episodes: 2
+analysis:
+  primary_metric: descriptive_trace_diagnostics
+  analysis_status: development_sensorized_sil_smoke_only
+  planned_contrasts: []
+  final_seed_access: prohibited
+  fragmentation_latent_radius: 0.10
+  aliasing_observation_radius: 0.15
+  material_latent_distance: 0.30
+envs:
+  - name: Crazyflie-sensorized-aliasing-smoke
+    id: SensorizedPyBulletUAVWaypoint-v0
+    kwargs:
+      target_split: train
+      physics: pyb
+      action_repeat: 1
+      max_steps: 20
+      state_quantization: 0.05
+      localization_latency_steps: 1
+      localization_dropout_probability: 0.02
+      range_dropout_probability: 0.01
+      camera_dropout_probability: 0.02
+      wind_force_std: 0.0
+    eval_kwargs:
+      target_split: deployment
+      physics: pyb_drag
+      vio_position_noise_std: 0.02
+      localization_latency_steps: 2
+      localization_dropout_probability: 0.03
+      range_dropout_probability: 0.02
+      camera_dropout_probability: 0.05
+    training_steps: 80
+    max_steps: 20
+    success_mode: positive_terminal
+agents:
+  - name: fuzzy_reliability
+    kind: fuzzy_reliability_gate
+    params:
+      batch_size: 16
+      replay_capacity: 1000
+      replay_warmup: 32
+      train_frequency: 4
+      target_update_interval: 40
+      hidden_size: 64
+      fuzzy_tau_support: 4
+      fuzzy_abstain_zero_support: false
+      epsilon_decay_steps: 80
+  - name: knn_support
+    kind: knn_support_gate
+    params:
+      batch_size: 16
+      replay_capacity: 1000
+      replay_warmup: 32
+      train_frequency: 4
+      target_update_interval: 40
+      hidden_size: 64
+      approximate_support_k: 5
+      approximate_support_bandwidth: 0.35
+      approximate_support_tau: 2
+      epsilon_decay_steps: 80

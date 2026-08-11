@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "config": "configs\\reviewer1_remaining\\smoke\\sensor_aliasing.yaml",
+  "result_dir": "results\\reviewer1_remaining\\sensor_aliasing\\smoke",
+  "expected_runs": 4,
+  "observed_runs": 4,
+  "run_shards_present": 4,
+  "raw_files": 1,
+  "raw_rows": 32,
+  "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
+  "historical_audit_scope": "metric/checkpoint/loss audit",
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "754e1d731e1ca84514d8cb8ac2ba3302f083b58251e7a91aa3a812adc2e2273d",
+      "bytes": 4347
+    },
+    "summary.csv": {
+      "sha256": "37ec25632ae1baf609f605058d38d136fd5acae921139bea7f8996ef68729bb8",
+      "bytes": 10945
+    },
+    "pairwise.csv": {
+      "sha256": "3019a001c71d58cefd7d3d7e4bba20bc16c831cd04e1669bee9c9cb43fac18e2",
+      "bytes": 798
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "7c6cad8f938c160ee8eecd970a85b7bad91429ed090a2c0b5614d6facc30fc3c",
+      "bytes": 803
+    },
+    "cross_environment.csv": {
+      "sha256": "2d3d9c8a4536adb7a619a6d794c4e57bee4f85fed710517bb592b6865e669108",
+      "bytes": 404
+    },
+    "metadata.json": {
+      "sha256": "2cf86db8bcbbaa3ae74d35cf0e2c4bf187aa2c9c118f647102de7e7c5336d66f",
+      "bytes": 7558
+    },
+    "raw.csv": {
+      "sha256": "d3b7c25a3ea7a108577950e96343e945ed4cb1cdb70ab29aa8c783752b580729",
+      "bytes": 34571
+    }
+  }
+}

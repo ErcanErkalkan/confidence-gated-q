@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "inferential_status": "SUPPLEMENTAL_NONCONFIRMATORY",
+  "complete_runs": 30,
+  "final_episode_rows": 3600,
+  "checkpoint_episode_rows": 600,
+  "S1_tests": 8,
+  "S2_tests": 12,
+  "analysis_bootstrap_base_seed": 56001
+}

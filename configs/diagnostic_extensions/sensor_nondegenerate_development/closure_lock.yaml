@@ -1,0 +1,212 @@
+schema_version: 1
+protocol_id: sensor_nondegenerate_closure_2026_08_05
+status: immutable_before_feasibility_execution
+created_at: '2026-08-05T00:00:00+03:00'
+relationship_to_prior_lock: New closure family prompted by the strict audit. It does
+  not edit or replace SENSOR_FINAL_PROTOCOL_LOCK.yaml and does not reinterpret its
+  all-floor result.
+scientific_question: Under a horizon and interaction budget capable of producing discriminating
+  waypoint outcomes, which of sensing factors, temporal state, and the low- versus
+  high-level control interface explains the sensorized learned-policy failure?
+claim_boundaries:
+  causal_language_requires_manipulation_and_nondegenerate_outcomes: true
+  shaped_return_without_waypoint_success_is_not_task_competence: true
+  simulator_only: true
+  practical_readiness_claim: prohibited
+  hardware_or_flight_claim: prohibited
+seed_lock:
+  feasibility_development:
+    registry_key: sensorized_sil_development
+    seeds:
+    - 15006
+    - 15007
+    - 15008
+  matched_development:
+    registry_key: sensorized_sil_development
+    seeds:
+    - 15009
+    - 15010
+    - 15011
+    - 15012
+    - 15013
+  independent_final:
+    registry_key: sensorized_sil_final
+    seeds:
+    - 16040
+    - 16041
+    - 16042
+    - 16043
+    - 16044
+    - 16045
+    - 16046
+    - 16047
+    - 16048
+    - 16049
+    - 16050
+    - 16051
+    - 16052
+    - 16053
+    - 16054
+    - 16055
+    - 16056
+    - 16057
+    - 16058
+    - 16059
+    - 16060
+    - 16061
+    - 16062
+    - 16063
+    - 16064
+    - 16065
+    - 16066
+    - 16067
+    - 16068
+    - 16069
+  disjoint_sets_required: true
+  same_seed_within_each_phase_across_conditions_and_agents: true
+plant_lock:
+  environment_id: SensorizedPyBulletUAVWaypoint-v0
+  target_split: deployment
+  physics: pyb_drag
+  pyb_freq: 240
+  ctrl_freq: 60
+  action_repeat: 1
+  goal_tolerance: 0.16
+  target_set_fixed: true
+  obstacle_set_fixed: true
+  reward_fixed: true
+  initial_state_distribution_fixed: true
+feasibility_phase:
+  evidence_class: development_feasibility
+  factor_condition: combined_executed_condition
+  observation_mode: sensorized
+  interfaces:
+  - low_level
+  - high_level
+  candidates:
+  - candidate_id: horizon120_budget6000
+    episode_horizon: 120
+    training_interactions: 6000
+  - candidate_id: horizon240_budget12000
+    episode_horizon: 240
+    training_interactions: 12000
+  - candidate_id: horizon360_budget24000
+    episode_horizon: 360
+    training_interactions: 24000
+  agents_per_interface:
+    learned:
+    - feed_forward_dqn
+    - selected_temporal_drqn
+    low_level_reference: sensorized_motor_controller
+    high_level_reference: velocity_setpoint_controller
+  evaluation_checkpoint_interval: 3000
+  evaluation_episodes_per_checkpoint: 10
+  selection_rule:
+    ordered_candidates: increasing_training_interactions_then_episode_horizon
+    eligible_if_all:
+    - at_least_one_interface_reference_success_strictly_above_0_10
+    - at_least_one_learned_agent_interface_success_between_0_05_and_0_95_inclusive
+    - learned_cell_success_range_at_least_0_10
+    - every_planned_seed_agent_interface_run_complete
+    p_values_used: false
+    selected_candidate: first_eligible_candidate
+    no_eligible_candidate: fail_closed_and_prohibit_matched_development_and_final
+matched_development_phase:
+  starts_only_after_hash_frozen_feasibility_selection: true
+  selected_budget_and_horizon_are_fixed_for_all_conditions: true
+  factorial_conditions:
+  - no_noise_no_delay_no_dropout
+  - noise_only
+  - latency_only
+  - localization_dropout_only
+  - range_dropout_only
+  - camera_dropout_only
+  - visibility_occlusion_only
+  - combined_executed_condition
+  factorial_interface_rule: Use high_level if its mean learned success exceeds low_level
+    by at least 0.10 at the selected feasibility candidate and high_level contains
+    a nondegenerate learned cell; otherwise use low_level.
+  interface_conditions:
+  - state_accessible_low_level
+  - sensorized_high_level
+  - state_accessible_high_level
+  - sensorized_low_level
+  temporal_candidates:
+  - frame_stack_4
+  - drqn_sequence_4
+  - filtered_belief_alpha_035
+  feed_forward_capacity_controls:
+  - mlp_hidden_64
+  - mlp_hidden_96
+  - mlp_hidden_128
+  equal_candidate_count: true
+  agents_for_factorial:
+  - feed_forward_dqn
+  - selected_temporal_candidate
+  - fuzzy_relative_reliability
+  - selected_approximate_support
+  - interface_appropriate_model_controller
+  selection_rule:
+    temporal_primary: lowest_mean_condition_rank_on_waypoint_success
+    tie_breakers:
+    - lowest_worst_condition_rank
+    - highest_mean_normalized_return_auc
+    - lower_decision_latency
+    - lexical_candidate_id
+    p_values_used: false
+  informative_factor_rule:
+    eligible_isolated_factors:
+    - noise_only
+    - latency_only
+    - localization_dropout_only
+    - range_dropout_only
+    - camera_dropout_only
+    - visibility_occlusion_only
+    score: absolute_mean_success_difference_from_no_noise_no_delay_no_dropout
+    selection: largest_score_then_larger_failure_difference_then_lexical_condition_id
+    p_values_used: false
+independent_final_phase:
+  starts_only_after_development_selection_hashes_are_frozen: true
+  seed_count: 30
+  required_conditions:
+  - combined_sensorized_low_level
+  - combined_sensorized_high_level
+  - selected_informative_isolated_factor_at_selected_interface
+  required_agents:
+  - feed_forward_dqn
+  - selected_temporal_model
+  - fuzzy_relative_reliability
+  - selected_approximate_support
+  - interface_appropriate_model_controller
+  primary_metric: waypoint_success_probability
+  secondary_metrics:
+  - normalized_return_auc
+  - failure_probability
+  - collision_rate
+  - lower_tail_return
+  - fragmentation_rate
+  - aliasing_rate
+  - support_correctness
+  - trajectory_deviation
+  - constraint_duration
+  planned_contrasts:
+  - selected_temporal_model_vs_feed_forward_dqn_within_each_condition
+  - feed_forward_dqn_high_level_vs_low_level_combined
+  - selected_temporal_model_high_level_vs_low_level_combined
+  - selected_factor_vs_clean_reference_within_each_learned_agent
+  multiplicity: one_report_level_holm_family_for_all_locked_primary_rows
+  no_generator_pooling_without_a_locked_rule: true
+exclusion_rules:
+  seed_exclusion: prohibited
+  incomplete_shard: rerun_exact_shard_with_identical_config
+  nonfinite_metric: fail_execution_audit
+  zero_success: retained
+  collision_or_abort: retained
+stopping_rules:
+  no_early_stopping_for_scientific_outcome: true
+  feasibility_failure: prohibit_later_phases
+  final_completion: all_agents_conditions_and_30_seeds
+amendment_policy: This lock is immutable after its digest is written. The development
+  outcome may create only a selection record and a dated final-config amendment that
+  instantiates the rules above; neither may change the seeds, candidate grid, eligibility
+  thresholds, metrics, or contrast logic.

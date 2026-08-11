@@ -1,0 +1,203 @@
+schema_version: 1
+protocol_id: temporal_sensorized_final
+lock_status: immutable_before_final_sensor_runs
+locked_at: '2026-08-05T10:24:16+03:00'
+locked_source_commit: 897957caf2e5bd89b424c5cff0c88707e3b2b4d7
+final_run_started_at_lock: false
+prerequisites:
+  original_shift_protocol:
+    relationship: independent_sensorized_family_no_original_hypothesis_changed
+    amendment_created: false
+    reason: This protocol does not alter the three mechanisms, hypotheses, seeds,
+      contrasts, or multiplicity family in SHIFT_PROTOCOL_LOCK.yaml.
+    composite_sha256: f7ee51fb5aa2bd3348b2c9e1757795c634008b2dc320ea5ac4eab90715656a15
+  selected_temporal_model:
+    source_file: results/diagnostic_extensions/temporal_interface_development/selected_temporal_model.yaml
+    sha256: c937fb08d54a32c3a2409ae352bcd1981910a517bc2c3310ffe05c59559828dc
+    selected_candidate_id: temporal_drqn_seq4
+    final_seed_results_used_for_selection: false
+  selected_support_estimator:
+    source_file: results/diagnostic_extensions/support_development/selected_estimators.yaml
+    sha256: d60c200ac3455408f8d44e1fec1f0d24828e34bbe7eabcc2a2df7d1035ea701e
+    selected_candidate_id: raw_normalized_s1
+    final_seed_results_used_for_selection: false
+condition_selection:
+  evidence_source: results/diagnostic_extensions/sensor_factorial_development/manipulation_check_audit.csv
+  evidence_sha256: 18ebcd11df10bfb2dd157469738cf0cbbb9e468baa016beb99f9d420a7edd230
+  outcome_columns_prohibited:
+  - success_rate
+  - failure_rate
+  - return
+  - p_value
+  eligibility_rule: The isolated condition must have audit_status PASS, a factor-specific
+    manipulation metric strictly above the no-factor baseline, and no unintended factor
+    enabled.
+  mechanism_priority_rule: 'Select the first eligible condition in the locked list
+    below. The order is based on direct temporal dependence: fixed observation delay
+    first, persistent state-estimation loss next, intermittent observation-channel
+    loss next, and instantaneous noise last. Do not use returns or p-values.'
+  priority_order:
+  - latency_only
+  - localization_dropout_only
+  - visibility_occlusion_only
+  - range_dropout_only
+  - camera_dropout_only
+  - noise_only
+  selected_isolated_condition: latency_only
+  selected_factor_specific_metric: effective_latency_mean
+  baseline_metric_value: 0.0
+  selected_metric_value: 0.030833333333333296
+  selection_uses_development_seeds_only: true
+final_conditions:
+- condition_id: combined_executed_condition
+  factor_flags:
+    sensor_noise_enabled: true
+    sensor_latency_enabled: true
+    localization_dropout_enabled: true
+    range_dropout_enabled: true
+    camera_dropout_enabled: true
+    visibility_occlusion_enabled: true
+- condition_id: latency_only
+  factor_flags:
+    sensor_noise_enabled: false
+    sensor_latency_enabled: true
+    localization_dropout_enabled: false
+    range_dropout_enabled: false
+    camera_dropout_enabled: false
+    visibility_occlusion_enabled: false
+final_seeds:
+  registry_key: sensorized_sil_final
+  seeds:
+  - 16000
+  - 16001
+  - 16002
+  - 16003
+  - 16004
+  - 16005
+  - 16006
+  - 16007
+  - 16008
+  - 16009
+  - 16010
+  - 16011
+  - 16012
+  - 16013
+  - 16014
+  - 16015
+  - 16016
+  - 16017
+  - 16018
+  - 16019
+  - 16020
+  - 16021
+  - 16022
+  - 16023
+  - 16024
+  - 16025
+  - 16026
+  - 16027
+  - 16028
+  - 16029
+  pairing: same_seed_across_all_agents_and_conditions
+  exclusions: none_unless_run_is_technically_corrupt
+  replacement: prohibited_without_dated_sensor_protocol_amendment
+budget:
+  training_interactions_per_agent_seed_condition: 240
+  checkpoint_schedule:
+  - 120
+  - 240
+  evaluation_episodes_per_checkpoint: 4
+  episode_horizon: 30
+  action_repeat: 1
+  control_frequency_hz: 60
+  torch_threads: 1
+  torch_interop_threads: 1
+  interaction_budget_matched: true
+  compute_budget_identical: false
+  compute_identity_reason: DQN, DRQN, hybrid estimators, and the model-based controller
+    have different update rules, network structures, and query costs.
+agents:
+- agent_id: feed_forward_dqn
+  kind: dqn
+- agent_id: selected_temporal_drqn
+  kind: drqn
+  frozen_candidate_id: temporal_drqn_seq4
+- agent_id: fuzzy_relative_reliability
+  kind: fuzzy_reliability_gate
+- agent_id: selected_approximate_support
+  kind: support_estimator_gate
+  frozen_candidate_id: raw_normalized_s1
+- agent_id: sensorized_controller
+  kind: uav_sensorized_motor_controller
+analysis:
+  primary_metric: normalized_return_auc
+  difference_direction: left_minus_right
+  bootstrap_confidence_level: 0.95
+  bootstrap_resamples: 10000
+  lower_tail_alpha_primary: 0.1
+  lower_tail_alpha_sensitivity: 0.05
+  report_holm_family: sensorized_final_eight_rows
+  report_holm_scope: all_eight_rows_together
+  planned_contrasts:
+  - contrast_id: selected_temporal_drqn_vs_feed_forward_dqn
+    status: primary_replication
+    left: selected_temporal_drqn
+    right: feed_forward_dqn
+  - contrast_id: fuzzy_relative_reliability_vs_feed_forward_dqn
+    status: secondary_replication
+    left: fuzzy_relative_reliability
+    right: feed_forward_dqn
+  - contrast_id: selected_approximate_support_vs_feed_forward_dqn
+    status: secondary_replication
+    left: selected_approximate_support
+    right: feed_forward_dqn
+  - contrast_id: sensorized_controller_vs_feed_forward_dqn
+    status: secondary_replication
+    left: sensorized_controller
+    right: feed_forward_dqn
+  secondary_outcomes:
+  - success_and_failure
+  - collision_and_risk_zone
+  - seed_and_episode_lower_tail_return
+  - trajectory_error
+  - recovery_events
+  - constraint_duration
+  - saturation_duration
+  - target_visibility_episodes
+  - failure_stage_labels
+  - fragmentation_and_aliasing
+  - support_correctness_proxy_when_analytic_optimal_action_is_unavailable
+  generator_pooling: prohibited
+  negative_null_zero_success_results: retain
+  practical_readiness_claim: prohibited
+trace_lock:
+  schema_version: sensorized_sil_trace_v2
+  phases:
+  - eval
+  compression: gzip
+  trajectory_error: Euclidean latent-position distance to the target after the action
+  constraint_active: collision or risk-zone occupancy after the action
+  recovery_event: Previous decision was constraint-active, current decision is not,
+    and trajectory error decreased relative to the previous decision.
+  saturation_active: post-action motor_saturation is strictly greater than zero
+  constraint_duration_seconds: constraint-active steps divided by 60
+  saturation_duration_seconds: saturation-active steps divided by 60
+  target_visibility_episode: any/all/fraction of post-action visible decisions
+  failure_stage_precedence:
+  - success
+  - collision_out_of_bounds
+  - collision_unstable
+  - collision_contact
+  - timeout_no_progress
+  - timeout_near_target
+  - timeout_partial_progress
+  - ongoing
+  timeout_no_progress_rule: final_error_not_less_than_initial_error_minus_0.05
+  timeout_near_target_rule: minimum_error_at_or_below_goal_tolerance_without_success
+immutability:
+  normative_file: configs/diagnostic_extensions/sensorized_final/protocol_lock.yaml
+  digest_file: configs/diagnostic_extensions/sensorized_final/protocol_lock.sha256
+  digest_algorithm: sha256_exact_bytes
+  silent_edit_policy: fail_closed
+  amendment_pattern: SENSOR_FINAL_PROTOCOL_AMENDMENT_YYYY-MM-DD_NN.yaml
+  amendment_must_precede_affected_final_run: true

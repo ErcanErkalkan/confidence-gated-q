@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "config": "configs\\reviewer1_remaining\\fuzzy_crisp_development.yaml",
+  "result_dir": "results\\reviewer1_remaining\\fuzzy_crisp_development\\execution_corrected",
+  "expected_runs": 240,
+  "observed_runs": 240,
+  "run_shards_present": 240,
+  "raw_files": 1,
+  "raw_rows": 137718,
+  "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
+  "historical_audit_scope": "metric/checkpoint/loss audit",
+  "files": {
+    "metadata.json": {
+      "sha256": "4fe26ea01e42f9dd9d81cdf3007fbcac8cfb49b04865b013e077beace95d69c0",
+      "bytes": 17300
+    },
+    "raw.csv.gz": {
+      "sha256": "262cda59ddfd4a65f8338b8000674ca9a9f2625b3e19f2c2f7ede2afae92f3aa",
+      "bytes": 15251256
+    },
+    "candidate_results.csv": {
+      "sha256": "85858f2ed97484690e9650c276b219f8456518a774333ac317aa70b534b3179c",
+      "bytes": 74782
+    },
+    "candidate_ranks.csv": {
+      "sha256": "f27f82d563648cda1a277571ae75dbefabd838d5972a230fca712453c4700940",
+      "bytes": 3550
+    },
+    "budget_match_audit.csv": {
+      "sha256": "04f80e9a44bb3acb7e18648af9230f4910d32567f5a1a65401f68b551dbc5741",
+      "bytes": 4261
+    },
+    "decision_surface_metrics.csv": {
+      "sha256": "e2beb7d72e554a36c4151376226c67fd7370c80000f6dae07b283e0712e4a88b",
+      "bytes": 2091
+    },
+    "latency_complexity.csv": {
+      "sha256": "9416c266ab6ce0bb91505644fb1529b839cffc62eec8c8f8be6d25bccf10ca04",
+      "bytes": 3522
+    },
+    "selected_candidates.yaml": {
+      "sha256": "e8e0ec622e0e1e3021bc5ba434c50d999a656e8e966063398a1417223ebca7f6",
+      "bytes": 1597
+    },
+    "selected_candidates.sha256": {
+      "sha256": "0bf8bea099f2316d8ff653bf0f9fd9dfacb5012e73826fd71f2b146dfa41be92",
+      "bytes": 92
+    }
+  },
+  "analysis_type": "matched_fuzzy_crisp_development",
+  "aggregate_dir": "results\\reviewer1_remaining\\fuzzy_crisp_development"
+}

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "evidence_class": "replication",
+  "expected_agent_seed_condition_runs": 300,
+  "observed_agent_seed_condition_runs": 300,
+  "evaluation_rows": 2400,
+  "trace_shards": 300,
+  "seed_range": "16000-16029",
+  "excluded_seeds": [],
+  "violations": [],
+  "standard_result_audit": "PASS",
+  "standard_provenance_audit": "STRICT_PASS",
+  "protocol_sha256": "7e24f7a8b49e0eb5cb99d031034735d05bd978a6b3c5281a183857b713fa244a"
+}

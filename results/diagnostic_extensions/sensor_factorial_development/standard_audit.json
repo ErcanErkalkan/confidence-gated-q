@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "config": "configs\\reviewer1_remaining\\sensor_factorial_development\\matched_conditions.yaml",
+  "result_dir": "results\\reviewer1_remaining\\sensor_factorial_development",
+  "expected_runs": 64,
+  "observed_runs": 64,
+  "run_shards_present": 64,
+  "raw_files": 1,
+  "raw_rows": 512,
+  "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
+  "historical_audit_scope": "metric/checkpoint/loss audit",
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "81760f813275b8c5780ecf0bc919eeaa32b3dd7b9c6bf3dd06680410b5ac2bd5",
+      "bytes": 13321
+    },
+    "summary.csv": {
+      "sha256": "09df484fd6a71f122fac80e39939a37b593096506a3f1828defd609c3f47086c",
+      "bytes": 143005
+    },
+    "pairwise.csv": {
+      "sha256": "583eaaa98e50e45471b45a94fed5c1d7d66767bbc4059b140e1f88791064776f",
+      "bytes": 29700
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "6cb17ac80c593c4a17abaf09750f9b7e73e4badb3572b4e98b08d8812e06a8ef",
+      "bytes": 10007
+    },
+    "cross_environment.csv": {
+      "sha256": "775644881947a3b382a43332ac4f7526b7d2f54d03d8af25fba386c5be3893eb",
+      "bytes": 765
+    },
+    "metadata.json": {
+      "sha256": "db409aba5f84ac953871c18b456bfccfef8b4de02eb99c2f25c931fe38325d8b",
+      "bytes": 21677
+    },
+    "raw.csv": {
+      "sha256": "8c4e0f9bac2333994238e330e6c142793b90c2d65a42b8dc8307898d8fb2b7e0",
+      "bytes": 498232
+    }
+  }
+}

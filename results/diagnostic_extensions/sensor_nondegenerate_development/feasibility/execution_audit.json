@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "evidence_class": "development_feasibility",
+  "protocol_sha256": "acf8af7f39deedb06152aa3f7505a2e895570730a432b0f916db5b39cb919639",
+  "expected_agent_seed_environment_runs": 54,
+  "observed_agent_seed_environment_runs": 54,
+  "evaluation_rows": 2520,
+  "development_seeds": [
+    15006,
+    15007,
+    15008
+  ],
+  "final_seed_rows": 0,
+  "violations": [],
+  "standard_result_audit": "PASS",
+  "standard_provenance_audit": "STRICT_PASS",
+  "selection_status": "no_eligible_candidate"
+}

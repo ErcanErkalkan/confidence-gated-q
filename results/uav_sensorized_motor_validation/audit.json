@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "config": "configs\\uav_sensorized_motor_30seed.yaml",
+  "result_dir": "results\\uav_sensorized_motor_validation",
+  "expected_runs": 150,
+  "observed_runs": 150,
+  "run_shards_present": 150,
+  "raw_files": 1,
+  "raw_rows": 13158,
+  "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "a1614f92a6e5f6e4fe6a15be206555a0afade9943f760bf7bb4038a61b249191",
+      "bytes": 119931
+    },
+    "summary.csv": {
+      "sha256": "a4b2b30238beeaa65e3f4c3bd83bddcf18db1c2cc0cc3c0419024b9ae537d69c",
+      "bytes": 29032
+    },
+    "pairwise.csv": {
+      "sha256": "59d428995d77f0badead01ee213743f5b37b9909ef478894ae62263fc0cdc298",
+      "bytes": 9715
+    },
+    "planned_contrasts.csv": {
+      "sha256": "a47e337714182b16e0711bc4099a09f3f30f5417d544f7181782f9b7e4c0fc54",
+      "bytes": 2560
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "7c5e15cee2c996c5526ff7d20b14eba5b9d6bb3224615269b8643bb8a6d7a932",
+      "bytes": 2125
+    },
+    "cross_environment.csv": {
+      "sha256": "f77c3bd5875c241515634abad04d69e5f7ac7f24fd7eeaf82febe759629aaf37",
+      "bytes": 806
+    },
+    "metadata.json": {
+      "sha256": "e96c25fea259967a9a365d149e075fb1f8491f645690d158ec42a6ce06a76235",
+      "bytes": 10001
+    },
+    "raw.csv.gz": {
+      "sha256": "9144d03115accefee224c5b29cfd91d64a1f29c748c024b11c9afa32d6c8dc08",
+      "bytes": 1551295
+    }
+  }
+}

@@ -1,0 +1,2 @@
+trace_rows,trace_shards,similar_latent_pair_count,different_exact_key_pair_count,fragmentation_rate,similar_observation_pair_count,aliased_pair_count,aliasing_rate,eligible_neighbor_decision_count,neighbor_action_disagreement_count,nearest_neighbor_action_disagreement_rate,final_seed_rows
+320,4,2110,2110,1.0,984,0,0.0,160,3,0.01875,0

@@ -1,0 +1,40 @@
+experiment_name: asoc_a2c_or_ppo_preregistered_protocol
+output_dir: results/strong_baselines/a2c_or_ppo_protocol
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+seeds: [1200, 1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212, 1213, 1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1228, 1229]
+evaluation:
+  interval_steps: 2000
+  episodes: 30
+analysis:
+  primary_metric: return_auc
+  analysis_status: preregistered_extension_protocol_not_executed
+  validation_scope: A2C is implemented; PPO and convolutional MiniGrid remain protocol-only and are not reported as results.
+  planned_contrasts:
+    - name: a2c_vs_validated_dqn
+      left: a2c_actor_critic
+      right: validated_dqn
+      metric: return_auc
+envs:
+  - name: ApplicationNavigation-deployment-goal-shift
+    id: ApplicationNavigationSupportShift-v0
+    kwargs:
+      goal_split: train
+      slip_probability: 0.05
+      max_steps: 120
+    eval_kwargs:
+      goal_split: deployment
+    training_steps: 12000
+    max_steps: 120
+    success_mode: positive_terminal
+agents:
+  - name: a2c_actor_critic
+    kind: a2c
+    params:
+      learning_rate: 0.0003
+      hidden_size: 128
+      a2c_value_coef: 0.5
+      a2c_entropy_coef: 0.01
+      epsilon_decay_steps: 10000

@@ -1,0 +1,9 @@
+environment,agent,metric,n_seeds,minimum,maximum,median,mad,skew,excess_kurtosis,catastrophic_low_outliers,catastrophic_high_outliers,heavy_tail_flag
+ApplicationNavigation-deployment-goal-shift,crisp_threshold_gate,return_auc,30,-6.2279,-1.6305333333333336,-3.3933166666666668,1.0088333333333335,-0.17792238923077397,-0.7311364449793896,0,0,False
+ApplicationNavigation-deployment-goal-shift,crisp_threshold_gate,mean_return,30,-13.028666666666664,2.3006666666666664,-6.291666666666666,2.2104999999999997,0.20091275544750106,0.06367700580871283,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_no_confidence,return_auc,30,-6.6103,-1.0641666666666674,-3.3971,1.1748166666666662,-0.20238718320780072,-0.6619107098495238,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_no_confidence,mean_return,30,-12.471,1.2283333333333342,-5.577,2.966,-0.1379833241063019,-1.0046604420293153,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_no_count,return_auc,30,-5.479433333333333,-1.1146000000000003,-3.0585000000000004,0.8884000000000001,-0.4454086435621131,-0.6404067368804558,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_no_count,mean_return,30,-9.431333333333333,2.1483333333333348,-3.5564999999999998,2.1791666666666654,-0.327813692780161,-0.6722443087918162,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_no_td_residual,return_auc,30,-6.170266666666667,-1.0828333333333333,-3.7077833333333334,0.8941333333333332,-0.0018335030306892673,-0.32161109157648626,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_no_td_residual,mean_return,30,-14.812666666666667,0.8969999999999998,-3.1026666666666665,2.6496666666666675,-0.8166441251437063,-0.3289693873452584,0,0,False

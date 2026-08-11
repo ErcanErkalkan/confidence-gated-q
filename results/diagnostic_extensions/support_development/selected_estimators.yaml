@@ -1,0 +1,120 @@
+schema_version: 1
+status: frozen_development_selection
+evidence_class: development
+selection_rule: mean_rank_then_worst_rank_then_failure_then_latency_then_lexical_id
+candidate_registry_sha256: 929524efaffc9d0fa9f96ba39c7cf0cd9787206e78be14cc156aa22b1ec52234
+source_raw_sha256: 07a92e7c2832de22dc82946cf154ef49d13bacc432ff00b3e3004e73fbedd8c9
+final_seed_results_used: false
+overall_selected_estimator:
+  candidate_id: raw_normalized_s1
+  candidate_definition: &id001
+    estimator_family: raw_normalized
+    estimator_type: gaussian_affinity
+    representation: raw_state
+    slot_id: s1
+    k: 3
+    h: 0.25
+    tau_approx: 1.0
+    regularization: 0.0001
+    requested_index: brute_force
+    effective_index: brute_force
+    embedding_freeze_step: ''
+    k_semantics: nearest_k_retrieval
+    candidate_registry_sha256: 929524efaffc9d0fa9f96ba39c7cf0cd9787206e78be14cc156aa22b1ec52234
+    source_file: project_admin/reviewer1_remaining/SUPPORT_ESTIMATOR_CANDIDATES.yaml
+  mean_environment_rank: 2.5
+  worst_environment_rank: 3.0
+  failure_probability: 0.733125
+  median_query_latency_seconds: 0.00169995
+within_family_descriptive_selections:
+  frozen_embedding:
+    candidate_id: frozen_embedding_s1
+    candidate_definition:
+      estimator_family: frozen_embedding
+      estimator_type: gaussian_affinity
+      representation: frozen_dqn_penultimate
+      slot_id: s1
+      k: 3
+      h: 0.25
+      tau_approx: 1.0
+      regularization: 0.0001
+      requested_index: brute_force
+      effective_index: brute_force
+      embedding_freeze_step: 4000
+      k_semantics: nearest_k_retrieval
+      candidate_registry_sha256: 929524efaffc9d0fa9f96ba39c7cf0cd9787206e78be14cc156aa22b1ec52234
+      source_file: project_admin/reviewer1_remaining/SUPPORT_ESTIMATOR_CANDIDATES.yaml
+    mean_environment_rank: 6.5
+    worst_environment_rank: 9.0
+    failure_probability: 0.715625
+    median_query_latency_seconds: 0.0025746000000000002
+  gaussian_density:
+    candidate_id: gaussian_density_s3
+    candidate_definition:
+      estimator_family: gaussian_density
+      estimator_type: regularized_gaussian_density
+      representation: raw_state
+      slot_id: s3
+      k: 7
+      h: 1.0
+      tau_approx: 8.0
+      regularization: 0.01
+      requested_index: brute_force
+      effective_index: brute_force_density_preserving
+      embedding_freeze_step: ''
+      k_semantics: declared_matched_slot_but_density_uses_all_stored_keys
+      candidate_registry_sha256: 929524efaffc9d0fa9f96ba39c7cf0cd9787206e78be14cc156aa22b1ec52234
+      source_file: project_admin/reviewer1_remaining/SUPPORT_ESTIMATOR_CANDIDATES.yaml
+    mean_environment_rank: 15.5
+    worst_environment_rank: 16.0
+    failure_probability: 0.869375
+    median_query_latency_seconds: 0.0013568500000000002
+  mahalanobis:
+    candidate_id: mahalanobis_s1
+    candidate_definition:
+      estimator_family: mahalanobis
+      estimator_type: regularized_mahalanobis
+      representation: raw_state
+      slot_id: s1
+      k: 3
+      h: 0.25
+      tau_approx: 1.0
+      regularization: 0.0001
+      requested_index: brute_force
+      effective_index: brute_force_metric_preserving
+      embedding_freeze_step: ''
+      k_semantics: nearest_k_retrieval
+      candidate_registry_sha256: 929524efaffc9d0fa9f96ba39c7cf0cd9787206e78be14cc156aa22b1ec52234
+      source_file: project_admin/reviewer1_remaining/SUPPORT_ESTIMATOR_CANDIDATES.yaml
+    mean_environment_rank: 5.0
+    worst_environment_rank: 6.0
+    failure_probability: 0.725625
+    median_query_latency_seconds: 0.002341575
+  raw_normalized:
+    candidate_id: raw_normalized_s1
+    candidate_definition: *id001
+    mean_environment_rank: 2.5
+    worst_environment_rank: 3.0
+    failure_probability: 0.733125
+    median_query_latency_seconds: 0.00169995
+  zscore:
+    candidate_id: zscore_s2
+    candidate_definition:
+      estimator_family: zscore
+      estimator_type: zscore_knn
+      representation: zscore_normalized_raw_state
+      slot_id: s2
+      k: 5
+      h: 0.5
+      tau_approx: 4.0
+      regularization: 0.001
+      requested_index: auto
+      effective_index: auto
+      embedding_freeze_step: ''
+      k_semantics: nearest_k_retrieval
+      candidate_registry_sha256: 929524efaffc9d0fa9f96ba39c7cf0cd9787206e78be14cc156aa22b1ec52234
+      source_file: project_admin/reviewer1_remaining/SUPPORT_ESTIMATOR_CANDIDATES.yaml
+    mean_environment_rank: 9.0
+    worst_environment_rank: 10.0
+    failure_probability: 0.73875
+    median_query_latency_seconds: 0.002417175

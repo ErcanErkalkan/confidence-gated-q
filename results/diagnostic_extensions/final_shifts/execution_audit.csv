@@ -1,0 +1,4 @@
+mechanism_id,severity_id,expected_seeds,completed_seeds_per_agent,agents,completed_agent_seed_runs,expected_checkpoints_per_run,evaluation_episodes_per_checkpoint,audit_status,source_file
+transition_dynamics_shift,transition_slip_035,30,30,5,150,24,200,PASS,results/diagnostic_extensions/final_shifts/execution/transition_dynamics_shift/raw.csv.gz
+observation_shift,observation_gain_085,30,30,5,150,24,200,PASS,results/diagnostic_extensions/final_shifts/execution/observation_shift/raw.csv.gz
+localized_multistep_reward_or_policy_shift,localized_risk_penalty_064,30,30,5,150,24,200,PASS,results/diagnostic_extensions/final_shifts/execution/localized_multistep_reward_or_policy_shift/raw.csv.gz

@@ -1,0 +1,11 @@
+family,agent,seed_set,training_steps,checkpoint_schedule,evaluation_episodes,episode_horizon,interaction_budget_matched,compute_budget_identical,audit_status
+combined_executed_condition_safety_trace,feed_forward_dqn,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+combined_executed_condition_safety_trace,fuzzy_relative_reliability,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+combined_executed_condition_safety_trace,selected_approximate_support,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+combined_executed_condition_safety_trace,selected_temporal_drqn,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+combined_executed_condition_safety_trace,sensorized_controller,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+latency_only_safety_trace,feed_forward_dqn,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+latency_only_safety_trace,fuzzy_relative_reliability,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+latency_only_safety_trace,selected_approximate_support,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+latency_only_safety_trace,selected_temporal_drqn,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS
+latency_only_safety_trace,sensorized_controller,16030;16031;16032;16033;16034;16035;16036;16037;16038;16039,240,120;240,4,30,True,False,PASS

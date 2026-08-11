@@ -1,0 +1,293 @@
+{
+  "schema_version": 3,
+  "revision_scope": {
+    "family_count": 28,
+    "first_family_id": "E01",
+    "last_family_id": "E28",
+    "repository_snapshot_family_range": "E01-E28",
+    "artifact_version": "1.0.0",
+    "repository_state": "pre_publication_clean_artifact",
+    "repository_url": "pending",
+    "zenodo_doi": "pending",
+    "scope_authority": "configs/evidence_registry.json"
+  },
+  "run_count_policy": {
+    "package_wide_total_claimed": false,
+    "reporting_level": "evidence-family",
+    "source_of_truth": [
+      "family-level generated completion manifests",
+      "family-level audit reports"
+    ],
+    "legacy_subtotal_use": "not used as a package-wide total",
+    "auxiliary_smoke_checks": "excluded",
+    "reason": "Evidence families use heterogeneous execution units, including method-environment-seed, candidate-generator-seed, and condition-agent-seed cells."
+  },
+  "families": [
+    {
+      "id": "E01",
+      "family": "DQN development tuning",
+      "class": "development",
+      "scope": "Seeds 0--4; seven compact development tasks; comparator selection only.",
+      "source": "configs/dqn_tuning_development.json; results/dqn_tuning_development"
+    },
+    {
+      "id": "E02",
+      "family": "Independent evaluation of the selected DQN comparator",
+      "class": "independent evaluation",
+      "scope": "Compact seeds 600--629 and MiniGrid seeds 700--709; untouched by development selection.",
+      "source": "configs/dqn_strong_validation.json; results/dqn_strong_validation"
+    },
+    {
+      "id": "E03",
+      "family": "Confirmatory compact-task expansion",
+      "class": "confirmatory",
+      "scope": "Seeds 500--529; seven compact tasks.",
+      "source": "configs/confirmatory_extended_compact.json; results/confirmatory_extended_compact"
+    },
+    {
+      "id": "E04",
+      "family": "Support-abstention replication",
+      "class": "independent replication",
+      "scope": "FourRooms seeds 300--329 and MiniGrid seeds 400--429.",
+      "source": "configs/support_abstention_replication.json; results/support_abstention_replication"
+    },
+    {
+      "id": "E05",
+      "family": "Extended MiniGrid diagnostic",
+      "class": "exploratory diagnostic",
+      "scope": "Seeds 500--509; six layouts.",
+      "source": "configs/minigrid_extended_diagnostic.json; results/minigrid_extended_diagnostic"
+    },
+    {
+      "id": "E06",
+      "family": "Application-navigation support shift",
+      "class": "confirmatory application diagnostic",
+      "scope": "Seeds 600--629; controlled held-out-goal shift.",
+      "source": "configs/application_navigation_case_study.json; results/application_navigation_case_study"
+    },
+    {
+      "id": "E07",
+      "family": "Adaptive-gate compact evaluation",
+      "class": "confirmatory",
+      "scope": "Seeds 700--729; FrozenLake 4x4, CliffWalking, and held-out-goal FourRooms 9.",
+      "source": "configs/adaptive_gate_compact_validation.json; results/adaptive_gate_compact_validation"
+    },
+    {
+      "id": "E08",
+      "family": "Cost and support analysis",
+      "class": "descriptive",
+      "scope": "Seeds 800--809; FourRooms 9 and application navigation.",
+      "source": "configs/cost_support_metrics.json; results/cost_support_metrics"
+    },
+    {
+      "id": "E09",
+      "family": "Strong neural baselines",
+      "class": "confirmatory comparator",
+      "scope": "Matched seeds 600--629; Double DQN and Dueling Double DQN.",
+      "source": "configs/strong_baselines; results/strong_baselines"
+    },
+    {
+      "id": "E10",
+      "family": "Legacy approximate-support application family",
+      "class": "confirmatory support-estimator",
+      "scope": "Matched seeds 600--629; tolerance kNN and Gaussian feature-distance gates.",
+      "source": "configs/approx_support; results/approx_support"
+    },
+    {
+      "id": "E11",
+      "family": "Fuzzy component ablation",
+      "class": "confirmatory mechanism ablation",
+      "scope": "Matched seeds 600--629; no-residual, no-count, no-confidence, and crisp variants.",
+      "source": "configs/fuzzy_ablation; results/fuzzy_ablation"
+    },
+    {
+      "id": "E12",
+      "family": "Application fallback ablation",
+      "class": "confirmatory mechanism ablation",
+      "scope": "Matched seeds 600--629; penalized hold, no-hold, shortest-path, and map-verified policies.",
+      "source": "configs/application_risk_variants_30seed.yaml; results/application_risk_variants"
+    },
+    {
+      "id": "E13",
+      "family": "State-accessible UAV simulator benchmark",
+      "class": "confirmatory simulator stress test",
+      "scope": "Seeds 900--929; five agents; not hardware validation.",
+      "source": "configs/uav_pybullet_30seed.yaml; results/uav_pybullet_validation"
+    },
+    {
+      "id": "E14",
+      "family": "Original sensorized UAV SIL benchmark",
+      "class": "confirmatory simulator stress test",
+      "scope": "Seeds 1000--1029; five agents; not hardware validation.",
+      "source": "configs/uav_sensorized_motor_30seed.yaml; results/uav_sensorized_motor_validation"
+    },
+    {
+      "id": "E15",
+      "family": "Stationary relative-reliability evaluation",
+      "class": "independent confirmatory",
+      "scope": "Seeds 1300--1329; three stationary compact tasks.",
+      "source": "configs/fuzzy_reliability_confirmatory_30seed.yaml; results/fuzzy_reliability_confirmatory"
+    },
+    {
+      "id": "E16",
+      "family": "Mechanism-targeted recurring-state reliability shift",
+      "class": "independent confirmatory",
+      "scope": "Seeds 1400--1429; two locked post-shift severities.",
+      "source": "configs/fuzzy_reliability_shift_confirmatory_30seed.yaml; results/fuzzy_reliability_shift_confirmatory"
+    },
+    {
+      "id": "E17",
+      "family": "Matched fuzzy/crisp mapping selection",
+      "class": "development selection",
+      "scope": "Four candidates per mapping family; ten development seeds per each of three locked generators.",
+      "source": "configs/diagnostic_extensions/fuzzy_crisp_development.yaml; results/diagnostic_extensions/fuzzy_crisp_development"
+    },
+    {
+      "id": "E18",
+      "family": "Independent transition-dynamics shift",
+      "class": "independent replication",
+      "scope": "Final seeds 12000--12029; five agents.",
+      "source": "configs/diagnostic_extensions/final_shifts/transition_dynamics_shift.yaml; results/diagnostic_extensions/final_shifts"
+    },
+    {
+      "id": "E19",
+      "family": "Independent observation shift",
+      "class": "independent replication",
+      "scope": "Final seeds 12030--12059; five agents.",
+      "source": "configs/diagnostic_extensions/final_shifts/observation_shift.yaml; results/diagnostic_extensions/final_shifts"
+    },
+    {
+      "id": "E20",
+      "family": "Independent localized multi-step shift",
+      "class": "independent replication",
+      "scope": "Final seeds 12060--12089; five agents.",
+      "source": "configs/diagnostic_extensions/final_shifts/localized_multistep_reward_or_policy_shift.yaml; results/diagnostic_extensions/final_shifts"
+    },
+    {
+      "id": "E21",
+      "family": "Independent focal relative-reliability calibration",
+      "class": "replication calibration diagnostic",
+      "scope": "Seeds 12090--12099; two analytic boundaries and two preselected mappings.",
+      "source": "configs/diagnostic_extensions/reliability_calibration/independent_focal.yaml; results/diagnostic_extensions/reliability_calibration_independent"
+    },
+    {
+      "id": "E22",
+      "family": "Matched support-estimator selection",
+      "class": "development selection",
+      "scope": "Seeds 13000--13004; 20 candidates from five representation families on two environments.",
+      "source": "configs/diagnostic_extensions/support_development/matched_candidates.yaml; configs/diagnostic_extensions/support_development/candidate_registry.yaml; results/diagnostic_extensions/support_development"
+    },
+    {
+      "id": "E23",
+      "family": "Independent support-estimator final evaluation",
+      "class": "independent replication",
+      "scope": "Application 14000--14029, observation 14030--14059, dynamics 14060--14089; nine agents.",
+      "source": "configs/diagnostic_extensions/support_final/protocol_lock.yaml; configs/diagnostic_extensions/support_final/application_goal_shift.yaml; configs/diagnostic_extensions/support_final/independent_observation_shift.yaml; configs/diagnostic_extensions/support_final/independent_transition_dynamics_shift.yaml; results/diagnostic_extensions/support_final"
+    },
+    {
+      "id": "E24",
+      "family": "Sensor-factor development diagnostic",
+      "class": "development diagnostic",
+      "scope": "Seeds 15002--15003; eight sensor conditions crossed with four agents.",
+      "source": "configs/diagnostic_extensions/sensor_factorial_development/matched_conditions.yaml; results/diagnostic_extensions/sensor_factorial_development"
+    },
+    {
+      "id": "E25",
+      "family": "Temporal-memory and control-interface development",
+      "class": "development diagnostic",
+      "scope": "Seeds 15004--15005; six architecture candidates and four matched interface cells.",
+      "source": "configs/diagnostic_extensions/temporal_interface_development/matched_design.yaml; results/diagnostic_extensions/temporal_interface_development"
+    },
+    {
+      "id": "E26",
+      "family": "Independent temporal sensorized SIL final",
+      "class": "independent replication",
+      "scope": "Seeds 16000--16029; combined and latency-only conditions, five agents.",
+      "source": "configs/diagnostic_extensions/sensorized_final/matched_final.yaml; results/diagnostic_extensions/sensorized_final"
+    },
+    {
+      "id": "E27",
+      "family": "Locked safety-trace rerun",
+      "class": "descriptive safety rerun",
+      "scope": "Seeds 16030--16039; two conditions, five agents, 24,000 decision rows.",
+      "source": "configs/diagnostic_extensions/safety_traces/matched_rerun.yaml; results/diagnostic_extensions/safety_traces"
+    },
+    {
+      "id": "E28",
+      "family": "Sensorized nondegeneracy feasibility grid",
+      "class": "development feasibility",
+      "scope": "Seeds 15006--15008; three horizon/budget cells; 54 planned runs.",
+      "source": "configs/diagnostic_extensions/sensor_nondegenerate_development/feasibility_grid.yaml; results/diagnostic_extensions/sensor_nondegenerate_development/feasibility; tables/table_sensor_nondegenerate_feasibility.csv"
+    }
+  ],
+  "evidence_blocks": [
+    {
+      "id": "B1",
+      "title": "Baseline selection and compact-support diagnostics",
+      "family_ids": [
+        "E01",
+        "E02",
+        "E03",
+        "E04",
+        "E05",
+        "E07",
+        "E08",
+        "E09"
+      ],
+      "purpose": "Comparator selection and independent evaluation; compact recurrence and held-out-support tests; MiniGrid, cost/support, and strong-baseline diagnostics.",
+      "boundary": "Evidence classes remain separate; no block-level pooled test."
+    },
+    {
+      "id": "B2",
+      "title": "Application support, ablation, and fallback",
+      "family_ids": [
+        "E06",
+        "E10",
+        "E11",
+        "E12"
+      ],
+      "purpose": "Application goal shift; legacy approximate support; fuzzy-component and fallback-policy ablations.",
+      "boundary": "Inference remains report-specific; no deployment claim."
+    },
+    {
+      "id": "B3",
+      "title": "Relative reliability and independent shift replication",
+      "family_ids": [
+        "E15",
+        "E16",
+        "E17",
+        "E18",
+        "E19",
+        "E20",
+        "E21"
+      ],
+      "purpose": "Stationary and targeted relative reliability; fuzzy/crisp selection; three independent shifts; focal calibration.",
+      "boundary": "Generator-specific positive, null, and negative results are retained; no fuzzy-necessity or calibrated-probability claim."
+    },
+    {
+      "id": "B4",
+      "title": "Principled support-estimator program",
+      "family_ids": [
+        "E22",
+        "E23"
+      ],
+      "purpose": "Twenty-candidate development selection and independent final evaluation across three shifts.",
+      "boundary": "Development and final evidence remain separate; no universally best estimator is claimed."
+    },
+    {
+      "id": "B5",
+      "title": "Physics-based and sensorized SIL failure boundary",
+      "family_ids": [
+        "E13",
+        "E14",
+        "E24",
+        "E25",
+        "E26",
+        "E27",
+        "E28"
+      ],
+      "purpose": "State-accessible and sensorized SIL; sensor, temporal/interface, independent-final, safety-trace, and feasibility diagnostics.",
+      "boundary": "Simulation/SIL only; learned zero success is a failure boundary, not HIL, flight, safety, or readiness evidence."
+    }
+  ]
+}

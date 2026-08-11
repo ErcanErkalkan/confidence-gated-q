@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "config": "configs\\strong_baselines\\dueling_double_dqn_30seed.yaml",
+  "result_dir": "results\\strong_baselines\\dueling_double_dqn",
+  "expected_runs": 30,
+  "observed_runs": 30,
+  "run_shards_present": 30,
+  "raw_rows": 8807,
+  "violations": [],
+  "warnings": [],
+  "provenance_status": "STRICT_PASS",
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "b253a5e3722b8b2fe085e60ffa046ae1ad909acf9a9e7aff44c118a25c7dd498",
+      "bytes": 23080
+    },
+    "summary.csv": {
+      "sha256": "7fe35bdd3448af3aba6767410787faaa0fc6b65423020fd4ad579a3a65953052",
+      "bytes": 4393
+    },
+    "pairwise.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "planned_contrasts.csv": {
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "bytes": 2
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "fe53a6ecd5bb2772de87bbc1904474d5297354e3c4cdc1f84ff14998b0c1c0de",
+      "bytes": 558
+    },
+    "cross_environment.csv": {
+      "sha256": "8593ae2ef0aaaa02bd615605fc9b0010968c0f470f46c26d76654784221da9d3",
+      "bytes": 274
+    },
+    "metadata.json": {
+      "sha256": "0b5e9547d6fb0a687badb794071dd9b8fde63f843d9fd376e22b4fc925ba16aa",
+      "bytes": 5811
+    },
+    "raw.csv.gz": {
+      "sha256": "71a03fd759b13f25643edd840ad61d65f4d175e0053f6abfc4b80583f487bcd3",
+      "bytes": 518517
+    }
+  }
+}

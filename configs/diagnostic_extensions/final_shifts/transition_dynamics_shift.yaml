@@ -1,0 +1,176 @@
+experiment_name: final_transition_dynamics_shift
+output_dir: results/diagnostic_extensions/final_shifts/execution/transition_dynamics_shift
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 6
+seeds: []
+evaluation:
+  interval_steps: 1000
+  episodes: 200
+analysis:
+  evidence_class: replication
+  mechanism_id: transition_dynamics_shift
+  severity_id: transition_slip_035
+  primary_metric: normalized_return_auc
+  post_shift_window:
+  - 12000
+  - 24000
+  report_level_holm_family: independent_shift_primary
+  generator_pooling: prohibited
+  planned_contrasts:
+  - name: relative_reliability_fuzzy_vs_count_gated_tau_20
+    left: relative_reliability_fuzzy
+    right: count_gated_tau_20
+    metric: normalized_return_auc
+    status: primary
+  - name: same_input_crisp_vs_relative_reliability_fuzzy
+    left: same_input_crisp
+    right: relative_reliability_fuzzy
+    metric: normalized_return_auc
+    status: co_primary_mechanism_contrast
+  protocol: configs/diagnostic_extensions/INDEPENDENT_SHIFT_PROTOCOL.yaml
+envs:
+- name: final-transition-dynamics-shift
+  mechanism_id: transition_dynamics_shift
+  severity_id: transition_slip_035
+  id: TransitionDynamicsShift-v0
+  seeds:
+  - 12000
+  - 12001
+  - 12002
+  - 12003
+  - 12004
+  - 12005
+  - 12006
+  - 12007
+  - 12008
+  - 12009
+  - 12010
+  - 12011
+  - 12012
+  - 12013
+  - 12014
+  - 12015
+  - 12016
+  - 12017
+  - 12018
+  - 12019
+  - 12020
+  - 12021
+  - 12022
+  - 12023
+  - 12024
+  - 12025
+  - 12026
+  - 12027
+  - 12028
+  - 12029
+  kwargs:
+    size: 9
+    goal_split: all
+    max_steps: 160
+    shift_after: 12000
+    pre_shift_slip_probability: 0.05
+    post_shift_slip_probability: 0.35
+  training_steps: 24000
+  max_steps: 160
+  success_mode: positive_terminal
+agents:
+- name: tabular
+  kind: tabular
+  params:
+    tabular_learning_rate: 0.2
+    epsilon_decay_steps: 20000
+- name: dqn
+  kind: dqn
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 20000
+- name: count_gated_tau_20
+  kind: count_gated
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    tabular_learning_rate: 0.2
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    tau: 20
+    fuzzy_tau_support: 20
+    reliability_beta: 0.05
+    reliability_prior_strength: 5
+    reliability_epsilon: 1.0e-08
+    epsilon_decay_steps: 20000
+- name: relative_reliability_fuzzy
+  kind: fuzzy_reliability_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    tabular_learning_rate: 0.2
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    tau: 20
+    fuzzy_tau_support: 20
+    reliability_beta: 0.05
+    reliability_prior_strength: 5
+    reliability_epsilon: 1.0e-08
+    epsilon_decay_steps: 20000
+    gate_min: 0.05
+    gate_max: 0.95
+    fuzzy_fallback_risk_mode: disabled
+    fuzzy_risk_ablation_mode: full
+    fuzzy_membership_shape: triangular
+    fuzzy_reliability_membership_shape: triangular
+    fuzzy_support_breakpoints:
+    - 0.0
+    - 0.5
+    - 1.0
+    fuzzy_reliability_breakpoints:
+    - 0.0
+    - 0.5
+    - 1.0
+    fuzzy_reliability_consequents:
+    - 0.0
+    - 0.2
+    - 0.7
+    - 0.1
+    - 0.95
+- name: same_input_crisp
+  kind: fuzzy_reliability_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    tabular_learning_rate: 0.2
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    tau: 20
+    fuzzy_tau_support: 20
+    reliability_beta: 0.05
+    reliability_prior_strength: 5
+    reliability_epsilon: 1.0e-08
+    epsilon_decay_steps: 20000
+    gate_min: 0.05
+    gate_max: 0.95
+    fuzzy_fallback_risk_mode: disabled
+    fuzzy_risk_ablation_mode: crisp_threshold
+    fuzzy_crisp_support_threshold: 0.7
+    fuzzy_crisp_reliability_threshold: 0.3

@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "protocol_sha256": "7e24f7a8b49e0eb5cb99d031034735d05bd978a6b3c5281a183857b713fa244a",
+  "config_file": "configs/reviewer1_remaining/sensorized_final/matched_final.yaml",
+  "seed_range": "16000-16029",
+  "conditions": [
+    "combined_executed_condition",
+    "latency_only"
+  ],
+  "agents": [
+    "feed_forward_dqn",
+    "selected_temporal_drqn",
+    "fuzzy_relative_reliability",
+    "selected_approximate_support",
+    "sensorized_controller"
+  ],
+  "run_count": 300,
+  "trace_shards": 300,
+  "trace_rows": 72000,
+  "episode_trace_rows": 2400,
+  "planned_contrast_rows": 8,
+  "excluded_seeds": [],
+  "generator_pooling_performed": false,
+  "practical_readiness_claim_permitted": false
+}

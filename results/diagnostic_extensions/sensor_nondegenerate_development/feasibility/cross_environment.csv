@@ -1,0 +1,13 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+feed_forward_dqn,return_auc,6,2.1666666666666665,2.5,1.0,3.0
+selected_temporal_drqn,return_auc,6,2.3333333333333335,2.5,1.0,3.0
+sensorized_motor_controller,return_auc,3,1.0,1.0,1.0,1.0
+velocity_setpoint_controller,return_auc,3,2.0,2.0,2.0,2.0
+feed_forward_dqn,success_rate_auc,6,2.1666666666666665,2.0,2.0,2.5
+selected_temporal_drqn,success_rate_auc,6,2.1666666666666665,2.0,2.0,2.5
+sensorized_motor_controller,success_rate_auc,3,1.3333333333333333,1.0,1.0,2.0
+velocity_setpoint_controller,success_rate_auc,3,2.0,2.0,2.0,2.0
+feed_forward_dqn,mean_return,6,2.0,2.0,1.0,3.0
+selected_temporal_drqn,mean_return,6,2.0,2.0,1.0,3.0
+sensorized_motor_controller,mean_return,3,1.0,1.0,1.0,1.0
+velocity_setpoint_controller,mean_return,3,3.0,3.0,3.0,3.0

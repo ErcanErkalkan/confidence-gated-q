@@ -1,0 +1,40 @@
+schema_version: 1
+registry_id: independent_shift_seed_registry
+status: locked
+purpose: Reserve disjoint development and final seed ranges for the independent shift
+  family.
+development:
+  registered_range: 11000-11099
+  mechanisms:
+    transition_dynamics_shift:
+      start: 11000
+      end: 11009
+      count: 10
+    observation_shift:
+      start: 11010
+      end: 11019
+      count: 10
+    localized_multistep_reward_or_policy_shift:
+      start: 11020
+      end: 11029
+      count: 10
+  unused_reserved_range: 11030-11099
+final:
+  registered_range: 12000-12099
+  mechanisms:
+    transition_dynamics_shift:
+      start: 12000
+      end: 12029
+      count: 30
+    observation_shift:
+      start: 12030
+      end: 12059
+      count: 30
+    localized_multistep_reward_or_policy_shift:
+      start: 12060
+      end: 12089
+      count: 30
+  unused_reserved_range: 12090-12099
+provenance:
+  source_protocol: configs/diagnostic_extensions/INDEPENDENT_SHIFT_PROTOCOL.yaml
+  historical_seed_registry_sha256: 48d64f8e24dcea965fcd80b90a6dbbb8b1f250efc1941a7b27340c01eff44710

@@ -1,0 +1,9 @@
+check,status,reason
+protocol_digest_valid,PASS,
+trace_shard_count,PASS,
+episode_metrics_present,PASS,
+seed_metrics_present,PASS,
+summary_present,PASS,
+metric_manifest_present,PASS,
+table_present,PASS,
+figure_present,PASS,

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "protocol_sha256": "e1b345fede96a39c18382821d4e459d22da18e3ba2f56cdac6c341153adc7d37",
+  "trace_schema_version": "sensorized_sil_trace_v3",
+  "trace_shards": 100,
+  "trace_rows": 24000,
+  "episode_rows": 800,
+  "seed_rows": 100,
+  "summary_rows": 80,
+  "excluded_seeds": [],
+  "non_recovery_rule": "right_censored_at_last_observed_post_onset_timestamp",
+  "generator_pooling_performed": false
+}

@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "analysis_type": "locked_independent_shift_replication",
+  "result_dir": "results\\reviewer1_remaining\\final_shifts",
+  "violations": [],
+  "files": {
+    "checkpoint_metrics.csv": {
+      "sha256": "bd968272bdad719490cb5b2df416f3c55cfe0360aae494665f2b70160c532b0d",
+      "bytes": 1570843
+    },
+    "seed_metrics.csv": {
+      "sha256": "037d47526582ce3061ab83167add03ed093a3fd878655d76db296d30051090e0",
+      "bytes": 161698
+    },
+    "planned_contrasts.csv": {
+      "sha256": "0b83a41b55436bb131fce99f275785c62e92d2f488836d2de18621ba002ed4bb",
+      "bytes": 3708
+    },
+    "lower_tail_metrics.csv": {
+      "sha256": "53053318b4f02e4fb1d571e3fcbafb59794827cfc10aef7f79966a185b5c14ea",
+      "bytes": 8538
+    },
+    "detection_delay.csv": {
+      "sha256": "9d8db06f4c105eb210ac988b193c50a1bd82f0c274f2e1a8eca878388cc49c5b",
+      "bytes": 168126
+    },
+    "descriptive_agent_summary.csv": {
+      "sha256": "a03a5e0098cbe3da23c7ea7193a59406c9f83c3a5eb6a27e590fec393b0c0a65",
+      "bytes": 21083
+    },
+    "execution_audit.csv": {
+      "sha256": "185331d6c53452141ea566c65bfe76dc0cde6c9fe04a877bd2233250f6f393bf",
+      "bytes": 692
+    },
+    "tables/table_independent_shift_replication.csv": {
+      "sha256": "0b83a41b55436bb131fce99f275785c62e92d2f488836d2de18621ba002ed4bb",
+      "bytes": 3708
+    },
+    "figures/fig_independent_shift_replication.pdf": {
+      "sha256": "15b9a624a0b69fc78b8746e96f02696e90b2abf32fe7639e4ac651fc5a7d66d6",
+      "bytes": 17626
+    }
+  }
+}

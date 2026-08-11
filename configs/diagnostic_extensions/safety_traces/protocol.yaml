@@ -1,0 +1,155 @@
+schema_version: 1
+protocol_id: safety_trace_rerun
+lock_status: immutable_before_safety_trace_reruns
+locked_at: '2026-08-05T18:10:00+03:00'
+locked_source_commit: 08f95b3e0e1e28a8c7ca00e8c8ff44d599a6a5cb
+scope:
+  evidence_class: descriptive_safety_rerun
+  purpose: Measure previously unavailable trajectory-deviation, recovery-time, saturation-duration,
+    constraint-duration, and near-miss trace outcomes.
+  manuscript_hypotheses_changed: false
+  inferential_superiority_claims_permitted: false
+  practical_readiness_claims_permitted: false
+  prior_outcomes_used_to_choose_definitions: false
+  source_sensor_protocol:
+    file: configs/diagnostic_extensions/sensorized_final/protocol_lock.yaml
+    sha256: 44190ce1dde3097eb22af6bd938dc961dab0b65fabeffa47dab71ca8257ba131
+rerun_families:
+- family_id: combined_executed_condition_safety_trace
+  environment: combined_executed_condition
+  source_environment: configs/diagnostic_extensions/sensorized_final/matched_final.yaml
+  factor_flags:
+    sensor_noise_enabled: true
+    sensor_latency_enabled: true
+    localization_dropout_enabled: true
+    range_dropout_enabled: true
+    camera_dropout_enabled: true
+    visibility_occlusion_enabled: true
+- family_id: latency_only_safety_trace
+  environment: latency_only
+  source_environment: configs/diagnostic_extensions/sensorized_final/matched_final.yaml
+  factor_flags:
+    sensor_noise_enabled: false
+    sensor_latency_enabled: true
+    localization_dropout_enabled: false
+    range_dropout_enabled: false
+    camera_dropout_enabled: false
+    visibility_occlusion_enabled: false
+new_seeds:
+  registry_key: sensorized_sil_final
+  seeds:
+  - 16030
+  - 16031
+  - 16032
+  - 16033
+  - 16034
+  - 16035
+  - 16036
+  - 16037
+  - 16038
+  - 16039
+  pairing: same_seed_across_all_agents_and_families
+  prior_use_at_lock: none
+  exclusions: none_unless_trace_or_run_is_technically_corrupt
+  replacement: prohibited_without_dated_safety_protocol_amendment
+budget:
+  training_interactions_per_agent_seed_family: 240
+  checkpoint_schedule:
+  - 120
+  - 240
+  evaluation_episodes_per_checkpoint: 4
+  episode_horizon_steps: 30
+  action_repeat: 1
+  control_frequency_hz: 60
+  control_timestep_seconds: 0.016666666666666666
+  torch_threads: 1
+  torch_interop_threads: 1
+  interaction_budget_matched: true
+  compute_budget_identical: false
+agents:
+- feed_forward_dqn
+- selected_temporal_drqn
+- fuzzy_relative_reliability
+- selected_approximate_support
+- sensorized_controller
+definitions:
+  perturbation_onset:
+    step_indexing: one_based_post_action
+    onset_step: 6
+    onset_time_seconds: 0.1
+    rule: Configured sensor perturbation factors are disabled for post-action steps
+      1 through 5 and enabled beginning with post-action step 6.
+  nominal_reference_path:
+    id: linear_reset_position_to_episode_target_v1
+    rule: For post-action step s, the reference waypoint is reset_position plus min(s
+      / episode_horizon_steps, 1) times (episode_target minus reset_position). The
+      sampled target and reset position are fixed within an episode.
+  trajectory_deviation:
+    sample_definition: Euclidean distance in metres between the post-action latent
+      position and the timestamp-aligned nominal reference waypoint.
+    rmse: Square root of the arithmetic mean of squared finite trajectory deviations
+      from the perturbation-onset step through the last observed post-action step,
+      inclusive.
+    maximum: Maximum finite trajectory deviation from the perturbation-onset step
+      through the last observed post-action step, inclusive.
+  recovery:
+    band_met_when: trajectory_deviation_m <= 0.15
+    band_m: 0.15
+    required_dwell_steps: 6
+    required_dwell_seconds: 0.1
+    recovery_time: Elapsed seconds from perturbation onset to the first sample of
+      the first run of six consecutive observed post-onset samples inside the recovery
+      band. The qualifying run must be fully observed.
+    non_recovery_rule: right_censored_at_last_observed_post_onset_timestamp
+    non_recovery_value: recovery_time_seconds is missing, recovered is false, and
+      censor_time_seconds is the elapsed time from onset to the last observed post-onset
+      sample.
+  motor_saturation:
+    per_motor_threshold: A motor is saturated when commanded RPM is <= 1.0 or >= 0.99
+      times the simulator maximum RPM.
+    active_when: at_least_one_motor_is_saturated
+    duration: saturated_post_action_sample_count_times_control_timestep_seconds
+  constraint_violation:
+    active_when: Collision is true or minimum obstacle clearance is <= 0.18 metres.
+    duration: constraint_active_post_action_sample_count_times_control_timestep_seconds
+  near_miss:
+    availability: available_for_declared_obstacle_geometry
+    active_when: Collision is false and finite minimum obstacle clearance is <= 0.10
+      metres at the post-action sample.
+    duration: near_miss_post_action_sample_count_times_control_timestep_seconds
+aggregation:
+  episode_grain:
+  - family
+  - agent
+  - seed
+  - checkpoint
+  - episode
+  seed_grain:
+  - family
+  - agent
+  - seed
+  family_summary_grain:
+  - family
+  - agent
+  checkpoints_in_episode_output: all_locked_checkpoints
+  family_summary_checkpoint: final_only
+  generator_pooling: prohibited
+  missing_or_nonfinite_trace_values: fail_closed
+  recovery_summary: Report recovery proportion, recovered-only recovery-time summaries,
+    and censor-time summaries separately. Never substitute the horizon for a censored
+    recovery time.
+trace:
+  schema_version: sensorized_sil_trace_v3
+  phases:
+  - eval
+  compression: gzip
+  bounded_rows: true
+  rerun_config: configs/diagnostic_extensions/safety_traces/matched_rerun.yaml
+  output_directory: results/diagnostic_extensions/safety_traces
+immutability:
+  normative_file: configs/diagnostic_extensions/safety_traces/protocol.yaml
+  digest_file: configs/diagnostic_extensions/safety_traces/protocol.sha256
+  digest_algorithm: sha256_exact_bytes
+  silent_edit_policy: fail_closed
+  amendment_pattern: SAFETY_TRACE_PROTOCOL_AMENDMENT_YYYY-MM-DD_NN.yaml
+  amendment_must_precede_affected_rerun: true

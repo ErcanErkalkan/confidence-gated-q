@@ -1,0 +1,32 @@
+{
+  "experiment_name": "asoc_smoke_application_navigation",
+  "output_dir": "results/smoke_application_navigation",
+  "runtime": {"torch_threads": 1, "torch_interop_threads": 1, "workers": 1},
+  "seeds": [0, 1],
+  "evaluation": {"interval_steps": 100, "episodes": 4},
+  "analysis": {
+    "primary_metric": "return_auc",
+    "analysis_status": "engineering_smoke_test",
+    "planned_contrasts": [
+      {"name": "fuzzy_vs_count", "left": "fuzzy_support_adaptive", "right": "count_gated_tau_20", "metric": "return_auc"}
+    ]
+  },
+  "envs": [
+    {
+      "name": "ApplicationNavigation-deployment-shift-smoke",
+      "id": "ApplicationNavigationSupportShift-v0",
+      "kwargs": {"goal_split": "train", "slip_probability": 0.05, "max_steps": 80},
+      "eval_kwargs": {"goal_split": "deployment"},
+      "training_steps": 300,
+      "max_steps": 80,
+      "success_mode": "positive_terminal"
+    }
+  ],
+  "agents": [
+    {"name": "tabular", "kind": "tabular", "params": {"tabular_learning_rate": 0.2, "epsilon_decay_steps": 250}},
+    {"name": "validated_dqn", "kind": "dqn", "params": {"double_dqn": false, "learning_rate": 0.0003, "batch_size": 16, "replay_capacity": 5000, "replay_warmup": 32, "train_frequency": 8, "target_update_interval": 100, "hidden_size": 64, "epsilon_decay_steps": 250}},
+    {"name": "count_gated_tau_20", "kind": "count_gated", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 16, "replay_capacity": 5000, "replay_warmup": 32, "train_frequency": 8, "target_update_interval": 100, "hidden_size": 64, "tau": 20, "epsilon_decay_steps": 250}},
+    {"name": "support_abstain_tau_20", "kind": "support_abstain_gate", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 16, "replay_capacity": 5000, "replay_warmup": 32, "train_frequency": 8, "target_update_interval": 100, "hidden_size": 64, "tau": 20, "abstain_action": 4, "epsilon_decay_steps": 250}},
+    {"name": "fuzzy_support_adaptive", "kind": "fuzzy_support_adaptive_gate", "params": {"double_dqn": false, "learning_rate": 0.0003, "tabular_learning_rate": 0.2, "batch_size": 16, "replay_capacity": 5000, "replay_warmup": 32, "train_frequency": 8, "target_update_interval": 100, "hidden_size": 64, "fuzzy_tau_support": 20, "fuzzy_uncertainty_scale": 1.0, "fuzzy_abstain_zero_support": false, "epsilon_decay_steps": 250}}
+  ]
+}

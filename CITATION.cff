@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this reproducibility artifact, cite this software artifact and the associated research article when available."
+title: "Support-Boundary and Relative-Reliability Diagnostics for Hybrid Memory–Neural Reinforcement Learning: Reproducibility Artifact"
+type: software
+authors:
+  - family-names: "Erkalkan"
+    given-names: "Ercan"
+    affiliation: "Vocational School of Technical Sciences, Department of Electronics and Automation, Artificial Intelligence Operator Program, Marmara University"
+    email: "ercan.erkalkan@marmara.edu.tr"
+    orcid: "https://orcid.org/0000-0001-9259-7112"
+version: 1.0.0
+license: MIT

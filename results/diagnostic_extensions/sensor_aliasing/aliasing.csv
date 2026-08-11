@@ -1,0 +1,5 @@
+environment,agent,seed,phase,similar_observation_pair_count,materially_different_latent_pair_count,different_optimal_label_pair_count,aliased_pair_count,aliasing_rate,observation_similarity_radius,material_latent_distance,status,reason_if_unavailable
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,15000,eval,263,0,0,0,0.0,0.15,0.3,available,
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,15001,eval,229,0,0,0,0.0,0.15,0.3,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15000,eval,263,0,0,0,0.0,0.15,0.3,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15001,eval,229,0,0,0,0.0,0.15,0.3,available,

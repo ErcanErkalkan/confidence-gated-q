@@ -1,0 +1,201 @@
+experiment_name: safety_trace_rerun
+output_dir: results/diagnostic_extensions/safety_traces
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 4
+trace_logging:
+  enabled: true
+  phases:
+  - eval
+  compression: gzip
+  schema_version: sensorized_sil_trace_v3
+seeds:
+- 16030
+- 16031
+- 16032
+- 16033
+- 16034
+- 16035
+- 16036
+- 16037
+- 16038
+- 16039
+evaluation:
+  interval_steps: 120
+  episodes: 4
+analysis:
+  evidence_class: descriptive_safety_rerun
+  protocol_id: safety_trace_rerun
+  protocol_sha256: b11c8006ab4a1cf4444c06fae458f6aa62a2e4ae2f64e679ec0ada415c1a37f1
+  primary_metric: trajectory_deviation_rmse_m
+  generator_pooling: prohibited
+  inferential_superiority_claims_permitted: false
+  practical_readiness_claim: prohibited
+envs:
+- name: combined_executed_condition_safety_trace
+  id: SensorizedPyBulletUAVWaypoint-v0
+  kwargs:
+    target_split: deployment
+    physics: pyb_drag
+    pyb_freq: 240
+    ctrl_freq: 60
+    action_repeat: 1
+    max_steps: 30
+    collective_delta_rpm: 220
+    tilt_radians: 0.1
+    high_level_speed: 0.18
+    goal_tolerance: 0.16
+    state_quantization: 0.05
+    lidar_range: 1.2
+    lidar_noise_std: 0.02
+    vio_position_noise_std: 0.02
+    vio_velocity_noise_std: 0.03
+    imu_attitude_noise_std: 0.008
+    localization_latency_steps: 2
+    localization_dropout_probability: 0.03
+    range_dropout_probability: 0.02
+    sensor_bias_walk_std: 0.0007
+    camera_fov_degrees: 100
+    camera_dropout_probability: 0.05
+    initial_position_jitter: 0.04
+    initial_attitude_jitter: 0.03
+    wind_force_std: 0.002
+    lambda_collision: 1.0
+    lambda_idle: 0.05
+    sensor_noise_enabled: true
+    sensor_latency_enabled: true
+    localization_dropout_enabled: true
+    range_dropout_enabled: true
+    camera_dropout_enabled: true
+    visibility_occlusion_enabled: true
+    observation_mode: sensorized
+    control_interface_mode: low_level
+    perturbation_onset_step: 6
+    motor_saturation_threshold_fraction: 0.99
+    near_miss_clearance: 0.1
+    constraint_clearance: 0.18
+    trace_schema_version: sensorized_sil_trace_v3
+  eval_kwargs: &id001 {}
+  training_steps: 240
+  max_steps: 30
+  success_mode: positive_terminal
+- name: latency_only_safety_trace
+  id: SensorizedPyBulletUAVWaypoint-v0
+  kwargs:
+    target_split: deployment
+    physics: pyb_drag
+    pyb_freq: 240
+    ctrl_freq: 60
+    action_repeat: 1
+    max_steps: 30
+    collective_delta_rpm: 220
+    tilt_radians: 0.1
+    high_level_speed: 0.18
+    goal_tolerance: 0.16
+    state_quantization: 0.05
+    lidar_range: 1.2
+    lidar_noise_std: 0.02
+    vio_position_noise_std: 0.02
+    vio_velocity_noise_std: 0.03
+    imu_attitude_noise_std: 0.008
+    localization_latency_steps: 2
+    localization_dropout_probability: 0.03
+    range_dropout_probability: 0.02
+    sensor_bias_walk_std: 0.0007
+    camera_fov_degrees: 100
+    camera_dropout_probability: 0.05
+    initial_position_jitter: 0.04
+    initial_attitude_jitter: 0.03
+    wind_force_std: 0.002
+    lambda_collision: 1.0
+    lambda_idle: 0.05
+    sensor_noise_enabled: false
+    sensor_latency_enabled: true
+    localization_dropout_enabled: false
+    range_dropout_enabled: false
+    camera_dropout_enabled: false
+    visibility_occlusion_enabled: false
+    observation_mode: sensorized
+    control_interface_mode: low_level
+    perturbation_onset_step: 6
+    motor_saturation_threshold_fraction: 0.99
+    near_miss_clearance: 0.1
+    constraint_clearance: 0.18
+    trace_schema_version: sensorized_sil_trace_v3
+  eval_kwargs: *id001
+  training_steps: 240
+  max_steps: 30
+  success_mode: positive_terminal
+agents:
+- name: feed_forward_dqn
+  kind: dqn
+  params:
+    double_dqn: false
+    learning_rate: 0.0005
+    batch_size: 16
+    replay_capacity: 2000
+    replay_warmup: 32
+    train_frequency: 4
+    target_update_interval: 120
+    hidden_size: 64
+    epsilon_decay_steps: 240
+    frame_stack_size: 1
+- name: selected_temporal_drqn
+  kind: drqn
+  params:
+    double_dqn: false
+    learning_rate: 0.0005
+    batch_size: 16
+    replay_capacity: 2000
+    replay_warmup: 32
+    train_frequency: 4
+    target_update_interval: 120
+    hidden_size: 64
+    epsilon_decay_steps: 240
+    frame_stack_size: 1
+    sequence_length: 4
+    recurrent_hidden_size: 64
+- name: fuzzy_relative_reliability
+  kind: fuzzy_reliability_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0005
+    batch_size: 16
+    replay_capacity: 2000
+    replay_warmup: 32
+    train_frequency: 4
+    target_update_interval: 120
+    hidden_size: 64
+    epsilon_decay_steps: 240
+    frame_stack_size: 1
+    tabular_learning_rate: 0.2
+    fuzzy_tau_support: 4
+    fuzzy_abstain_zero_support: false
+    reliability_beta: 0.05
+    reliability_prior_strength: 5
+    reliability_epsilon: 1.0e-08
+- name: selected_approximate_support
+  kind: support_estimator_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0005
+    batch_size: 16
+    replay_capacity: 2000
+    replay_warmup: 32
+    train_frequency: 4
+    target_update_interval: 120
+    hidden_size: 64
+    epsilon_decay_steps: 240
+    frame_stack_size: 1
+    tabular_learning_rate: 0.2
+    support_estimator_type: gaussian_affinity
+    support_representation_type: raw_state
+    support_index_type: brute_force
+    approximate_support_k: 3
+    approximate_support_bandwidth: 0.25
+    approximate_support_tau: 1.0
+    support_covariance_regularization: 0.0001
+- name: sensorized_controller
+  kind: uav_sensorized_motor_controller
+  params: {}

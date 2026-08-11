@@ -1,0 +1,108 @@
+schema_version: 1
+protocol_id: independent_focal_calibration_2026_08_05
+status: immutable_before_execution
+created_at: '2026-08-05T00:00:00+03:00'
+purpose: Independently test whether the frozen residual-based relative-reliability
+  score ranks the better branch for the focal fuzzy and same-input crisp mappings.
+  This is a calibration/diagnostic family, not a performance- superiority family.
+prerequisites:
+  frozen_mapping_selection: results/diagnostic_extensions/fuzzy_crisp_development/selected_candidates.yaml
+  frozen_mapping_selection_sha256: 37860ebc8c681d9f4c3d35fc6fbf679ef8daf66cd321b8500c0f959c4449da01
+  final_shift_results_not_used_to_choose_calibration_design: true
+seeds:
+  registry_key: new_shift_final
+  values:
+  - 12090
+  - 12091
+  - 12092
+  - 12093
+  - 12094
+  - 12095
+  - 12096
+  - 12097
+  - 12098
+  - 12099
+  use_class: independent_calibration
+  development_seed_access: prohibited_for_selection_after_lock
+  pairing: same_seed_across_agents_and_severities
+environment_family:
+  id: ReliabilityShiftBandit-v0
+  analytic_optimal_action_available: true
+  analytic_full_action_q_available: true
+  common:
+    context_count: 41
+    regime: switch
+    shift_after: 2500
+    pre_boundary: 0.5
+    training_steps: 4000
+    checkpoint_interval: 250
+    evaluation_episodes_per_checkpoint: 82
+    episode_horizon: 1
+  severities:
+  - severity_id: boundary_030
+    post_boundary: 0.3
+  - severity_id: boundary_020
+    post_boundary: 0.2
+agents:
+  common_residual_parameters:
+    reliability_beta: 0.05
+    reliability_prior_strength: 5
+    reliability_epsilon: 1.0e-08
+  frozen_mappings:
+  - agent_id: relative_reliability_fuzzy
+    kind: fuzzy_reliability_gate
+    selected_candidate_id: fuzzy_triangular_balanced
+  - agent_id: same_input_crisp
+    kind: fuzzy_reliability_gate
+    selected_candidate_id: crisp_s070_r030
+targets:
+  action_correctness:
+    positive_class: tabular_branch_is_the_only_action-correct_branch
+    negative_class: neural_branch_is_the_only_action-correct_branch
+    ties: excluded_and_counted
+    primary_scope: post_shift_all_contexts
+  value_error:
+    positive_class: tabular_full_action_q_rmse_is_lower
+    negative_class: neural_full_action_q_rmse_is_lower
+    ties: excluded_and_counted
+    primary_scope: post_shift_all_contexts
+  target_pooling: action_and_value_targets_must_never_be_pooled
+metrics:
+  primary:
+  - auroc
+  - average_precision
+  - balanced_accuracy_at_0_5
+  calibration:
+  - brier_score
+  - calibration_bins
+  - expected_calibration_error
+  selective:
+  - error_risk_by_retained_coverage
+  adaptation:
+  - first_sustained_correct_detection_after_shift
+  - right_censored_delay_if_not_detected
+  uncertainty: bootstrap_95_percent_ci_over_seeds
+availability_rules:
+  auroc: unavailable_when_either_binary_class_is_absent
+  calibration: only_for_the_explicit_binary_target
+  minimum_seed_count_for_interval: 2
+  class_sufficiency_is_reported_per_target_scope_agent_and_severity: true
+  no_row_or_context_may_be_removed_to_manufacture_two_classes: true
+analysis:
+  evidence_class: replication_calibration
+  report_family: independent_focal_calibration
+  performance_superiority_claim: prohibited
+  fuzzy_superiority_claim: prohibited
+  calibrated_probability_claim: prohibited_unless_calibration_error_supports_a_narrow_statement
+  generator_pooling: severities_reported_separately_and_descriptive_combined_scope_allowed
+exclusion_rules:
+- nonfinite_scores_are_invalid_and_fail_the_execution_audit
+- action_target_ties_are_excluded_only_from_action_target_metrics
+- value_error_ties_are_excluded_only_from_value_target_metrics
+- no_seed_exclusion_after_execution
+stopping_rules:
+  completion_requirement: complete_all_agents_severities_and_seeds
+  no_early_stopping_for_null_negative_or_one_class_results: true
+  technical_failure: rerun_only_the_exact_failed_shard_with_identical_configuration
+amendment_policy: This file must not be edited after its SHA-256 is written. Any change
+  requires a dated amendment that records whether any seed-level outcome was inspected.

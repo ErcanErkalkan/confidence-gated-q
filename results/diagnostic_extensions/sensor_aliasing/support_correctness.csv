@@ -1,0 +1,9 @@
+environment,agent,seed,phase,correctness_target,inferential_status,support_bin_low,support_bin_high,eligible_decision_count,mean_support,correctness_rate,status,reason_if_unavailable
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,15000,eval,unavailable,not_available,,,0,,,not_available,support/correctness pair unavailable
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,15001,eval,unavailable,not_available,,,0,,,not_available,support/correctness pair unavailable
+Crazyflie-sensorized-aliasing-smoke,knn_support,15000,eval,nominal_free_space_reference_action,reference_agreement_proxy_not_optimality,0.0,0.2,69,0.0,0.0,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15000,eval,nominal_free_space_reference_action,reference_agreement_proxy_not_optimality,0.2,0.4,1,0.3333333333333333,0.0,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15000,eval,nominal_free_space_reference_action,reference_agreement_proxy_not_optimality,0.4,0.6000000000000001,1,0.6,0.0,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15000,eval,nominal_free_space_reference_action,reference_agreement_proxy_not_optimality,0.6000000000000001,0.8,9,0.7142857142857143,0.0,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15001,eval,nominal_free_space_reference_action,reference_agreement_proxy_not_optimality,0.0,0.2,61,0.0,0.0,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15001,eval,nominal_free_space_reference_action,reference_agreement_proxy_not_optimality,0.6000000000000001,0.8,19,0.7142857142857142,0.0,available,

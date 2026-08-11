@@ -1,0 +1,11 @@
+family,candidate_or_agent,environment,observation_mode,control_interface_mode,frame_stack,temporal_filter_alpha,seed_set,training_steps,checkpoint_schedule,evaluation_episodes,audit_status,observed_run_count,observed_evaluation_rows,final_gradient_updates,nonfinite_loss_count,final_seed_rows
+temporal_candidate,temporal_frame_stack_4,architecture_frame_stack,sensorized,low_level,4,,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+temporal_candidate,temporal_drqn_seq4,architecture_sensorized_low_level,sensorized,low_level,1,,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+temporal_candidate,temporal_filtered_alpha035,architecture_filtered_belief,sensorized,low_level,1,0.35,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+feedforward_capacity_control,feedforward_capacity_h064,architecture_sensorized_low_level,sensorized,low_level,1,,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+feedforward_capacity_control,feedforward_capacity_h096,architecture_sensorized_low_level,sensorized,low_level,1,,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+feedforward_capacity_control,feedforward_capacity_h128,architecture_sensorized_low_level,sensorized,low_level,1,,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+interface_ablation,interface_dqn_h064,interface_A_state_low_level,state_accessible,low_level,1,,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+interface_ablation,interface_dqn_h064,interface_B_sensorized_high_level,sensorized,high_level,1,,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+interface_ablation,interface_dqn_h064,interface_C_state_high_level,state_accessible,high_level,1,,15004;15005,240,120;240,3,PASS,2,12,53,0,0
+interface_ablation,interface_dqn_h064,interface_D_sensorized_low_level,sensorized,low_level,1,,15004;15005,240,120;240,3,PASS,2,12,53,0,0

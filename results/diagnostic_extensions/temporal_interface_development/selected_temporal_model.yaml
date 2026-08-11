@@ -1,0 +1,37 @@
+schema_version: 1
+evidence_class: development_diagnostic
+selection_scope: temporal_candidates_only
+selection_rule:
+- highest_mean_normalized_return_auc
+- lowest_failure_probability
+- lowest_inference_time_us_per_decision_mean
+- lexical_candidate_id
+selected_candidate_id: temporal_drqn_seq4
+selected_mean_normalized_return_auc: -1.1007088925214097
+selected_failure_probability: 1.0
+selected_inference_time_us_per_decision_mean: 1545.8330555555553
+agent_kind: drqn
+agent_params:
+  double_dqn: false
+  learning_rate: 0.0005
+  batch_size: 16
+  replay_capacity: 2000
+  replay_warmup: 32
+  train_frequency: 4
+  target_update_interval: 120
+  hidden_size: 64
+  epsilon_decay_steps: 240
+  frame_stack_size: 1
+  sequence_length: 4
+  recurrent_hidden_size: 64
+environment_transform:
+  frame_stack: 1
+  temporal_filter_alpha: null
+development_seeds:
+- 15004
+- 15005
+final_seed_results_used: false
+source_file: results/reviewer1_remaining/temporal_interface_development/raw.csv
+execution_source_commit: 7544f61e62b857de55fcd6c17c5151159b824ebf
+source_snapshot_sha256: 36544a532d02876404ae4245dbfdbf54a902a017d06dc714fab7bef09253291c
+config_sha256: 7ea2a23545b7db8fd7a1fb9b1a19857c42b88b0a6c1446376c4cffca8c65ed20

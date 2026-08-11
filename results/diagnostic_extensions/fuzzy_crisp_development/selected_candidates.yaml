@@ -1,0 +1,56 @@
+schema_version: 2
+status: frozen_development_selection
+evidence_class: development
+selection_rule:
+  locked_before_outcomes: true
+  unit: candidate_within_mapping_family
+  environment_score: mean primary metric across the ten locked development seeds
+  environment_rank: descending environment score, average ranks for exact ties
+  ordered_criteria:
+  - lowest_mean_environment_rank
+  - lowest_worst_environment_rank
+  - lower_median_warm_cpu_mapping_latency_ns
+  - lexical_candidate_id
+  p_values_used: false
+  final_seed_results_used: false
+final_seed_results_used: false
+selected:
+  crisp:
+    candidate_id: crisp_s070_r030
+    candidate_definition:
+      candidate_id: crisp_s070_r030
+      support_threshold: 0.7
+      reliability_threshold: 0.3
+      gate_min: 0.05
+      gate_max: 0.95
+    mean_environment_rank: 2.0
+    worst_environment_rank: 3.0
+    median_latency_ns: 11445.425
+  fuzzy:
+    candidate_id: fuzzy_triangular_balanced
+    candidate_definition:
+      candidate_id: fuzzy_triangular_balanced
+      membership_family: triangular
+      support_breakpoints:
+      - 0.0
+      - 0.5
+      - 1.0
+      reliability_breakpoints:
+      - 0.0
+      - 0.5
+      - 1.0
+      consequents:
+      - 0.0
+      - 0.2
+      - 0.7
+      - 0.1
+      - 0.95
+      gate_min: 0.05
+      gate_max: 0.95
+    mean_environment_rank: 1.3333333333333333
+    worst_environment_rank: 2.0
+    median_latency_ns: 99005.385
+incorporated_into_final_protocol: true
+provenance:
+  historical_selection_sha256: e8e0ec622e0e1e3021bc5ba434c50d999a656e8e966063398a1417223ebca7f6
+  historical_candidate_registry_sha256: ab144985c47bafab06857227f5c943abf51d1a887791c5de19dbafc7adf9dec2

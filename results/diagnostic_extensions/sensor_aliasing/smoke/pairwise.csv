@@ -1,0 +1,4 @@
+environment,metric,left,right,n_pairs,mean_difference,median_difference,bootstrap_ci_low,bootstrap_ci_high,cohen_dz,rank_biserial,paired_t_p,wilcoxon_p,sign_test_p,wins,losses,ties,difference_skew,difference_excess_kurtosis,catastrophic_low_outliers,catastrophic_high_outliers,win_rate_non_ties,paired_t_holm_p,wilcoxon_holm_p,sign_test_holm_p
+Crazyflie-sensorized-aliasing-smoke,mean_return,fuzzy_reliability,knn_support,2,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,0,0,2,0.0,0.0,0,0,0.5,1.0,1.0,1.0
+Crazyflie-sensorized-aliasing-smoke,success_rate,fuzzy_reliability,knn_support,2,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,0,0,2,0.0,0.0,0,0,0.5,1.0,1.0,1.0
+Crazyflie-sensorized-aliasing-smoke,return_auc,fuzzy_reliability,knn_support,2,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,0,0,2,0.0,0.0,0,0,0.5,1.0,1.0,1.0

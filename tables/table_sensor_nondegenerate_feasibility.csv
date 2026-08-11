@@ -1,0 +1,4 @@
+candidate_id,training_interactions,episode_horizon,reference_success_max,learned_success_min,learned_success_max,eligible,evidence_class,source_file
+horizon120_budget6000,6000,120,0.0,0.0,0.0,False,development_feasibility,results/reviewer1_remaining/sensor_nondegenerate_development/feasibility/feasibility_selection.yaml
+horizon240_budget12000,12000,240,0.39999999999999997,0.0,0.0,False,development_feasibility,results/reviewer1_remaining/sensor_nondegenerate_development/feasibility/feasibility_selection.yaml
+horizon360_budget24000,24000,360,0.6666666666666666,0.0,0.0,False,development_feasibility,results/reviewer1_remaining/sensor_nondegenerate_development/feasibility/feasibility_selection.yaml

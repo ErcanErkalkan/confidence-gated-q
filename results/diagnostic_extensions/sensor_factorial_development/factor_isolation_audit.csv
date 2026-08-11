@@ -1,0 +1,9 @@
+condition,sensor_noise_enabled,sensor_latency_enabled,localization_dropout_enabled,range_dropout_enabled,camera_dropout_enabled,visibility_occlusion_enabled,seed_set,training_steps,checkpoint_interval,evaluation_episodes,max_steps,audit_status
+no_noise_no_delay_no_dropout,False,False,False,False,False,False,15002;15003,80,40,2,20,PASS
+noise_only,True,False,False,False,False,False,15002;15003,80,40,2,20,PASS
+latency_only,False,True,False,False,False,False,15002;15003,80,40,2,20,PASS
+localization_dropout_only,False,False,True,False,False,False,15002;15003,80,40,2,20,PASS
+range_dropout_only,False,False,False,True,False,False,15002;15003,80,40,2,20,PASS
+camera_dropout_only,False,False,False,False,True,False,15002;15003,80,40,2,20,PASS
+visibility_occlusion_only,False,False,False,False,False,True,15002;15003,80,40,2,20,PASS
+combined_executed_condition,True,True,True,True,True,True,15002;15003,80,40,2,20,PASS

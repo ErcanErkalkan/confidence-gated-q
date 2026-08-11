@@ -1,0 +1,233 @@
+{
+  "created_utc": "2026-06-07T19:17:45Z",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.3",
+  "gymnasium": "1.3.0",
+  "numpy": "2.4.3",
+  "torch": "2.11.0+cpu",
+  "torch_threads": 1,
+  "cpu_count": 12,
+  "processor": "Intel64 Family 6 Model 165 Stepping 3, GenuineIntel",
+  "config_sha256": "605a755ff876473a5ab57f2af02d54b728991e86e59344e456b16e1b87b21a5f",
+  "config_file": "configs/adaptive_gate_compact_validation.json",
+  "git_commit_hash": "b292c8d64b1f8ecb5c1db0717979cb6deec5480c",
+  "package_version": "1.3.0",
+  "environment_observations": [
+    {
+      "name": "FrozenLake-4x4-slippery-adaptive",
+      "requested_id": "FrozenLake-v1",
+      "resolved_id": "FrozenLake-v1",
+      "representation": "native_gymnasium_observation"
+    },
+    {
+      "name": "CliffWalking-adaptive",
+      "requested_id": "CliffWalking-v1",
+      "resolved_id": "CliffWalking-v1",
+      "representation": "native_gymnasium_observation"
+    },
+    {
+      "name": "FourRooms-9-support-shift-adaptive",
+      "requested_id": "StructuredFourRooms-v0",
+      "resolved_id": "StructuredFourRooms-v0",
+      "representation": "native_gymnasium_observation"
+    }
+  ],
+  "packages": {
+    "gymnasium": "1.3.0",
+    "minigrid": "3.1.0",
+    "numpy": "2.4.3",
+    "pandas": "3.0.1",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.8",
+    "torch": "2.11.0"
+  },
+  "config": {
+    "experiment_name": "asoc_adaptive_gate_compact_validation",
+    "output_dir": "results/adaptive_gate_compact_validation",
+    "runtime": {
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "workers": 8
+    },
+    "seeds": [
+      700,
+      701,
+      702,
+      703,
+      704,
+      705,
+      706,
+      707,
+      708,
+      709,
+      710,
+      711,
+      712,
+      713,
+      714,
+      715,
+      716,
+      717,
+      718,
+      719,
+      720,
+      721,
+      722,
+      723,
+      724,
+      725,
+      726,
+      727,
+      728,
+      729
+    ],
+    "evaluation": {
+      "interval_steps": 2000,
+      "episodes": 30
+    },
+    "analysis": {
+      "primary_metric": "return_auc",
+      "analysis_status": "confirmatory_adaptive_gate_validation",
+      "planned_contrasts": [
+        {
+          "name": "fuzzy_vs_count",
+          "left": "fuzzy_support_adaptive",
+          "right": "count_gated_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "fuzzy_vs_support_abstain",
+          "left": "fuzzy_support_adaptive",
+          "right": "support_abstain_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "fuzzy_vs_dqn",
+          "left": "fuzzy_support_adaptive",
+          "right": "validated_dqn",
+          "metric": "return_auc"
+        },
+        {
+          "name": "fuzzy_vs_tabular",
+          "left": "fuzzy_support_adaptive",
+          "right": "tabular",
+          "metric": "return_auc"
+        }
+      ]
+    },
+    "envs": [
+      {
+        "name": "FrozenLake-4x4-slippery-adaptive",
+        "id": "FrozenLake-v1",
+        "kwargs": {
+          "map_name": "4x4",
+          "is_slippery": true
+        },
+        "training_steps": 10000,
+        "max_steps": 100,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "CliffWalking-adaptive",
+        "id": "CliffWalking-v1",
+        "training_steps": 10000,
+        "max_steps": 500,
+        "success_mode": "terminated"
+      },
+      {
+        "name": "FourRooms-9-support-shift-adaptive",
+        "id": "StructuredFourRooms-v0",
+        "kwargs": {
+          "size": 9,
+          "goal_split": "train",
+          "slip_probability": 0.1,
+          "max_steps": 160
+        },
+        "eval_kwargs": {
+          "goal_split": "test"
+        },
+        "training_steps": 12000,
+        "max_steps": 160,
+        "success_mode": "positive_terminal"
+      }
+    ],
+    "agents": [
+      {
+        "name": "tabular",
+        "kind": "tabular",
+        "params": {
+          "tabular_learning_rate": 0.2,
+          "epsilon_decay_steps": 10000
+        }
+      },
+      {
+        "name": "validated_dqn",
+        "kind": "dqn",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 10000
+        }
+      },
+      {
+        "name": "count_gated_tau_20",
+        "kind": "count_gated",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "epsilon_decay_steps": 10000
+        }
+      },
+      {
+        "name": "support_abstain_tau_20",
+        "kind": "support_abstain_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "epsilon_decay_steps": 10000
+        }
+      },
+      {
+        "name": "fuzzy_support_adaptive",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "fuzzy_tau_support": 20,
+          "fuzzy_uncertainty_scale": 1.0,
+          "fuzzy_abstain_zero_support": false,
+          "epsilon_decay_steps": 10000
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+original_selected_dqn,return_auc,8,1.75,2.0,1.0,2.0
+validated_dqn,return_auc,8,1.25,1.0,1.0,2.0
+original_selected_dqn,success_rate_auc,8,1.8125,2.0,1.5,2.0
+validated_dqn,success_rate_auc,8,1.1875,1.0,1.0,1.5
+original_selected_dqn,mean_return,8,1.6875,1.75,1.0,2.0
+validated_dqn,mean_return,8,1.3125,1.25,1.0,2.0

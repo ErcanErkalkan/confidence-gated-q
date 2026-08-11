@@ -1,0 +1,111 @@
+experiment_name: asoc_fuzzy_ablation_30seed
+output_dir: results/fuzzy_ablation
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+seeds: [600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629]
+evaluation:
+  interval_steps: 2000
+  episodes: 30
+analysis:
+  primary_metric: return_auc
+  analysis_status: main_confirmatory_fuzzy_ablation
+  planned_contrasts:
+    - name: no_td_residual_vs_full
+      left: fuzzy_no_td_residual
+      right: fuzzy_support_adaptive
+      metric: return_auc
+    - name: no_count_vs_full
+      left: fuzzy_no_count
+      right: fuzzy_support_adaptive
+      metric: return_auc
+    - name: no_confidence_vs_full
+      left: fuzzy_no_confidence
+      right: fuzzy_support_adaptive
+      metric: return_auc
+    - name: crisp_threshold_vs_full
+      left: crisp_threshold_gate
+      right: fuzzy_support_adaptive
+      metric: return_auc
+envs:
+  - name: ApplicationNavigation-deployment-goal-shift
+    id: ApplicationNavigationSupportShift-v0
+    kwargs:
+      goal_split: train
+      slip_probability: 0.05
+      max_steps: 120
+    eval_kwargs:
+      goal_split: deployment
+    training_steps: 12000
+    max_steps: 120
+    success_mode: positive_terminal
+agents:
+  - name: fuzzy_no_td_residual
+    kind: fuzzy_support_adaptive_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      fuzzy_tau_support: 20
+      fuzzy_uncertainty_scale: 1.0
+      fuzzy_ablation_mode: no_td_residual
+      fuzzy_abstain_zero_support: false
+      epsilon_decay_steps: 10000
+  - name: fuzzy_no_count
+    kind: fuzzy_support_adaptive_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      fuzzy_tau_support: 20
+      fuzzy_uncertainty_scale: 1.0
+      fuzzy_ablation_mode: no_count
+      fuzzy_abstain_zero_support: false
+      epsilon_decay_steps: 10000
+  - name: fuzzy_no_confidence
+    kind: fuzzy_support_adaptive_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      fuzzy_tau_support: 20
+      fuzzy_uncertainty_scale: 1.0
+      fuzzy_ablation_mode: no_confidence
+      fuzzy_abstain_zero_support: false
+      epsilon_decay_steps: 10000
+  - name: crisp_threshold_gate
+    kind: fuzzy_support_adaptive_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      fuzzy_tau_support: 20
+      fuzzy_uncertainty_scale: 1.0
+      fuzzy_ablation_mode: crisp_threshold
+      fuzzy_abstain_zero_support: false
+      epsilon_decay_steps: 10000

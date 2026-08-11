@@ -1,0 +1,79 @@
+{
+  "format": "gzip_csv_parts_by_environment_and_agent",
+  "parts": [
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-020-confirmatory__count_gate.csv.gz",
+      "sha256": "8a9d817dcae3cdc0d9221f587beca38d26afb7a746d603b85a38aec1286f29e6",
+      "bytes": 17904661,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-020-confirmatory__fuzzy_shift_crisp.csv.gz",
+      "sha256": "cd75ec97f4e4113cb38d1a0d8e0207fb186b14da809336ac822b1073ed7fa8fe",
+      "bytes": 20651057,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-020-confirmatory__fuzzy_shift_full.csv.gz",
+      "sha256": "3b6727461e4bbe37088e427749e64b4a014a4f9af84bf29da7c1e96a066c9528",
+      "bytes": 24944418,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-020-confirmatory__fuzzy_shift_no_reliability.csv.gz",
+      "sha256": "d3a4546a19218f219cd00d887c85f5ddf83fbf2a3bfd270a3ae66a8d895d8d62",
+      "bytes": 22512782,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-020-confirmatory__fuzzy_shift_no_support.csv.gz",
+      "sha256": "6ff9b8385d40eca05e9740398416f0a09213647d35d3a88cba4f0470f94042e7",
+      "bytes": 23835366,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-020-confirmatory__original_fuzzy.csv.gz",
+      "sha256": "883b678cd0deaa5585eacf83baf4f41d1000b3c8c411ea8330f6c2df5614d7cc",
+      "bytes": 26411600,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-030-confirmatory__count_gate.csv.gz",
+      "sha256": "95d31c1573a6c5da0fdfe33a96debaefbcbc644005ac9bb29249fbcebfb9f0ec",
+      "bytes": 17902389,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-030-confirmatory__fuzzy_shift_crisp.csv.gz",
+      "sha256": "634288273fb94f2b72c1370599f8dddbee25ac41bbdb84d64dfacb2c2d69dae8",
+      "bytes": 20595392,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-030-confirmatory__fuzzy_shift_full.csv.gz",
+      "sha256": "d8168c3a0d63a576c789d6a97d19613c30f40824a3c3457b3bff526f61960029",
+      "bytes": 24926202,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-030-confirmatory__fuzzy_shift_no_reliability.csv.gz",
+      "sha256": "2ddca5cbe3d96dacd29158772e480adf2326abadbb78a3eafe2a4f3bb960981f",
+      "bytes": 22486006,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-030-confirmatory__fuzzy_shift_no_support.csv.gz",
+      "sha256": "71237159fae09be97d6b21a121be41121e47f2f2ff097fae831c41197e8e1a1d",
+      "bytes": 23833255,
+      "run_shards": 30
+    },
+    {
+      "path": "raw_parts/ReliabilityShift-boundary-030-confirmatory__original_fuzzy.csv.gz",
+      "sha256": "e3cb16961cdd10d96f61a1ac04b63b805d88247cab4fc4330232ad61d2b0c5b4",
+      "bytes": 26375480,
+      "run_shards": 30
+    }
+  ],
+  "total_parts": 12,
+  "total_run_shards": 360
+}

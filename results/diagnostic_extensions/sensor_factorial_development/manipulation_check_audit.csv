@@ -1,0 +1,9 @@
+condition,noise_effect,latency_effect,localization_dropout_effect,range_dropout_effect,camera_dropout_effect,visibility_effect,localization_error_mean,effective_latency_mean,localization_dropout_rate,range_dropout_rate,camera_dropout_rate,target_visibility_rate,audit_status
+no_noise_no_delay_no_dropout,True,True,True,True,True,True,0.0,0.0,0.0,0.0,0.0,1.0,PASS
+noise_only,True,True,True,True,True,True,0.03261270737057198,0.0,0.0,0.0,0.0,1.0,PASS
+latency_only,True,True,True,True,True,True,0.003864338342492553,0.030833333333333296,0.0,0.0,0.0,1.0,PASS
+localization_dropout_only,True,True,True,True,True,True,0.00010018791881519745,0.0008333333333333306,0.04375,0.0,0.0,1.0,PASS
+range_dropout_only,True,True,True,True,True,True,0.0,0.0,0.0,0.19375,0.0,1.0,PASS
+camera_dropout_only,True,True,True,True,True,True,0.0,0.0,0.0,0.0,0.06875,0.9312499999999999,PASS
+visibility_occlusion_only,True,True,True,True,True,True,0.0,0.0,0.0,0.0,0.0,0.3234375,PASS
+combined_executed_condition,True,True,True,True,True,True,0.03429848858941109,0.031666666666666635,0.04375,0.19375,0.0625,0.2984375,PASS

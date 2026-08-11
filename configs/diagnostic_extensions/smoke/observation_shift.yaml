@@ -1,0 +1,64 @@
+experiment_name: observation_shift_smoke
+output_dir: results/diagnostic_extensions/new_shift/smoke/observation_shift
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 6
+seeds: [11010, 11011]
+evaluation:
+  interval_steps: 6000
+  episodes: 4
+analysis:
+  primary_metric: normalized_return_auc
+  analysis_status: development_smoke_only_not_severity_selection
+  protocol_lock: configs/diagnostic_extensions/INDEPENDENT_SHIFT_PROTOCOL.yaml
+  mechanism_id: observation_shift
+  smoke_exception: >-
+    The locked onset, environment, first severity candidate, agents, and seed
+    reservation are preserved. The smoke ends at 12020 interactions and uses
+    four evaluation episodes; it is not evidence or severity-selection input.
+  final_seed_ranges_prohibited: [12000-12099]
+  planned_contrasts: []
+envs:
+  - name: Observation-shift-smoke
+    id: ObservationShift-v0
+    kwargs:
+      size: 9
+      goal_split: all
+      max_steps: 160
+      shift_after: 12000
+      slip_probability: 0.10
+      pre_shift_sensor_gain: 1.0
+      post_shift_sensor_gain: 0.85
+    training_steps: 12020
+    max_steps: 160
+    success_mode: positive_terminal
+agents:
+  - name: relative_reliability_fuzzy
+    kind: fuzzy_reliability_gate
+    params: &common
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      tau: 20
+      fuzzy_tau_support: 20
+      reliability_beta: 0.05
+      reliability_prior_strength: 5
+      reliability_epsilon: 1.0e-8
+      epsilon_decay_steps: 20000
+      fuzzy_reliability_consequents: [0.0, 0.20, 0.70, 0.10, 0.95]
+  - name: count_gated_tau_20
+    kind: count_gated
+    params: *common
+  - name: same_input_crisp
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *common
+      fuzzy_risk_ablation_mode: crisp_threshold
+      fuzzy_crisp_support_threshold: 0.5

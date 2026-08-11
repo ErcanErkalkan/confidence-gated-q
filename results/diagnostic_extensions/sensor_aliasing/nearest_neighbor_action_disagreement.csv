@@ -1,0 +1,5 @@
+environment,agent,seed,phase,eligible_decision_count,disagreement_count,nearest_neighbor_action_disagreement_rate,status,reason_if_unavailable
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,15000,eval,0,0,,not_available,nearest/current tabular actions unavailable
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,15001,eval,0,0,,not_available,nearest/current tabular actions unavailable
+Crazyflie-sensorized-aliasing-smoke,knn_support,15000,eval,80,3,0.0375,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15001,eval,80,0,0.0,available,

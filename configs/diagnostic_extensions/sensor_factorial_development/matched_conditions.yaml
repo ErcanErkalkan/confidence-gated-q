@@ -1,0 +1,142 @@
+experiment_name: sensor_factorial_development
+output_dir: results/diagnostic_extensions/sensor_factorial_development
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 4
+trace_logging:
+  enabled: true
+  phases: [eval]
+  compression: gzip
+  schema_version: sensorized_sil_trace_v1
+seeds: [15002, 15003]
+evaluation:
+  interval_steps: 40
+  episodes: 2
+analysis:
+  primary_metric: descriptive_sensor_factor_diagnostics
+  analysis_status: development_diagnostic_not_final_confirmation
+  planned_contrasts: []
+  final_seed_access: prohibited
+  fragmentation_latent_radius: 0.10
+  aliasing_observation_radius: 0.15
+  material_latent_distance: 0.30
+envs:
+  - &condition
+    name: no_noise_no_delay_no_dropout
+    id: SensorizedPyBulletUAVWaypoint-v0
+    kwargs: &environment
+      target_split: deployment
+      physics: pyb_drag
+      pyb_freq: 240
+      ctrl_freq: 60
+      action_repeat: 1
+      max_steps: 20
+      collective_delta_rpm: 220
+      tilt_radians: 0.10
+      goal_tolerance: 0.16
+      state_quantization: 0.05
+      lidar_range: 1.2
+      lidar_noise_std: 0.02
+      vio_position_noise_std: 0.02
+      vio_velocity_noise_std: 0.03
+      imu_attitude_noise_std: 0.008
+      localization_latency_steps: 2
+      localization_dropout_probability: 0.03
+      range_dropout_probability: 0.02
+      sensor_bias_walk_std: 0.0007
+      camera_fov_degrees: 100
+      camera_dropout_probability: 0.05
+      initial_position_jitter: 0.04
+      initial_attitude_jitter: 0.03
+      wind_force_std: 0.002
+      lambda_collision: 1.0
+      lambda_idle: 0.05
+      sensor_noise_enabled: false
+      sensor_latency_enabled: false
+      localization_dropout_enabled: false
+      range_dropout_enabled: false
+      camera_dropout_enabled: false
+      visibility_occlusion_enabled: false
+    eval_kwargs: {}
+    training_steps: 80
+    max_steps: 20
+    success_mode: positive_terminal
+  - <<: *condition
+    name: noise_only
+    kwargs:
+      <<: *environment
+      sensor_noise_enabled: true
+  - <<: *condition
+    name: latency_only
+    kwargs:
+      <<: *environment
+      sensor_latency_enabled: true
+  - <<: *condition
+    name: localization_dropout_only
+    kwargs:
+      <<: *environment
+      localization_dropout_enabled: true
+  - <<: *condition
+    name: range_dropout_only
+    kwargs:
+      <<: *environment
+      range_dropout_enabled: true
+  - <<: *condition
+    name: camera_dropout_only
+    kwargs:
+      <<: *environment
+      camera_dropout_enabled: true
+  - <<: *condition
+    name: visibility_occlusion_only
+    kwargs:
+      <<: *environment
+      visibility_occlusion_enabled: true
+  - <<: *condition
+    name: combined_executed_condition
+    kwargs:
+      <<: *environment
+      sensor_noise_enabled: true
+      sensor_latency_enabled: true
+      localization_dropout_enabled: true
+      range_dropout_enabled: true
+      camera_dropout_enabled: true
+      visibility_occlusion_enabled: true
+agents:
+  - name: dqn
+    kind: dqn
+    params: &agent_common
+      double_dqn: false
+      learning_rate: 0.0005
+      batch_size: 16
+      replay_capacity: 1000
+      replay_warmup: 32
+      train_frequency: 4
+      target_update_interval: 40
+      hidden_size: 64
+      epsilon_decay_steps: 80
+  - name: fuzzy_relative_reliability
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *agent_common
+      tabular_learning_rate: 0.2
+      fuzzy_tau_support: 4
+      fuzzy_abstain_zero_support: false
+      reliability_beta: 0.05
+      reliability_prior_strength: 5
+      reliability_epsilon: 1.0e-8
+  - name: selected_approximate_support
+    kind: support_estimator_gate
+    params:
+      <<: *agent_common
+      tabular_learning_rate: 0.2
+      support_estimator_type: gaussian_affinity
+      support_representation_type: raw_state
+      support_index_type: brute_force
+      approximate_support_k: 3
+      approximate_support_bandwidth: 0.25
+      approximate_support_tau: 1.0
+      support_covariance_regularization: 0.0001
+  - name: sensorized_controller
+    kind: uav_sensorized_motor_controller
+    params: {}

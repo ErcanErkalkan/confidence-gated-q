@@ -1,0 +1,107 @@
+experiment_name: asoc_application_risk_variants_30seed
+output_dir: results/application_risk_variants
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+seeds: [600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629]
+evaluation:
+  interval_steps: 2000
+  episodes: 30
+analysis:
+  primary_metric: risk_adjusted_score
+  analysis_status: main_confirmatory_application_fallback_ablation
+  risk_objective: J_risk = success_rate - 1.0 * collision_rate - 0.1 * idle_rate
+  planned_contrasts:
+    - name: no_hold_vs_hold_penalized
+      left: support_no_hold
+      right: support_hold_penalized
+      metric: risk_adjusted_score
+    - name: shortest_path_vs_hold_penalized
+      left: support_shortest_path
+      right: support_hold_penalized
+      metric: risk_adjusted_score
+    - name: verified_safe_vs_hold_penalized
+      left: support_verified_safe
+      right: support_hold_penalized
+      metric: risk_adjusted_score
+envs:
+  - name: ApplicationNavigation-risk-adjusted-fallbacks
+    id: ApplicationNavigationSupportShift-v0
+    kwargs:
+      goal_split: train
+      slip_probability: 0.05
+      max_steps: 120
+      hold_penalty: 0.05
+      lambda_collision: 1.0
+      lambda_idle: 0.1
+    eval_kwargs:
+      goal_split: deployment
+    training_steps: 12000
+    max_steps: 120
+    success_mode: positive_terminal
+agents:
+  - name: support_hold_penalized
+    kind: support_abstain_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      tau: 20
+      abstain_action: 4
+      fallback_policy: hold
+      epsilon_decay_steps: 10000
+  - name: support_no_hold
+    kind: support_abstain_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      tau: 20
+      abstain_action: 4
+      fallback_policy: no_hold
+      epsilon_decay_steps: 10000
+  - name: support_shortest_path
+    kind: support_abstain_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      tau: 20
+      abstain_action: 4
+      fallback_policy: shortest_path
+      epsilon_decay_steps: 10000
+  - name: support_verified_safe
+    kind: support_abstain_gate
+    params:
+      double_dqn: false
+      learning_rate: 0.0003
+      tabular_learning_rate: 0.2
+      batch_size: 32
+      replay_capacity: 100000
+      replay_warmup: 512
+      train_frequency: 16
+      target_update_interval: 500
+      hidden_size: 128
+      tau: 20
+      abstain_action: 4
+      fallback_policy: verified_safe
+      epsilon_decay_steps: 10000

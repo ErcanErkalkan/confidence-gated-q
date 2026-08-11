@@ -1,0 +1,557 @@
+schema_version: 2
+protocol_id: independent_shift_replication
+lock_status: finalized_locked_design
+locked_at: '2026-08-03T07:45:22+03:00'
+locked_source_commit: 061241406e9d5175a99516ba337ab92e4726d7ce
+final_results_inspected: false
+purpose: Define the complete independent-shift experiment family, including development-only selection, finalized shift severities,
+  finalized fuzzy/crisp mappings, final seed sets, outcomes, contrasts, multiplicity control, detection-delay diagnostics,
+  and fail-closed execution rules.
+immutability:
+  status: locked
+  rule: The public protocol is the finalized scientific design for the executed experiment family. Scientific parameters,
+    seeds, budgets, contrasts, mappings, and stopping rules are fixed.
+seed_registry:
+  source_file: configs/diagnostic_extensions/independent_shift_seed_registry.yaml
+  development_registered_range: 11000-11099
+  final_registered_range: 12000-12099
+  unused_development_seeds_remain_reserved: 11030-11099
+  unused_final_seeds_remain_reserved: 12090-12099
+analysis_lock:
+  primary_metric:
+    metric_name: normalized_return_auc
+    window: post_shift_inclusive
+    definition: At each checkpoint, average undiscounted episodic return over the locked evaluation episodes. Starting with
+      the checkpoint at interaction 12000, integrate checkpoint means by the trapezoidal rule through interaction 24000 and
+      divide by 12000, the checkpoint-axis span. This is time-axis normalization and is not min-max reward scaling.
+    direction: higher_is_better
+  primary_contrast:
+    contrast_id: relative_reliability_fuzzy_vs_count_gated_tau_20
+    left: relative_reliability_fuzzy
+    right: count_gated_tau_20
+    alternative: two_sided
+    status: primary
+  co_primary_contrast:
+    contrast_id: same_input_crisp_vs_relative_reliability_fuzzy
+    left: same_input_crisp
+    right: relative_reliability_fuzzy
+    alternative: two_sided
+    status: co_primary_mechanism_contrast
+  secondary_diagnostics:
+    success_auc: Post-shift trapezoidal success-rate AUC divided by the post-shift checkpoint span; higher is better.
+    failure_probability: Failed evaluation episodes divided by all finite evaluation episodes, reported by checkpoint and
+      post-shift aggregate; lower is better.
+    detection_delay: Training interactions from shift onset to the first of two consecutive checkpoints satisfying the predeclared
+      correct-detection criterion; non-detections are retained as right-censored/not-detected.
+    branch_correctness: Evaluation-only rate at which the score-predicted better branch matches the actually better branch
+      when an analytic or enumerated oracle exists; unavailable otherwise and never synthesized.
+    lower_tail_summaries: Seed-level minimum return, lower quantiles, worst-decile mean, and empirical lower CVaR at alpha
+      0.10, with alpha 0.05 sensitivity only where sample size is sufficient. Episode-level summaries remain labeled separately
+      when raw episode rows exist.
+  secondary_inference_policy:
+    status: descriptive_diagnostic
+    p_values: prohibited
+    uncertainty: seed_bootstrap_intervals_where_defined
+    promotion_to_confirmatory: not_permitted_post_execution
+  uncertainty_unit: seed
+  pairing: exact_seed_with_common_evaluation_seed_schedule
+  confidence_interval: paired_seed_bootstrap_95_percent
+  bootstrap_samples: 10000
+  inferential_tests:
+    primary: paired_t_two_sided
+    sensitivity: wilcoxon_signed_rank_two_sided
+  missing_metric_policy: report_not_available_with_reason
+  detection_delay_criterion:
+    aggregation_unit: agent_seed_checkpoint
+    eligible_episode_definition: An evaluation episode is eligible only when actually_better_branch is exactly tabular or
+      neural. Ties and unavailable targets are excluded from this diagnostic denominator, never converted to errors.
+    correct_episode_definition: predicted_better_branch_equals_actually_better_branch
+    minimum_eligible_episodes_per_checkpoint: 20
+    checkpoint_is_correct_when: branch_correctness_rate_strictly_greater_than_0_50
+    consecutive_checkpoint_requirement: 2
+    search_window: checkpoints_12000_through_24000_inclusive
+    reported_detection_checkpoint: first_checkpoint_of_first_qualifying_pair
+    delay_definition: detection_checkpoint_minus_12000_training_interactions
+    no_qualifying_pair: right_censored_not_detected_at_24000
+    unavailable_rule: If analytic optimal-action evidence is unavailable or fewer than 20 eligible episodes exist at every
+      post-shift checkpoint, detection delay is reported unavailable with the reason; it is not synthesized.
+agent_lock:
+  agents:
+  - name: relative_reliability_fuzzy
+    role: focal_method
+    gate: fuzzy_relative_reliability
+    gate_inputs:
+    - normalized_support
+    - relative_reliability_score
+  - name: count_gated_tau_20
+    role: primary_comparator
+    gate: exact_count_threshold
+    tau: 20
+  - name: same_input_crisp
+    role: co_primary_mechanism_comparator
+    gate: crisp_threshold_on_same_inputs
+    gate_inputs:
+    - normalized_support
+    - relative_reliability_score
+  common_parameters:
+    double_dqn: false
+    learning_rate: 0.0003
+    tabular_learning_rate: 0.2
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    tau: 20
+    fuzzy_tau_support: 20
+    reliability_beta: 0.05
+    reliability_prior_strength: 5
+    reliability_epsilon: 1.0e-08
+    epsilon_decay_steps: 20000
+  relative_reliability_fuzzy_parameters:
+    selected_candidate_id: fuzzy_triangular_balanced
+    membership_family: triangular
+    support_breakpoints: &id001
+    - 0.0
+    - 0.5
+    - 1.0
+    reliability_breakpoints: &id002
+    - 0.0
+    - 0.5
+    - 1.0
+    fuzzy_reliability_consequents: &id003
+    - 0.0
+    - 0.2
+    - 0.7
+    - 0.1
+    - 0.95
+    gate_min: 0.05
+    gate_max: 0.95
+    fuzzy_fallback_risk_mode: disabled
+    fuzzy_risk_ablation_mode: full
+  same_input_crisp_parameters:
+    selected_candidate_id: crisp_s070_r030
+    mapping: same_input_crisp_threshold
+    support_threshold: 0.7
+    relative_reliability_threshold: 0.3
+    gate_min: 0.05
+    gate_max: 0.95
+    fuzzy_fallback_risk_mode: disabled
+    fuzzy_risk_ablation_mode: crisp_threshold
+  fairness_rules:
+  - Identical network architecture, optimizer, replay, update schedule, and exploration schedule.
+  - Identical interaction, checkpoint, and evaluation budgets within a mechanism.
+  - Identical training and evaluation seed sets within every planned contrast.
+  - No agent hyperparameter may be selected from the new development shift outcomes.
+  descriptive_comparators:
+  - name: tabular
+    kind: tabular
+    inferential_role: descriptive_only
+  - name: dqn
+    kind: dqn
+    inferential_role: descriptive_only
+development_selection:
+  seed_scope: development_seeds_only
+  selection_metric: post_shift_success_auc
+  selection_uses_p_values: false
+  final_seed_results_used: false
+  selected_severities:
+    transition_dynamics_shift: transition_slip_035
+    observation_shift: observation_gain_085
+    localized_multistep_reward_or_policy_shift: localized_risk_penalty_064
+  mapping_selection_rule:
+    locked_before_outcomes: true
+    unit: candidate_within_mapping_family
+    environment_score: mean primary metric across the ten locked development seeds
+    environment_rank: descending environment score, average ranks for exact ties
+    ordered_criteria:
+    - lowest_mean_environment_rank
+    - lowest_worst_environment_rank
+    - lower_median_warm_cpu_mapping_latency_ns
+    - lexical_candidate_id
+    p_values_used: false
+    final_seed_results_used: false
+  selected_mappings:
+    relative_reliability_fuzzy: fuzzy_triangular_balanced
+    same_input_crisp: crisp_s070_r030
+report_level_holm_families:
+- family_id: independent_shift_primary
+  evidence_class: replication
+  scope: report_level
+  correction: holm
+  primary_test: paired_t_two_sided
+  sensitivity_test: wilcoxon_signed_rank_two_sided_with_same_membership
+  expected_member_count: 6
+  note: Correct the six final normalized-return-AUC rows together. The paired-t and Wilcoxon streams use separate Holm vectors
+    with identical membership.
+  members:
+  - mechanism_id: transition_dynamics_shift
+    contrast_id: relative_reliability_fuzzy_vs_count_gated_tau_20
+    metric: normalized_return_auc
+  - mechanism_id: transition_dynamics_shift
+    contrast_id: same_input_crisp_vs_relative_reliability_fuzzy
+    metric: normalized_return_auc
+  - mechanism_id: observation_shift
+    contrast_id: relative_reliability_fuzzy_vs_count_gated_tau_20
+    metric: normalized_return_auc
+  - mechanism_id: observation_shift
+    contrast_id: same_input_crisp_vs_relative_reliability_fuzzy
+    metric: normalized_return_auc
+  - mechanism_id: localized_multistep_reward_or_policy_shift
+    contrast_id: relative_reliability_fuzzy_vs_count_gated_tau_20
+    metric: normalized_return_auc
+  - mechanism_id: localized_multistep_reward_or_policy_shift
+    contrast_id: same_input_crisp_vs_relative_reliability_fuzzy
+    metric: normalized_return_auc
+mechanisms:
+- mechanism_id: transition_dynamics_shift
+  independence_class: transition_kernel_only
+  environment_definition:
+    base_environment_id: StructuredFourRooms-v0
+    size: 9
+    goal_split: all
+    max_episode_steps: 160
+    action_count: 4
+    observation: normalized_agent_and_goal_coordinates
+    reward: terminal_1_step_minus_0.01_wall_step_minus_0.02
+    pre_shift_slip_probability: 0.05
+  what_changes:
+  - At interaction 12000, the probability that the requested action is replaced by a uniformly sampled action changes from
+    0.05 to the development-selected post-shift value.
+  what_remains_fixed:
+  - grid topology and doors
+  - state and action spaces
+  - observation mapping
+  - goal and start distributions
+  - reward function and episode horizon
+  - agent parameters and all budgets
+  shift_onset:
+    training_interaction: 12000
+    boundary_semantics: regime_switch_after_completing_interaction_12000
+    first_post_shift_training_interaction: 12001
+    checkpoint_12000_evaluation_regime: post_shift
+  development_severity_candidates:
+  - severity_id: transition_slip_015
+    post_shift_slip_probability: 0.15
+  - severity_id: transition_slip_025
+    post_shift_slip_probability: 0.25
+  - severity_id: transition_slip_035
+    post_shift_slip_probability: 0.35
+  development_seeds:
+    start: 11000
+    end: 11009
+    count: 10
+    registry_key: new_shift_development
+  final_seeds:
+    start: 12000
+    end: 12029
+    count: 30
+    registry_key: new_shift_final
+  training_interaction_budget:
+    per_agent_seed: 24000
+    pre_shift: 12000
+    post_shift: 12000
+    budget_type: environment_interactions
+  checkpoint_schedule:
+    first: 1000
+    last: 24000
+    interval: 1000
+    expected_count: 24
+    primary_window_first: 12000
+  evaluation_episodes: 200
+  primary_metric: normalized_return_auc
+  primary_contrast:
+    contrast_id: relative_reliability_fuzzy_vs_count_gated_tau_20
+    left: relative_reliability_fuzzy
+    right: count_gated_tau_20
+    alternative: two_sided
+    status: primary
+  co_primary_contrast:
+    contrast_id: same_input_crisp_vs_relative_reliability_fuzzy
+    left: same_input_crisp
+    right: relative_reliability_fuzzy
+    alternative: two_sided
+    status: co_primary_mechanism_contrast
+  secondary_diagnostics:
+  - success_auc
+  - failure_probability
+  - detection_delay
+  - branch_correctness
+  - lower_tail_summaries
+  report_level_holm_family: independent_shift_primary
+  exclusion_rules:
+    outcome_based_exclusion: prohibited
+    outlier_exclusion: prohibited
+    technical_exclusion: Missing, corrupt, duplicate, or non-finite required rows make the agent-seed run incomplete; rerun
+      the identical config and seed.
+    persistent_failure: blocks_analysis
+    seed_replacement: prohibited
+  stopping_rules:
+    sequential_efficacy_or_futility_stopping: prohibited
+    development: complete_all_candidates_and_development_seeds
+    final: complete_exactly_all_30_paired_final_seeds
+    sample_size_extension_after_inspection: prohibited
+    technical_pause: required_on_schema_nonfinite_or_checkpoint_failure
+  selected_final_severity: transition_slip_035
+  final_environment_id: TransitionDynamicsShift-v0
+- mechanism_id: observation_shift
+  independence_class: observation_function_only
+  environment_definition:
+    base_environment_id: StructuredFourRooms-v0
+    size: 9
+    goal_split: all
+    max_episode_steps: 160
+    action_count: 4
+    transition_slip_probability: 0.1
+    reward: terminal_1_step_minus_0.01_wall_step_minus_0.02
+    latent_observation: normalized_agent_and_goal_coordinates
+    pre_shift_sensor_gain: 1.0
+    sensor_transform: 0.5 + gain * (latent_observation - 0.5)
+  what_changes:
+  - At interaction 12000, a deterministic gain below one compresses all four observed coordinate channels around 0.5; the
+    latent state is not changed and the transform remains within [0,1].
+  what_remains_fixed:
+  - latent transition kernel and slip probability
+  - grid topology and doors
+  - action space
+  - latent goal and start distributions
+  - reward function and episode horizon
+  - agent parameters and all budgets
+  shift_onset:
+    training_interaction: 12000
+    boundary_semantics: regime_switch_after_completing_interaction_12000
+    first_post_shift_training_interaction: 12001
+    checkpoint_12000_evaluation_regime: post_shift
+  development_severity_candidates:
+  - severity_id: observation_gain_085
+    post_shift_sensor_gain: 0.85
+  - severity_id: observation_gain_070
+    post_shift_sensor_gain: 0.7
+  - severity_id: observation_gain_055
+    post_shift_sensor_gain: 0.55
+  development_seeds:
+    start: 11010
+    end: 11019
+    count: 10
+    registry_key: new_shift_development
+  final_seeds:
+    start: 12030
+    end: 12059
+    count: 30
+    registry_key: new_shift_final
+  training_interaction_budget:
+    per_agent_seed: 24000
+    pre_shift: 12000
+    post_shift: 12000
+    budget_type: environment_interactions
+  checkpoint_schedule:
+    first: 1000
+    last: 24000
+    interval: 1000
+    expected_count: 24
+    primary_window_first: 12000
+  evaluation_episodes: 200
+  primary_metric: normalized_return_auc
+  primary_contrast:
+    contrast_id: relative_reliability_fuzzy_vs_count_gated_tau_20
+    left: relative_reliability_fuzzy
+    right: count_gated_tau_20
+    alternative: two_sided
+    status: primary
+  co_primary_contrast:
+    contrast_id: same_input_crisp_vs_relative_reliability_fuzzy
+    left: same_input_crisp
+    right: relative_reliability_fuzzy
+    alternative: two_sided
+    status: co_primary_mechanism_contrast
+  secondary_diagnostics:
+  - success_auc
+  - failure_probability
+  - detection_delay
+  - branch_correctness
+  - lower_tail_summaries
+  report_level_holm_family: independent_shift_primary
+  exclusion_rules:
+    outcome_based_exclusion: prohibited
+    outlier_exclusion: prohibited
+    technical_exclusion: Missing, corrupt, duplicate, or non-finite required rows make the agent-seed run incomplete; rerun
+      the identical config and seed.
+    persistent_failure: blocks_analysis
+    seed_replacement: prohibited
+  stopping_rules:
+    sequential_efficacy_or_futility_stopping: prohibited
+    development: complete_all_candidates_and_development_seeds
+    final: complete_exactly_all_30_paired_final_seeds
+    sample_size_extension_after_inspection: prohibited
+    technical_pause: required_on_schema_nonfinite_or_checkpoint_failure
+  selected_final_severity: observation_gain_085
+  final_environment_id: ObservationShift-v0
+- mechanism_id: localized_multistep_reward_or_policy_shift
+  independence_class: localized_reward_function_only
+  environment_definition:
+    base_environment_id: ApplicationNavigationSupportShift-v0
+    size: 9
+    goal_split: deployment
+    max_episode_steps: 120
+    action_count: 5
+    transition_slip_probability: 0.05
+    observation: normalized_agent_and_goal_coordinates
+    start_cells:
+    - - 1
+      - 3
+    - - 3
+      - 1
+    - - 5
+      - 7
+    - - 7
+      - 5
+    goal_cells:
+    - - 1
+      - 1
+    - - 7
+      - 1
+    - - 1
+      - 7
+    - - 7
+      - 7
+    - - 5
+      - 5
+    localized_risk_cells:
+    - - 2
+      - 2
+    - - 2
+      - 6
+    - - 6
+      - 2
+    - - 6
+      - 6
+    pre_shift_risk_penalty: 0.08
+    base_step_penalty: 0.02
+    collision_penalty: 0.23
+    terminal_reward: 5.0
+  what_changes:
+  - At interaction 12000, only the per-step penalty in the four locked risk cells changes from 0.08 to the development-selected
+    value. This local reward change may alter optimal multi-step routes.
+  what_remains_fixed:
+  - transition kernel and slip probability
+  - grid topology, risk-cell locations, starts, and goals
+  - state, observation, and action spaces
+  - all rewards outside the locked risk cells
+  - episode horizon
+  - agent parameters and all budgets
+  shift_onset:
+    training_interaction: 12000
+    boundary_semantics: regime_switch_after_completing_interaction_12000
+    first_post_shift_training_interaction: 12001
+    checkpoint_12000_evaluation_regime: post_shift
+  development_severity_candidates:
+  - severity_id: localized_risk_penalty_016
+    post_shift_risk_penalty: 0.16
+  - severity_id: localized_risk_penalty_032
+    post_shift_risk_penalty: 0.32
+  - severity_id: localized_risk_penalty_064
+    post_shift_risk_penalty: 0.64
+  development_seeds:
+    start: 11020
+    end: 11029
+    count: 10
+    registry_key: new_shift_development
+  final_seeds:
+    start: 12060
+    end: 12089
+    count: 30
+    registry_key: new_shift_final
+  training_interaction_budget:
+    per_agent_seed: 24000
+    pre_shift: 12000
+    post_shift: 12000
+    budget_type: environment_interactions
+  checkpoint_schedule:
+    first: 1000
+    last: 24000
+    interval: 1000
+    expected_count: 24
+    primary_window_first: 12000
+  evaluation_episodes: 200
+  primary_metric: normalized_return_auc
+  primary_contrast:
+    contrast_id: relative_reliability_fuzzy_vs_count_gated_tau_20
+    left: relative_reliability_fuzzy
+    right: count_gated_tau_20
+    alternative: two_sided
+    status: primary
+  co_primary_contrast:
+    contrast_id: same_input_crisp_vs_relative_reliability_fuzzy
+    left: same_input_crisp
+    right: relative_reliability_fuzzy
+    alternative: two_sided
+    status: co_primary_mechanism_contrast
+  secondary_diagnostics:
+  - success_auc
+  - failure_probability
+  - detection_delay
+  - branch_correctness
+  - lower_tail_summaries
+  report_level_holm_family: independent_shift_primary
+  exclusion_rules:
+    outcome_based_exclusion: prohibited
+    outlier_exclusion: prohibited
+    technical_exclusion: Missing, corrupt, duplicate, or non-finite required rows make the agent-seed run incomplete; rerun
+      the identical config and seed.
+    persistent_failure: blocks_analysis
+    seed_replacement: prohibited
+  stopping_rules:
+    sequential_efficacy_or_futility_stopping: prohibited
+    development: complete_all_candidates_and_development_seeds
+    final: complete_exactly_all_30_paired_final_seeds
+    sample_size_extension_after_inspection: prohibited
+    technical_pause: required_on_schema_nonfinite_or_checkpoint_failure
+  selected_final_severity: localized_risk_penalty_064
+  final_environment_id: LocalizedRewardShift-v0
+execution_preconditions:
+  finalized_design_checks:
+  - seed_registry_matches_protocol
+  - selected_severities_match_finalized_selection
+  - selected_mappings_match_finalized_selection
+  - configuration_budgets_match_protocol
+  - evaluation_does_not_update_estimators
+  output_policy:
+    path: results/diagnostic_extensions/final_shifts/execution
+    overwrite_completed_shards: prohibited
+    analyze_only_after_all_three_mechanisms_complete: true
+provenance:
+  historical_source_digests:
+    base_design_sha256: 1562995a953f80a39b0328df148fae8537f4194fd57f8978be2a0fde8138ac64
+    design_change_record_1_sha256: fbc9a04356eef964d8f88f90c5db599e9253fd43f68214c98cdf76aea685ebf0
+    design_change_record_2_sha256: f051e5e8f32c3452e42f69048c98b6e0552061658ae8bce96aa38d5998966a15
+    development_severity_selection_sha256: 0310fbd43ccbe0557c3733fc87a8de559ef5faf258c602b8ba978efea8f40a5b
+    development_mapping_selection_sha256: e8e0ec622e0e1e3021bc5ba434c50d999a656e8e966063398a1417223ebca7f6
+  historical_source_commit: 061241406e9d5175a99516ba337ab92e4726d7ce
+  note: Historical source records are preserved outside the public scientific tree. The public protocol consolidates the final
+    locked values used by the executed family.
+finalized_selection:
+  selected_severities:
+    transition_dynamics_shift: transition_slip_035
+    observation_shift: observation_gain_085
+    localized_multistep_reward_or_policy_shift: localized_risk_penalty_064
+  relative_reliability_fuzzy:
+    candidate_id: fuzzy_triangular_balanced
+    membership_family: triangular
+    support_breakpoints: *id001
+    reliability_breakpoints: *id002
+    consequents: *id003
+    gate_min: 0.05
+    gate_max: 0.95
+    fallback_risk_mapping: disabled
+  same_input_crisp:
+    candidate_id: crisp_s070_r030
+    support_threshold: 0.7
+    reliability_threshold: 0.3
+    gate_min: 0.05
+    gate_max: 0.95
+    fallback_risk_mapping: disabled
+  descriptive_comparators:
+  - tabular
+  - dqn
+  final_seed_results_used_for_selection: false

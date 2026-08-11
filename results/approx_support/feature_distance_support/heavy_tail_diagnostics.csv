@@ -1,0 +1,3 @@
+environment,agent,metric,n_seeds,minimum,maximum,median,mad,skew,excess_kurtosis,catastrophic_low_outliers,catastrophic_high_outliers,heavy_tail_flag
+ApplicationNavigation-deployment-goal-shift,feature_distance_support_gate,return_auc,30,-5.542033333333333,-1.5114000000000003,-2.5545166666666663,0.6753166666666669,-0.7437790816161826,0.3285621296117123,0,0,False
+ApplicationNavigation-deployment-goal-shift,feature_distance_support_gate,mean_return,30,-10.280333333333333,0.4296666666666679,-2.6134999999999997,1.3186666666666662,-1.0938248571910478,2.0585980223233458,0,0,False

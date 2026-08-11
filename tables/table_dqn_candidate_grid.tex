@@ -1,0 +1,17 @@
+\begin{table}
+\caption{Complete DQN development candidate grid.}
+\label{tab:dqn-candidate-grid}
+\begin{tabular}{llrrrrrrrrrrlrrll}
+\toprule
+candidate & algorithm & batch\_size & double\_dqn & epsilon\_decay\_steps & hidden\_size & learning\_rate & replay\_capacity & replay\_warmup & target\_update\_interval & train\_frequency & development\_environment\_count & seed\_set & evaluation\_interval\_steps & evaluation\_episodes & selection\_rule & source\_config \\
+\midrule
+vanilla\_dqn\_h64 & dqn & 32 & False & 12000 & 64 & 0.001000 & 50000 & 256 & 500 & 16 & 7 & [0,1,2,3,4] & 2500 & 20 & Select the lowest mean environment rank in return\_auc across all seven development environments. Break ties by lower worst-environment rank, then fewer gradient updates, then lexicographic agent name. & configs/dqn\_tuning\_development.json \\
+vanilla\_dqn\_h128 & dqn & 32 & False & 12000 & 128 & 0.001000 & 50000 & 256 & 500 & 16 & 7 & [0,1,2,3,4] & 2500 & 20 & Select the lowest mean environment rank in return\_auc across all seven development environments. Break ties by lower worst-environment rank, then fewer gradient updates, then lexicographic agent name. & configs/dqn\_tuning\_development.json \\
+vanilla\_dqn\_lr3e4\_h128 & dqn & 32 & False & 12000 & 128 & 0.000300 & 50000 & 256 & 500 & 16 & 7 & [0,1,2,3,4] & 2500 & 20 & Select the lowest mean environment rank in return\_auc across all seven development environments. Break ties by lower worst-environment rank, then fewer gradient updates, then lexicographic agent name. & configs/dqn\_tuning\_development.json \\
+vanilla\_dqn\_buffer100k & dqn & 32 & False & 12000 & 128 & 0.000300 & 100000 & 512 & 500 & 16 & 7 & [0,1,2,3,4] & 2500 & 20 & Select the lowest mean environment rank in return\_auc across all seven development environments. Break ties by lower worst-environment rank, then fewer gradient updates, then lexicographic agent name. & configs/dqn\_tuning\_development.json \\
+vanilla\_dqn\_target250 & dqn & 32 & False & 12000 & 128 & 0.000300 & 100000 & 512 & 250 & 16 & 7 & [0,1,2,3,4] & 2500 & 20 & Select the lowest mean environment rank in return\_auc across all seven development environments. Break ties by lower worst-environment rank, then fewer gradient updates, then lexicographic agent name. & configs/dqn\_tuning\_development.json \\
+vanilla\_dqn\_target1000 & dqn & 32 & False & 12000 & 128 & 0.000300 & 100000 & 512 & 1000 & 16 & 7 & [0,1,2,3,4] & 2500 & 20 & Select the lowest mean environment rank in return\_auc across all seven development environments. Break ties by lower worst-environment rank, then fewer gradient updates, then lexicographic agent name. & configs/dqn\_tuning\_development.json \\
+double\_dqn\_lr3e4\_h128 & double\_dqn & 32 & True & 12000 & 128 & 0.000300 & 100000 & 512 & 1000 & 16 & 7 & [0,1,2,3,4] & 2500 & 20 & Select the lowest mean environment rank in return\_auc across all seven development environments. Break ties by lower worst-environment rank, then fewer gradient updates, then lexicographic agent name. & configs/dqn\_tuning\_development.json \\
+\bottomrule
+\end{tabular}
+\end{table}

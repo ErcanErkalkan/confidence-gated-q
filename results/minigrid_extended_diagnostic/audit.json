@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "config": "configs\\minigrid_extended_diagnostic.json",
+  "result_dir": "results\\minigrid_extended_diagnostic",
+  "expected_runs": 420,
+  "observed_runs": 420,
+  "run_shards_present": 0,
+  "raw_rows": 215786,
+  "violations": [],
+  "files": {
+    "seed_metrics.csv": {
+      "sha256": "a853ab34ea844c63c6d9ba3d206d2a03bd8acfbee7bd8cede4e6c4ac054584cf",
+      "bytes": 196721
+    },
+    "summary.csv": {
+      "sha256": "c6b9bf82fcef8df550b04bf4e2b104d23829ac7d92430dedd654c732ceae7801",
+      "bytes": 59008
+    },
+    "pairwise.csv": {
+      "sha256": "9417254c2aa94935a06497ea85b57927ad04fff7ed008580df0d784d79d35cc4",
+      "bytes": 94312
+    },
+    "planned_contrasts.csv": {
+      "sha256": "39229295b40b8732d8a49e928f384227533a194ed3fe4574157266b48ed57b74",
+      "bytes": 6306
+    },
+    "heavy_tail_diagnostics.csv": {
+      "sha256": "19c4c58e8017b788d9596aa317d6d4c99adf76fa49c7db17a8f5e7bee168f220",
+      "bytes": 10869
+    },
+    "cross_environment.csv": {
+      "sha256": "405d6eee34b34e722fef936b6b32b2bbd32ef6f55d432616917a4d8b9aca6b50",
+      "bytes": 1296
+    },
+    "metadata.json": {
+      "sha256": "a50a30f2ba8fa04275fc7a3e064d53cc1ca8313882b7a8d7faee21be37e4684e",
+      "bytes": 7420
+    },
+    "raw.csv.gz": {
+      "sha256": "231283b98cae78b85e04b342f0dcbab3ec2ccf595b594a139cb063eb167a928b",
+      "bytes": 8302385
+    }
+  }
+}

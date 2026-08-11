@@ -1,0 +1,7 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+fuzzy_reliability,return_auc,1,1.5,1.5,1.5,1.5
+knn_support,return_auc,1,1.5,1.5,1.5,1.5
+fuzzy_reliability,success_rate_auc,1,1.5,1.5,1.5,1.5
+knn_support,success_rate_auc,1,1.5,1.5,1.5,1.5
+fuzzy_reliability,mean_return,1,1.5,1.5,1.5,1.5
+knn_support,mean_return,1,1.5,1.5,1.5,1.5

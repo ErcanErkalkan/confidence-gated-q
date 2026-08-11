@@ -1,0 +1,133 @@
+schema_version: 2
+registry_id: diagnostic_extension_seed_registry
+status: locked_public_reservations
+purpose: Reserve disjoint development and final seed ranges used by the public diagnostic
+  extensions.
+reserved_ranges:
+  reliability_calibration_development:
+    start: 10000
+    end: 10099
+    capacity: 100
+    status: partially_used
+    used_ranges:
+    - 10000-10004
+    used_by:
+    - configs/diagnostic_extensions/reliability_calibration/development_fractional.yaml
+    remaining_reserved_ranges:
+    - 10005-10099
+  new_shift_development:
+    start: 11000
+    end: 11099
+    capacity: 100
+    status: partially_used_for_smoke_mapping_and_severity_development
+    used_ranges:
+    - 11000-11029
+    used_by:
+    - configs/diagnostic_extensions/smoke/transition_dynamics_shift.yaml
+    - configs/diagnostic_extensions/smoke/observation_shift.yaml
+    - configs/diagnostic_extensions/smoke/localized_reward_shift.yaml
+    - configs/diagnostic_extensions/fuzzy_crisp_development.yaml
+    - configs/diagnostic_extensions/final_shifts/development_severity_selection.yaml
+    use_class: development_smoke_comment7_mapping_and_locked_severity_selection
+    remaining_reserved_ranges:
+    - 11030-11099
+  new_shift_final:
+    start: 12000
+    end: 12099
+    capacity: 100
+    status: partially_used_for_locked_final_replication
+    used_ranges:
+    - 12000-12029
+    - 12030-12059
+    - 12060-12089
+    - 12090-12099
+    used_by:
+    - configs/diagnostic_extensions/final_shifts/transition_dynamics_shift.yaml
+    - configs/diagnostic_extensions/final_shifts/observation_shift.yaml
+    - configs/diagnostic_extensions/final_shifts/localized_multistep_reward_or_policy_shift.yaml
+    - configs/diagnostic_extensions/reliability_calibration/independent_focal.yaml
+    use_class: locked_final_replication_and_comment2_independent_calibration
+    remaining_reserved_ranges: []
+  support_estimator_development:
+    start: 13000
+    end: 13099
+    capacity: 100
+    status: partially_used_for_matched_development
+    allocated_ranges:
+    - 13000-13004
+    allocated_by:
+    - configs/diagnostic_extensions/smoke/support_estimators.yaml
+    - configs/diagnostic_extensions/support_development/matched_candidates.yaml
+    used_ranges:
+    - 13000-13004
+    execution_status: completed_step10_matched_development
+    remaining_reserved_ranges:
+    - 13005-13099
+  support_estimator_final:
+    start: 14000
+    end: 14099
+    capacity: 100
+    status: partially_used_for_locked_final_evaluation
+    allocated_ranges:
+    - 14000-14029
+    - 14030-14059
+    - 14060-14089
+    allocated_by:
+    - configs/diagnostic_extensions/support_final/protocol_lock.yaml
+    environment_allocations:
+      application_goal_shift: 14000-14029
+      independent_observation_shift: 14030-14059
+      independent_transition_dynamics_shift: 14060-14089
+    used_ranges:
+    - 14000-14029
+    - 14030-14059
+    - 14060-14089
+    execution_status: completed_step11_independent_final_evaluation
+    remaining_reserved_ranges:
+    - 14090-14099
+  sensorized_sil_development:
+    start: 15000
+    end: 15099
+    capacity: 100
+    status: partially_used_for_development_diagnostics
+    allocated_ranges:
+    - 15000-15001
+    - 15002-15003
+    - 15004-15005
+    - 15006-15008
+    - 15009-15013
+    allocated_by:
+    - configs/diagnostic_extensions/smoke/sensor_aliasing.yaml
+    - configs/diagnostic_extensions/sensor_factorial_development/matched_conditions.yaml
+    - configs/diagnostic_extensions/temporal_interface_development/matched_design.yaml
+    - configs/diagnostic_extensions/sensor_nondegenerate_development/closure_lock.yaml
+    used_ranges:
+    - 15000-15001
+    - 15002-15003
+    - 15004-15005
+    execution_status: completed_steps13_14_and15_development
+    remaining_reserved_ranges:
+    - 15014-15099
+  sensorized_sil_final:
+    start: 16000
+    end: 16099
+    capacity: 100
+    status: partially_used_for_locked_final_and_safety_trace_reruns
+    allocated_ranges:
+    - 16000-16029
+    - 16030-16039
+    - 16040-16069
+    allocated_by:
+    - configs/diagnostic_extensions/sensorized_final/matched_final.yaml
+    - configs/diagnostic_extensions/safety_traces/matched_rerun.yaml
+    - configs/diagnostic_extensions/sensor_nondegenerate_development/closure_lock.yaml
+    used_ranges:
+    - 16000-16029
+    - 16030-16039
+    execution_status: completed_steps16_and17_sensorized_evidence
+    remaining_reserved_ranges:
+    - 16070-16099
+invariants:
+  reservations_overlap_existing_seed_union: false
+  unused_allocated_seeds_remain_reserved: true
+  seed_replacement_without_protocol_amendment: prohibited

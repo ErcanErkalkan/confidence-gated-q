@@ -1,0 +1,130 @@
+experiment_name: reliability_calibration_independent_focal_instrumentation_rerun
+output_dir: results/diagnostic_extensions/reliability_calibration_independent/execution_instrumentation_rerun
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+seeds:
+- 12090
+- 12091
+- 12092
+- 12093
+- 12094
+- 12095
+- 12096
+- 12097
+- 12098
+- 12099
+evaluation:
+  interval_steps: 250
+  episodes: 82
+analysis:
+  evidence_class: replication_calibration
+  protocol_id: independent_focal_calibration_2026_08_05
+  protocol_sha256: e371e0f8fc4195550df8912be474b6d41d70ecff09aa7cb0d993692716da781f
+  seed_registry_key: new_shift_final
+  primary_scope: post_shift_all
+  primary_metric: branch_action_auroc_post_shift
+  performance_superiority_claim: prohibited
+  instrumentation_amendment: configs/diagnostic_extensions/reliability_calibration/CALIBRATION_MEASUREMENT_AMENDMENT_2026-08-05.md
+  calibration_targets:
+    action_correctness: Binary target on evaluation rows where exactly one branch
+      greedy action equals the analytic optimal action; 1 means tabular is the correct
+      branch.
+    value_error: Binary target on evaluation rows with non-tied analytic full-action
+      Q* RMSE; 1 means the tabular branch has lower Q-vector RMSE.
+envs:
+- name: ReliabilityShift-boundary-030-independent-calibration
+  id: ReliabilityShiftBandit-v0
+  kwargs:
+    context_count: 41
+    regime: switch
+    shift_after: 2500
+    pre_boundary: 0.5
+    post_boundary: 0.3
+  eval_kwargs:
+    regime: switch
+  training_steps: 4000
+  max_steps: 1
+  success_mode: positive_terminal
+- name: ReliabilityShift-boundary-020-independent-calibration
+  id: ReliabilityShiftBandit-v0
+  kwargs:
+    context_count: 41
+    regime: switch
+    shift_after: 2500
+    pre_boundary: 0.5
+    post_boundary: 0.2
+  eval_kwargs:
+    regime: switch
+  training_steps: 4000
+  max_steps: 1
+  success_mode: positive_terminal
+agents:
+- name: relative_reliability_fuzzy
+  kind: fuzzy_reliability_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.001
+    tabular_learning_rate: 0.02
+    batch_size: 32
+    replay_capacity: 1000
+    replay_warmup: 128
+    train_frequency: 16
+    target_update_interval: 100
+    hidden_size: 32
+    tau: 20
+    fuzzy_tau_support: 20
+    reliability_beta: 0.05
+    reliability_prior_strength: 5
+    reliability_epsilon: 1.0e-08
+    epsilon_decay_steps: 3000
+    gate_min: 0.05
+    gate_max: 0.95
+    fuzzy_fallback_risk_mode: disabled
+    fuzzy_risk_ablation_mode: full
+    fuzzy_membership_shape: triangular
+    fuzzy_reliability_membership_shape: triangular
+    fuzzy_support_breakpoints: &id001
+    - 0.0
+    - 0.5
+    - 1.0
+    fuzzy_reliability_breakpoints: &id002
+    - 0.0
+    - 0.5
+    - 1.0
+    fuzzy_reliability_consequents: &id003
+    - 0.0
+    - 0.2
+    - 0.7
+    - 0.1
+    - 0.95
+- name: same_input_crisp
+  kind: fuzzy_reliability_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.001
+    tabular_learning_rate: 0.02
+    batch_size: 32
+    replay_capacity: 1000
+    replay_warmup: 128
+    train_frequency: 16
+    target_update_interval: 100
+    hidden_size: 32
+    tau: 20
+    fuzzy_tau_support: 20
+    reliability_beta: 0.05
+    reliability_prior_strength: 5
+    reliability_epsilon: 1.0e-08
+    epsilon_decay_steps: 3000
+    gate_min: 0.05
+    gate_max: 0.95
+    fuzzy_fallback_risk_mode: disabled
+    fuzzy_risk_ablation_mode: crisp_threshold
+    fuzzy_membership_shape: triangular
+    fuzzy_reliability_membership_shape: triangular
+    fuzzy_support_breakpoints: *id001
+    fuzzy_reliability_breakpoints: *id002
+    fuzzy_reliability_consequents: *id003
+    fuzzy_crisp_support_threshold: 0.7
+    fuzzy_crisp_reliability_threshold: 0.3

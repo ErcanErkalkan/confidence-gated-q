@@ -1,0 +1,231 @@
+schema_version: 1
+registry_id: fuzzy_crisp_matched_mapping_development
+status: locked_before_development_outcomes
+created_at: '2026-08-03T12:00:00+03:00'
+evidence_class: development
+purpose: Select one fuzzy and one same-input crisp reliability mapping with equal
+  candidate counts and exactly matched experimental budgets. This registry is separate
+  from, and does not modify, the locked independent-shift final protocol.
+protocol_boundary:
+  independent_shift_source: configs/diagnostic_extensions/INDEPENDENT_SHIFT_PROTOCOL.yaml
+  independent_shift_protocol_modified: false
+  selected_candidates_may_replace_locked_final_agents: false
+  required_action_before_any_such_replacement: documented_protocol_change_record
+  final_seed_access: prohibited
+  prohibited_final_seed_range: 12000-12099
+primary_metric:
+  name: post_shift_normalized_return_auc
+  direction: higher_is_better
+  definition: For each candidate-environment-seed, average finite undiscounted evaluation
+    returns at each checkpoint from 12000 through 16000 inclusive, integrate those
+    checkpoint means by the trapezoidal rule, and divide by the 4000-step checkpoint-axis
+    span. This is time-axis normalization, not reward scaling.
+selection_rule:
+  locked_before_outcomes: true
+  unit: candidate_within_mapping_family
+  environment_score: mean primary metric across the ten locked development seeds
+  environment_rank: descending environment score, average ranks for exact ties
+  ordered_criteria:
+  - lowest_mean_environment_rank
+  - lowest_worst_environment_rank
+  - lower_median_warm_cpu_mapping_latency_ns
+  - lexical_candidate_id
+  p_values_used: false
+  final_seed_results_used: false
+matched_budget:
+  candidate_count_per_family: 4
+  training_steps_per_agent_seed: 16000
+  shift_onset: 12000
+  checkpoint_first: 1000
+  checkpoint_last: 16000
+  checkpoint_interval: 1000
+  expected_checkpoint_count: 16
+  evaluation_episodes_per_checkpoint: 25
+  torch_threads: 1
+  torch_interop_threads: 1
+  note: This is a predeclared development mapping-selection screen. The screen uses
+    a shorter post-shift horizon and fewer evaluation episodes than the locked independent-shift
+    final protocol, identically for every fuzzy and crisp candidate.
+environments:
+- mechanism_id: transition_dynamics_shift
+  environment_name: transition-dynamics-shift-mapping-development
+  environment_id: TransitionDynamicsShift-v0
+  severity_id: transition_slip_015
+  severity_kwargs:
+    pre_shift_slip_probability: 0.05
+    post_shift_slip_probability: 0.15
+  development_seeds:
+  - 11000
+  - 11001
+  - 11002
+  - 11003
+  - 11004
+  - 11005
+  - 11006
+  - 11007
+  - 11008
+  - 11009
+- mechanism_id: observation_shift
+  environment_name: observation-shift-mapping-development
+  environment_id: ObservationShift-v0
+  severity_id: observation_gain_085
+  severity_kwargs:
+    slip_probability: 0.1
+    pre_shift_sensor_gain: 1.0
+    post_shift_sensor_gain: 0.85
+  development_seeds:
+  - 11010
+  - 11011
+  - 11012
+  - 11013
+  - 11014
+  - 11015
+  - 11016
+  - 11017
+  - 11018
+  - 11019
+- mechanism_id: localized_multistep_reward_or_policy_shift
+  environment_name: localized-reward-shift-mapping-development
+  environment_id: LocalizedRewardShift-v0
+  severity_id: localized_risk_penalty_016
+  severity_kwargs:
+    slip_probability: 0.05
+    pre_shift_risk_penalty: 0.08
+    post_shift_risk_penalty: 0.16
+  development_seeds:
+  - 11020
+  - 11021
+  - 11022
+  - 11023
+  - 11024
+  - 11025
+  - 11026
+  - 11027
+  - 11028
+  - 11029
+common_mapping_inputs:
+  support: 1 - exp(-exact_state_visit_count / fuzzy_tau_support)
+  reliability: neural_residual / (tabular_residual + neural_residual + epsilon)
+  gate_min: 0.05
+  gate_max: 0.95
+  fallback_risk_mapping: disabled_for_isolated_two_input_comparison
+crisp_candidates:
+- candidate_id: crisp_s030_r030
+  support_threshold: 0.3
+  reliability_threshold: 0.3
+  gate_min: 0.05
+  gate_max: 0.95
+- candidate_id: crisp_s030_r070
+  support_threshold: 0.3
+  reliability_threshold: 0.7
+  gate_min: 0.05
+  gate_max: 0.95
+- candidate_id: crisp_s070_r030
+  support_threshold: 0.7
+  reliability_threshold: 0.3
+  gate_min: 0.05
+  gate_max: 0.95
+- candidate_id: crisp_s070_r070
+  support_threshold: 0.7
+  reliability_threshold: 0.7
+  gate_min: 0.05
+  gate_max: 0.95
+fuzzy_candidates:
+- candidate_id: fuzzy_shoulder_balanced
+  membership_family: shoulder
+  support_breakpoints:
+  - 0.3
+  - 0.5
+  - 0.7
+  reliability_breakpoints:
+  - 0.3
+  - 0.5
+  - 0.7
+  consequents:
+  - 0.0
+  - 0.2
+  - 0.7
+  - 0.1
+  - 0.95
+  gate_min: 0.05
+  gate_max: 0.95
+- candidate_id: fuzzy_shoulder_wide
+  membership_family: shoulder
+  support_breakpoints:
+  - 0.2
+  - 0.5
+  - 0.8
+  reliability_breakpoints:
+  - 0.25
+  - 0.5
+  - 0.75
+  consequents:
+  - 0.0
+  - 0.25
+  - 0.65
+  - 0.15
+  - 0.9
+  gate_min: 0.05
+  gate_max: 0.95
+- candidate_id: fuzzy_triangular_balanced
+  membership_family: triangular
+  support_breakpoints:
+  - 0.0
+  - 0.5
+  - 1.0
+  reliability_breakpoints:
+  - 0.0
+  - 0.5
+  - 1.0
+  consequents:
+  - 0.0
+  - 0.2
+  - 0.7
+  - 0.1
+  - 0.95
+  gate_min: 0.05
+  gate_max: 0.95
+- candidate_id: fuzzy_triangular_conservative
+  membership_family: triangular
+  support_breakpoints:
+  - 0.0
+  - 0.4
+  - 1.0
+  reliability_breakpoints:
+  - 0.0
+  - 0.6
+  - 1.0
+  consequents:
+  - 0.0
+  - 0.1
+  - 0.6
+  - 0.05
+  - 0.9
+  gate_min: 0.05
+  gate_max: 0.95
+decision_surface_lock:
+  grid_points_per_axis: 41
+  finite_difference_step: 0.025
+  boundary_probe_epsilon: 0.0001
+  perturbation_delta: 0.01
+  perturbation_stable_absolute_change: 0.05
+  metrics:
+  - local_lipschitz_style_mean
+  - local_lipschitz_style_max
+  - boundary_output_change_mean
+  - boundary_output_change_max
+  - perturbation_stability_rate
+  - perturbation_absolute_change_mean
+latency_lock:
+  cpu_threads: 1
+  warmup_calls: 5000
+  measured_calls_per_repeat: 20000
+  repeats: 7
+  input_schedule: deterministic_257_point_lattice
+  selected_statistic: median_nanoseconds_per_mapping_call
+  includes: mapping_only_after_support_and_reliability_are_available
+  excludes:
+  - network_inference
+  - residual_estimation
+  - support_estimation
+  - q_value_mixing

@@ -1,0 +1,37 @@
+selection_status: no_eligible_candidate
+selected_candidate_id: null
+p_values_used: false
+candidate_diagnostics:
+- candidate_id: horizon120_budget6000
+  training_interactions: 6000
+  episode_horizon: 120
+  reference_success_max: 0.0
+  learned_success_min: 0.0
+  learned_success_max: 0.0
+  learned_success_range: 0.0
+  reference_feasible: false
+  learned_nondegenerate: false
+  range_sufficient: false
+  eligible: false
+- candidate_id: horizon240_budget12000
+  training_interactions: 12000
+  episode_horizon: 240
+  reference_success_max: 0.39999999999999997
+  learned_success_min: 0.0
+  learned_success_max: 0.0
+  learned_success_range: 0.0
+  reference_feasible: true
+  learned_nondegenerate: false
+  range_sufficient: false
+  eligible: false
+- candidate_id: horizon360_budget24000
+  training_interactions: 24000
+  episode_horizon: 360
+  reference_success_max: 0.6666666666666666
+  learned_success_min: 0.0
+  learned_success_max: 0.0
+  learned_success_range: 0.0
+  reference_feasible: true
+  learned_nondegenerate: false
+  range_sufficient: false
+  eligible: false

@@ -1,0 +1,12 @@
+metric_name,definition,direction,aggregation_level,denominator,evidence_class,source_file
+success_rate,mean episode success indicator,higher,episode,evaluation episodes,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv
+failure_rate,mean one-minus-success indicator,lower,episode,evaluation episodes,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv
+collision_rate,mean per-episode collision-step fraction,lower,episode,evaluation steps,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv
+localization_error_mean,mean Euclidean latent-versus-estimated position error,lower,decision,evaluation decisions,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv
+exact_support_coverage,mean exact-key support indicator,higher,decision,evaluation decisions,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv
+approximate_support_coverage,mean approximate-support indicator,higher,decision,evaluation decisions,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv
+fragmentation_rate,similar latent-state pairs with different exact keys,lower,unordered_pair,pairs within latent radius 0.10,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/trace_shards/*.csv.gz
+aliasing_rate,similar observations with materially different latent state or optimal label,lower,unordered_pair,pairs within observation radius 0.15,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/trace_shards/*.csv.gz
+memory_branch_usage_ratio,mean memory-branch decision weight,descriptive,decision,evaluation decisions,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv
+neural_branch_usage_ratio,mean neural-branch decision weight,descriptive,decision,evaluation decisions,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv
+episode_lower_tail_return_0_10,"arithmetic mean of the lowest max(1, ceil(0.10*n)) finite episode returns",higher,episode,eight evaluation episodes per condition-agent,development_diagnostic,results/reviewer1_remaining/sensor_factorial_development/raw.csv

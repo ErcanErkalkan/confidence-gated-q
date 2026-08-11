@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "evidence_class": "replication_calibration",
+  "protocol_sha256": "5831588f601d35705a2a5d2f672a6ddf079bb1cc3acb866630ece125a4bf77f1",
+  "expected_agent_seed_severity_runs": 40,
+  "observed_agent_seed_severity_runs": 40,
+  "evaluation_rows": 52480,
+  "seed_range": "12090-12099",
+  "excluded_seeds": [],
+  "violations": [],
+  "instrumentation_rerun_equivalence": {
+    "initial_instrumentation_attempt": "results\\reviewer1_remaining\\reliability_calibration_independent\\execution\\raw.csv",
+    "non_diagnostic_outcomes_equal": true,
+    "compared_rows": 212480,
+    "mismatched_columns": []
+  },
+  "standard_result_audit": "PASS",
+  "standard_provenance_audit": "STRICT_PASS",
+  "branch_rows": 24,
+  "calibration_bin_rows": 57,
+  "selective_risk_rows": 80,
+  "delay_rows": 40,
+  "summary_rows": 8
+}

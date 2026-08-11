@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "evidence_class": "development_diagnostic",
+  "expected_agent_seed_environment_runs": 20,
+  "observed_agent_seed_environment_runs": 20,
+  "evaluation_rows": 120,
+  "development_seeds": [
+    15004,
+    15005
+  ],
+  "final_seed_rows": 0,
+  "violations": [],
+  "standard_result_audit": "PASS",
+  "standard_provenance_audit": "STRICT_PASS"
+}

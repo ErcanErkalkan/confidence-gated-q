@@ -1,0 +1,259 @@
+lock:
+  name: continuous_control_resource_constrained_supplemental
+  date: '2026-08-08'
+  status: FROZEN_BEFORE_RESOURCE_CONSTRAINED_PERFORMANCE_EXECUTION
+  evidence_source: RESOURCE_CONSTRAINED_SUPPLEMENTAL_BENCHMARK
+  resource_constrained_results_inspected_before_freeze: false
+  prior_full_budget_feasibility_observed: true
+  confirmatory_status: false
+  reason: A full-budget design was computationally infeasible on the available CPU-only
+    workstation; full-budget performance evidence is excluded from the resource-constrained
+    inference block.
+  historical_lock_sha256: a90160b429ec4456549458c5152269572b5cfa7544700dde96d4c38353c1dafe
+question: Does the support-boundary diagnostic remain informative in standard continuous-control
+  domains where exact state recurrence is structurally rare, and how do support/failure
+  signals behave for modern off-policy actor-critic controllers under nominal, observation-delay,
+  and actuation-authority shifts?
+claim_boundary:
+  allowed_after_execution:
+  - continuous-control benchmark transfer of support-boundary diagnostics
+  - controller-level contextualization against modern continuous actor-critic references
+  prohibited:
+  - universal RL superiority
+  - calibrated uncertainty claim
+  - physical UAV readiness
+  - HIL validity
+  - real-flight safety
+  - operational deployment readiness
+runtime:
+  python: 3.13.x (exact patch recorded at execution)
+  gymnasium: 1.3.0
+  stable_baselines3: 2.9.0
+  sb3_contrib: 2.9.0
+  mujoco: 3.10.0
+  device: cpu
+  n_envs: 1
+  freeze_transitive_dependencies: true
+  runtime_manifest_required: true
+  parallel_workers: 3
+  torch_threads_per_worker: 2
+  torch_interop_threads_per_worker: 1
+  parallelism_rule: three independent processes; no within-run vectorized environments
+environments:
+- id: HalfCheetah-v5
+  observation_dim: 17
+  action_dim: 6
+  action_space: Box[-1,1]^6
+  primary_failure_endpoint: null
+  return_endpoint: true
+- id: Walker2d-v5
+  observation_dim: 17
+  action_dim: 6
+  action_space: Box[-1,1]^6
+  terminate_when_unhealthy: true
+  primary_failure_endpoint: unhealthy_termination_rate
+  return_endpoint: true
+algorithms:
+- id: SAC
+  class: stable_baselines3.SAC
+  policy: MlpPolicy
+  role: established_continuous_reference
+  tuning: none
+  config_rule: pinned_2_9_0_defaults_except_explicit_common_fields
+- id: CrossQ
+  class: sb3_contrib.CrossQ
+  policy: MlpPolicy
+  role: recent_sample_efficient_reference
+  tuning: none
+  config_rule: pinned_2_9_0_defaults_except_explicit_common_fields
+- id: TQC
+  class: sb3_contrib.TQC
+  policy: MlpPolicy
+  role: distributional_multi_critic_reference
+  tuning: none
+  config_rule: pinned_2_9_0_defaults_except_explicit_common_fields
+  epistemic_uncertainty_claim: false
+seeds:
+  smoke:
+  - 20500
+  - 20501
+  - 20502
+  checkpoint_eval_reset:
+  - 32000
+  - 32001
+  - 32002
+  - 32003
+  - 32004
+  - 32005
+  - 32006
+  - 32007
+  - 32008
+  - 32009
+  final_eval_reset:
+  - 31000
+  - 31001
+  - 31002
+  - 31003
+  - 31004
+  - 31005
+  - 31006
+  - 31007
+  - 31008
+  - 31009
+  - 31010
+  - 31011
+  - 31012
+  - 31013
+  - 31014
+  - 31015
+  - 31016
+  - 31017
+  - 31018
+  - 31019
+  - 31020
+  - 31021
+  - 31022
+  - 31023
+  - 31024
+  - 31025
+  - 31026
+  - 31027
+  - 31028
+  - 31029
+  support_bank_seed_formula: 41000 + training_seed
+  supplemental_training:
+  - 22000
+  - 22001
+  - 22002
+  - 22003
+  - 22004
+budget:
+  smoke_train_steps_max: 20000
+  supplemental_train_steps: 100000
+  eval_checkpoint_every_steps: 50000
+  checkpoint_eval_episodes: 10
+  final_eval_episodes_per_condition: 30
+  performance_based_early_stopping: false
+  planned_trained_agents: 30
+  planned_supplemental_training_interactions: 3000000
+conditions:
+- id: NOMINAL
+  primary: false
+  wrapper: none
+- id: OBS_DELAY_1
+  primary: true
+  observation_delay_steps: 1
+  reward_changed: false
+- id: ACT_GAIN_075
+  primary: true
+  action_gain: 0.75
+  action_clip_to_native_bounds: true
+  reward_changed: false
+- id: COMBINED_DELAY_GAIN
+  primary: false
+  exploratory: true
+  observation_delay_steps: 1
+  action_gain: 0.75
+  action_clip_to_native_bounds: true
+  reward_changed: false
+support:
+  source: final_nominal_replay_observations
+  bank_max_n: 50000
+  sample_without_replacement: true
+  standardization:
+    per_dimension: true
+    std_floor: 1.0e-06
+  index: scipy.spatial.cKDTree
+  k: 5
+  calibration_subset_max_n: 10000
+  self_exclusion_query_k: 6
+  radius_definition: percentile_95_of_fifth_nonself_neighbor_distance
+  radius_uses_reward_or_failure_labels: false
+  metrics:
+  - exact_bytewise_recurrence_rate
+  - d1
+  - d5
+  - rho_d5_over_r95
+  - approximate_support_coverage
+  - low_support_exposure
+  calibrated_confidence_claim: false
+critic_diagnostics:
+  SAC: abs_gap_between_two_Q_critics_at_policy_action
+  CrossQ: abs_gap_between_two_Q_critics_at_policy_action
+  TQC:
+  - abs_gap_between_per_critic_mean_quantile_values
+  - quantile_interquartile_range
+  epistemic_posterior_claim: false
+outcomes:
+  controller:
+  - final_mean_episode_return
+  - final_median_episode_return
+  - shift_return_difference_from_nominal
+  - nominal_learning_curve_return_auc_secondary
+  - episode_CVaR_0_10
+  - episode_CVaR_0_05_sensitivity_if_tail_n_ge_2
+  failure:
+    Walker2d-v5:
+    - unhealthy_termination_rate
+    - truncation_rate
+    HalfCheetah-v5:
+    - termination_rate_descriptive
+    - truncation_rate
+    all:
+    - nonfinite_action_observation_reward_or_critic_count
+  support:
+  - exact_recurrence_rate_descriptive
+  - approximate_support_coverage
+  - low_support_exposure
+  - mean_median_d1_d5_rho
+inference:
+  status: supplemental_nonconfirmatory
+  unit: trained_seed
+  n_trained_seeds_per_algorithm_environment: 5
+  controller_contrast_family_S1:
+    n_contrasts: 8
+    contrasts: CrossQ-vs-SAC and TQC-vs-SAC x 2 environments x 2 primary shifts
+    reporting:
+    - mean paired difference
+    - median paired difference
+    - paired wins/losses
+    - paired bootstrap 95% CI
+    sensitivity_only:
+    - paired t-test
+    - Wilcoxon signed-rank
+    - Holm-adjusted p-values
+    interpretation: effect-estimation and directional contextualization; no confirmatory
+      superiority claim
+  support_contrast_family_S2:
+    n_contrasts: 12
+    contrasts: 3 algorithms x 2 environments x 2 primary shifts, shift minus nominal
+      support coverage
+    reporting:
+    - mean paired difference
+    - median paired difference
+    - paired bootstrap 95% CI
+    sensitivity_only:
+    - paired t-test
+    - Wilcoxon signed-rank
+    - Holm-adjusted p-values
+    interpretation: support-boundary response contextualization; no confirmatory hypothesis
+      claim
+  combined_shift: exploratory
+  nominal_return_auc: secondary descriptive two-checkpoint summary only
+eligibility:
+  absolute_return_threshold: null
+  seed_replacement_allowed: false
+  must_complete_locked_steps_unless_technical_failure: true
+  must_produce_declared_artifacts: true
+  must_pass_schema_and_provenance_checks: true
+excluded_from_primary_block:
+- offline_IQL_CQL
+- safe_RL_Lagrangian_methods
+- new_continuous_action_exact_memory_hybrid
+- posthoc_algorithm_or_environment_additions
+separation_policy:
+  prior_full_budget_artifacts_preserved: true
+  prior_full_budget_results_enter_resource_constrained_inference: false
+  performance_motivated_changes_after_freeze_forbidden: true
+  failed_artifact_must_be_preserved: true
+  same_seed_rerun_only_after_documented_method_independent_fix: true

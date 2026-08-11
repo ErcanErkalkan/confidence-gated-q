@@ -1,0 +1,686 @@
+schema_version: 1
+purpose: Lock evidence classes, canonical source selection, report-level multiplicity
+  scopes, principal contrasts, and manuscript-wide sensitivity eligibility.
+allowed_evidence_classes:
+- development
+- confirmatory
+- replication
+- exploratory
+- descriptive
+rules:
+  planned_report_holm_scope: one vector over every row in the source report
+  pairwise_report_holm_scope: one vector per environment and metric
+  primary_confirmatory: Only canonical planned primary-outcome rows in independent
+    confirmatory families; replication, exploratory, descriptive, pairwise, and derived
+    supplemental rows are excluded from the manuscript-wide sensitivity family.
+  derivative_policy: Combined or reported copies are excluded when a canonical source
+    contains the same rows. Reported files are included only for explicitly selected
+    supplemental mechanism contrasts absent from the canonical source.
+sources:
+- source_id: adaptive_gate_planned
+  source_file: results/adaptive_gate_compact_validation/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: adaptive_gate_compact_validation.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 12
+  expected_contrasts:
+  - fuzzy_vs_count
+  - fuzzy_vs_support_abstain
+  - fuzzy_vs_dqn
+  - fuzzy_vs_tabular
+- source_id: application_case_planned
+  source_file: results/application_navigation_case_study/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: application_navigation_case_study.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 4
+  expected_contrasts:
+  - fuzzy_vs_count
+  - fuzzy_vs_support_abstain
+  - fuzzy_vs_dqn
+  - fuzzy_vs_tabular
+- source_id: application_risk_combined_copy
+  source_file: results/application_risk_variants/combined/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: false
+  reason_if_excluded: derivative copy of the canonical root planned-contrast report
+- source_id: application_risk_planned
+  source_file: results/application_risk_variants/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: application_risk_variants.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 3
+  expected_contrasts:
+  - no_hold_vs_hold_penalized
+  - shortest_path_vs_hold_penalized
+  - verified_safe_vs_hold_penalized
+- source_id: feature_support_empty_planned
+  source_file: results/approx_support/feature_distance_support/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: false
+  reason_if_excluded: empty component report; cross-component planned rows are in
+    the parent report
+- source_id: knn_support_empty_planned
+  source_file: results/approx_support/knn_support/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: false
+  reason_if_excluded: empty component report; cross-component planned rows are in
+    the parent report
+- source_id: approximate_support_planned
+  source_file: results/approx_support/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: approximate_support.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 4
+  expected_contrasts:
+  - knn_vs_exact_count
+  - feature_distance_vs_exact_count
+  - knn_vs_tabular
+  - feature_distance_vs_tabular
+- source_id: approximate_support_smoke_planned
+  source_file: results/approximate_support_baseline_validation/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: exploratory
+  include: true
+  report_family: approximate_support_baseline_validation.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 3
+  expected_contrasts:
+  - approx_vs_exact_count
+  - approx_vs_support_abstain
+  - approx_vs_tabular
+- source_id: compact_expansion_planned
+  source_file: results/confirmatory_extended_compact/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: confirmatory_extended_compact.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 28
+  expected_contrasts:
+  - count_vs_validated_dqn
+  - count_vs_tabular
+  - count_vs_fixed
+  - support_abstain_vs_count
+- source_id: cost_support_planned
+  source_file: results/cost_support_metrics/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: descriptive
+  include: true
+  report_family: cost_support_metrics.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 4
+  expected_contrasts:
+  - fuzzy_vs_count_cost
+  - fuzzy_vs_dqn_cost
+- source_id: dqn_independent_evaluation_planned
+  source_file: results/dqn_strong_validation/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: dqn_strong_validation.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 8
+  expected_contrasts:
+  - validated_vs_original_dqn
+- source_id: dqn_development_empty_planned
+  source_file: results/dqn_tuning_development/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: development
+  include: false
+  reason_if_excluded: empty because the development sweep declared no planned contrasts
+- source_id: fuzzy_ablation_planned
+  source_file: results/fuzzy_ablation/combined/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: fuzzy_ablation.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 4
+  expected_contrasts:
+  - no_td_residual_vs_full
+  - no_count_vs_full
+  - no_confidence_vs_full
+  - crisp_threshold_vs_full
+- source_id: fuzzy_ablation_empty_root
+  source_file: results/fuzzy_ablation/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: false
+  reason_if_excluded: empty component root; canonical combined report contains the
+    executed planned rows
+- source_id: fuzzy_reliability_stationary_planned
+  source_file: results/fuzzy_reliability_confirmatory/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: fuzzy_reliability_stationary.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 3
+  expected_contrasts:
+  - fuzzy_reliability_vs_count
+- source_id: fuzzy_reliability_stationary_supplemental
+  source_file: results/fuzzy_reliability_confirmatory/reported/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: exploratory
+  include: true
+  report_family: fuzzy_reliability_stationary.reported_supplemental
+  report_holm_scope: file
+  principal_planned: false
+  primary_confirmatory: false
+  include_contrasts:
+  - fuzzy_reliability_vs_crisp
+  expected_contrasts:
+  - fuzzy_reliability_vs_count
+  - fuzzy_reliability_vs_crisp
+  expected_included_rows: 3
+- source_id: fuzzy_reliability_shift_planned
+  source_file: results/fuzzy_reliability_shift_confirmatory/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: fuzzy_reliability_shift.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 2
+  expected_contrasts:
+  - fuzzy_shift_vs_count
+- source_id: fuzzy_reliability_shift_supplemental
+  source_file: results/fuzzy_reliability_shift_confirmatory/reported/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: exploratory
+  include: true
+  report_family: fuzzy_reliability_shift.reported_supplemental
+  report_holm_scope: file
+  principal_planned: false
+  primary_confirmatory: false
+  include_contrasts:
+  - fuzzy_shift_vs_original
+  - fuzzy_shift_vs_crisp
+  expected_contrasts:
+  - fuzzy_shift_vs_count
+  - fuzzy_shift_vs_original
+  - fuzzy_shift_vs_crisp
+  expected_included_rows: 4
+- source_id: fuzzy_sensitivity_smoke_planned
+  source_file: results/fuzzy_sensitivity_ablation/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: exploratory
+  include: true
+  report_family: fuzzy_sensitivity_ablation.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 6
+  expected_contrasts:
+  - tau_5_vs_tau_20
+  - tau_80_vs_tau_20
+  - kappa_025_vs_kappa_1
+  - kappa_4_vs_kappa_1
+  - shoulder_conservative_vs_triangular_default
+  - zero_support_abstain_vs_zero_support_neural
+- source_id: minigrid_diagnostic_planned
+  source_file: results/minigrid_extended_diagnostic/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: exploratory
+  include: true
+  report_family: minigrid_extended_diagnostic.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 18
+  expected_contrasts:
+  - count_vs_validated_dqn
+  - count_vs_tabular
+  - support_abstain_vs_count
+- source_id: double_dqn_empty_planned
+  source_file: results/strong_baselines/double_dqn/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: false
+  reason_if_excluded: empty component report; cross-baseline planned rows are in the
+    parent report
+- source_id: dueling_dqn_empty_planned
+  source_file: results/strong_baselines/dueling_double_dqn/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: false
+  reason_if_excluded: empty component report; cross-baseline planned rows are in the
+    parent report
+- source_id: strong_baselines_planned
+  source_file: results/strong_baselines/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: strong_baselines.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 2
+  expected_contrasts:
+  - double_dqn_vs_validated_dqn
+  - dueling_double_dqn_vs_validated_dqn
+- source_id: stronger_baseline_smoke_planned
+  source_file: results/stronger_baseline_validation/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: exploratory
+  include: true
+  report_family: stronger_baseline_validation.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 4
+  expected_contrasts:
+  - dueling_double_dqn_vs_validated_dqn
+  - a2c_vs_validated_dqn
+- source_id: support_abstention_replication_planned
+  source_file: results/support_abstention_replication/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: replication
+  include: true
+  report_family: support_abstention_replication.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 20
+  expected_contrasts:
+  - support_abstain_vs_count
+  - support_abstain_vs_dqn
+  - count_vs_dqn
+  - count_vs_tabular
+  - support_abstain_vs_tabular
+- source_id: uav_state_accessible_combined_copy
+  source_file: results/uav_pybullet_validation/combined/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: false
+  reason_if_excluded: derivative copy of the canonical root planned-contrast report
+- source_id: uav_state_accessible_planned
+  source_file: results/uav_pybullet_validation/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: uav_pybullet_validation.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 4
+  expected_contrasts:
+  - double_dqn_vs_dqn
+  - fuzzy_support_vs_dqn
+  - feature_support_vs_dqn
+  - feature_support_vs_pid_safe_controller
+- source_id: uav_sensorized_planned
+  source_file: results/uav_sensorized_motor_validation/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: true
+  report_family: uav_sensorized_motor_validation.planned
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: true
+  expected_included_rows: 5
+  expected_contrasts:
+  - double_dqn_vs_dqn
+  - fuzzy_reliability_vs_dqn
+  - fuzzy_reliability_vs_sensorized_controller
+  - knn_support_vs_dqn
+  - knn_support_vs_fuzzy_reliability
+- source_id: uav_sensorized_reported_copy
+  source_file: results/uav_sensorized_motor_validation/reported/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: confirmatory
+  include: false
+  reason_if_excluded: derivative copy of the canonical root planned-contrast report
+- source_id: independent_shift_replication_planned
+  source_file: results/diagnostic_extensions/final_shifts/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: replication
+  include: true
+  report_family: independent_shift_primary
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 6
+  expected_contrasts:
+  - relative_reliability_fuzzy_vs_count_gated_tau_20
+  - same_input_crisp_vs_relative_reliability_fuzzy
+- source_id: support_estimator_final_planned
+  source_file: results/diagnostic_extensions/support_final/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: replication
+  include: true
+  report_family_template: support_final.{environment}
+  report_holm_scope: environment_metric
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 36
+  expected_contrasts:
+  - frozen_embedding_s1_vs_exact_count_gate
+  - frozen_embedding_s1_vs_raw_normalized_s1
+  - gaussian_affinity_executed_vs_exact_count_gate
+  - gaussian_density_s3_vs_exact_count_gate
+  - gaussian_density_s3_vs_raw_normalized_s1
+  - mahalanobis_s1_vs_exact_count_gate
+  - mahalanobis_s1_vs_raw_normalized_s1
+  - raw_normalized_s1_vs_exact_count_gate
+  - raw_normalized_s1_vs_gaussian_affinity_executed
+  - raw_normalized_s1_vs_dqn
+  - raw_normalized_s1_vs_tabular
+  - tolerance_knn_executed_vs_exact_count_gate
+- source_id: adaptive_gate_pairwise
+  source_file: results/adaptive_gate_compact_validation/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: adaptive_gate_compact_validation.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 90
+- source_id: application_case_pairwise
+  source_file: results/application_navigation_case_study/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: application_navigation_case_study.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 45
+- source_id: application_risk_pairwise
+  source_file: results/application_risk_variants/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: application_risk_variants.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 18
+- source_id: feature_support_empty_pairwise
+  source_file: results/approx_support/feature_distance_support/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: false
+  reason_if_excluded: empty component report
+- source_id: knn_support_empty_pairwise
+  source_file: results/approx_support/knn_support/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: false
+  reason_if_excluded: empty component report
+- source_id: approximate_support_smoke_pairwise
+  source_file: results/approximate_support_baseline_validation/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: approximate_support_baseline_validation.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 18
+- source_id: compact_expansion_pairwise
+  source_file: results/confirmatory_extended_compact/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: confirmatory_extended_compact.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 441
+- source_id: cost_support_pairwise
+  source_file: results/cost_support_metrics/pairwise.csv
+  source_kind: pairwise
+  evidence_class: descriptive
+  include: true
+  report_family_template: cost_support_metrics.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 60
+- source_id: dqn_independent_evaluation_pairwise
+  source_file: results/dqn_strong_validation/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: dqn_strong_validation.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 24
+- source_id: dqn_development_pairwise
+  source_file: results/dqn_tuning_development/pairwise.csv
+  source_kind: pairwise
+  evidence_class: development
+  include: true
+  report_family_template: dqn_tuning_development.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 441
+- source_id: fuzzy_ablation_pairwise
+  source_file: results/fuzzy_ablation/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: fuzzy_ablation.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 18
+- source_id: fuzzy_reliability_stationary_pairwise
+  source_file: results/fuzzy_reliability_confirmatory/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: fuzzy_reliability_stationary.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 135
+- source_id: fuzzy_reliability_shift_pairwise
+  source_file: results/fuzzy_reliability_shift_confirmatory/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: fuzzy_reliability_shift.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 90
+- source_id: fuzzy_sensitivity_pairwise
+  source_file: results/fuzzy_sensitivity_ablation/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: fuzzy_sensitivity_ablation.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 63
+- source_id: minigrid_diagnostic_pairwise
+  source_file: results/minigrid_extended_diagnostic/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: minigrid_extended_diagnostic.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 378
+- source_id: double_dqn_empty_pairwise
+  source_file: results/strong_baselines/double_dqn/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: false
+  reason_if_excluded: empty component report
+- source_id: dueling_dqn_empty_pairwise
+  source_file: results/strong_baselines/dueling_double_dqn/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: false
+  reason_if_excluded: empty component report
+- source_id: stronger_baseline_smoke_pairwise
+  source_file: results/stronger_baseline_validation/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: stronger_baseline_validation.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 18
+- source_id: support_abstention_replication_pairwise
+  source_file: results/support_abstention_replication/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: support_abstention_replication.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 252
+- source_id: uav_state_accessible_pairwise
+  source_file: results/uav_pybullet_validation/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: uav_pybullet_validation.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 30
+- source_id: uav_sensorized_pairwise
+  source_file: results/uav_sensorized_motor_validation/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: uav_sensorized_motor_validation.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 30
+- source_id: sensorized_temporal_final_planned
+  source_file: results/diagnostic_extensions/sensorized_final/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: replication
+  include: true
+  report_family: sensorized_final_primary
+  report_holm_scope: file
+  principal_planned: true
+  primary_confirmatory: false
+  expected_included_rows: 8
+  expected_contrasts:
+  - selected_temporal_drqn_vs_feed_forward_dqn
+  - fuzzy_relative_reliability_vs_feed_forward_dqn
+  - selected_approximate_support_vs_feed_forward_dqn
+  - sensorized_controller_vs_feed_forward_dqn
+- source_id: sensor_aliasing_smoke_pairwise
+  source_file: results/diagnostic_extensions/sensor_aliasing/smoke/pairwise.csv
+  source_kind: pairwise
+  evidence_class: descriptive
+  include: true
+  report_family_template: sensor_aliasing_smoke.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 3
+- source_id: sensor_aliasing_smoke_empty_planned
+  source_file: results/diagnostic_extensions/sensor_aliasing/smoke/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: descriptive
+  include: false
+  reason_if_excluded: empty smoke configuration declared no planned inferential contrasts
+- source_id: sensor_factorial_development_pairwise
+  source_file: results/diagnostic_extensions/sensor_factorial_development/pairwise.csv
+  source_kind: pairwise
+  evidence_class: development
+  include: true
+  report_family_template: sensor_factorial_development.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 144
+- source_id: sensor_factorial_development_empty_planned
+  source_file: results/diagnostic_extensions/sensor_factorial_development/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: development
+  include: false
+  reason_if_excluded: empty development configuration declared descriptive diagnostics
+    only
+- source_id: temporal_interface_development_pairwise
+  source_file: results/diagnostic_extensions/temporal_interface_development/pairwise.csv
+  source_kind: pairwise
+  evidence_class: development
+  include: true
+  report_family_template: temporal_interface_development.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 18
+- source_id: temporal_interface_development_empty_planned
+  source_file: results/diagnostic_extensions/temporal_interface_development/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: development
+  include: false
+  reason_if_excluded: empty development configuration declared no planned inferential
+    contrasts
+- source_id: sensorized_temporal_final_pairwise
+  source_file: results/diagnostic_extensions/sensorized_final/pairwise.csv
+  source_kind: pairwise
+  evidence_class: exploratory
+  include: true
+  report_family_template: sensorized_final.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 60
+- source_id: safety_trace_rerun_pairwise
+  source_file: results/diagnostic_extensions/safety_traces/pairwise.csv
+  source_kind: pairwise
+  evidence_class: descriptive
+  include: true
+  report_family_template: safety_trace_rerun.pairwise.{environment}.{metric}
+  report_holm_scope: environment_metric
+  expected_included_rows: 60
+- source_id: safety_trace_rerun_empty_planned
+  source_file: results/diagnostic_extensions/safety_traces/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: descriptive
+  include: false
+  reason_if_excluded: The locked safety-trace protocol declared descriptive safety
+    metrics and no inferential superiority contrasts.
+- source_id: reliability_calibration_invalid_attempt_pairwise
+  source_file: results/diagnostic_extensions/reliability_calibration_independent/execution/pairwise.csv
+  source_kind: pairwise
+  evidence_class: descriptive
+  include: false
+  reason_if_excluded: Invalid instrumentation attempt retained for audit only; all
+    focal branch diagnostics were missing and no row may be used as scientific evidence.
+- source_id: reliability_calibration_invalid_attempt_empty_planned
+  source_file: results/diagnostic_extensions/reliability_calibration_independent/execution/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: descriptive
+  include: false
+  reason_if_excluded: Invalid instrumentation attempt and empty planned-contrast file.
+- source_id: reliability_calibration_independent_pairwise
+  source_file: results/diagnostic_extensions/reliability_calibration_independent/execution_instrumentation_rerun/pairwise.csv
+  source_kind: pairwise
+  evidence_class: replication
+  include: false
+  reason_if_excluded: Focal calibration is diagnostic-only; automatically generated
+    performance pairwise rows were not predeclared and must not enter inferential
+    families.
+- source_id: reliability_calibration_independent_empty_planned
+  source_file: results/diagnostic_extensions/reliability_calibration_independent/execution_instrumentation_rerun/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: replication
+  include: false
+  reason_if_excluded: The locked focal calibration declared diagnostic targets and
+    no performance superiority contrast.
+- source_id: sensor_nondegenerate_feasibility_pairwise
+  source_file: results/diagnostic_extensions/sensor_nondegenerate_development/feasibility/pairwise.csv
+  source_kind: pairwise
+  evidence_class: development
+  include: false
+  reason_if_excluded: Feasibility selection uses only the locked non-p-value eligibility
+    rule; automatically generated pairwise rows are excluded from inference.
+- source_id: sensor_nondegenerate_feasibility_empty_planned
+  source_file: results/diagnostic_extensions/sensor_nondegenerate_development/feasibility/planned_contrasts.csv
+  source_kind: planned
+  evidence_class: development
+  include: false
+  reason_if_excluded: Empty development-feasibility report with no planned inferential
+    contrast.

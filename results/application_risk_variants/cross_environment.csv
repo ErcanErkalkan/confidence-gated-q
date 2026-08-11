@@ -1,0 +1,13 @@
+agent,metric,n_environments,mean_environment_rank,median_environment_rank,best_environment_rank,worst_environment_rank
+support_hold_penalized,return_auc,1,4.0,4.0,4.0,4.0
+support_no_hold,return_auc,1,2.0,2.0,2.0,2.0
+support_shortest_path,return_auc,1,3.0,3.0,3.0,3.0
+support_verified_safe,return_auc,1,1.0,1.0,1.0,1.0
+support_hold_penalized,success_rate_auc,1,4.0,4.0,4.0,4.0
+support_no_hold,success_rate_auc,1,3.0,3.0,3.0,3.0
+support_shortest_path,success_rate_auc,1,1.0,1.0,1.0,1.0
+support_verified_safe,success_rate_auc,1,2.0,2.0,2.0,2.0
+support_hold_penalized,mean_return,1,4.0,4.0,4.0,4.0
+support_no_hold,mean_return,1,2.0,2.0,2.0,2.0
+support_shortest_path,mean_return,1,3.0,3.0,3.0,3.0
+support_verified_safe,mean_return,1,1.0,1.0,1.0,1.0

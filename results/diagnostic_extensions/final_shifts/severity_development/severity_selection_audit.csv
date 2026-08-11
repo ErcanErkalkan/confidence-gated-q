@@ -1,0 +1,10 @@
+mechanism_id,severity_id,locked_order,n_agent_seed,pooled_median_success_auc,distance_from_0_5,floor_share_le_0_05,ceiling_share_ge_0_95,complete,nondegenerate_interval,avoids_universal_floor,avoids_universal_ceiling,eligible,selected
+transition_dynamics_shift,transition_slip_015,0,30,0.3594791666666667,0.14052083333333332,0.0,0.0,True,True,True,True,True,False
+transition_dynamics_shift,transition_slip_025,1,30,0.42125,0.07874999999999999,0.0,0.0,True,True,True,True,True,False
+transition_dynamics_shift,transition_slip_035,2,30,0.4454166666666667,0.05458333333333332,0.0,0.0,True,True,True,True,True,True
+observation_shift,observation_gain_085,0,30,0.2415625,0.2584375,0.0,0.0,True,True,True,True,True,True
+observation_shift,observation_gain_070,1,30,0.21822916666666664,0.28177083333333336,0.0,0.0,True,True,True,True,True,False
+observation_shift,observation_gain_055,2,30,0.19635416666666666,0.30364583333333334,0.0,0.0,True,True,True,True,True,False
+localized_multistep_reward_or_policy_shift,localized_risk_penalty_016,0,30,0.7511458333333334,0.2511458333333334,0.0,0.0,True,True,True,True,True,False
+localized_multistep_reward_or_policy_shift,localized_risk_penalty_032,1,30,0.7323958333333334,0.23239583333333336,0.0,0.0,True,True,True,True,True,False
+localized_multistep_reward_or_policy_shift,localized_risk_penalty_064,2,30,0.7060416666666667,0.20604166666666668,0.0,0.0,True,True,True,True,True,True

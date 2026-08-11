@@ -1,0 +1,298 @@
+schema_version: 3
+project: confidence-gated-q
+artifact_version: 1.0.0
+evidence_registry: configs/evidence_registry.json
+policy:
+  claim_language: effect-size and evidence-class bounded
+  confirmatory_claims: require locked or registered inferential evidence
+  supplemental_claims: must remain explicitly non-confirmatory
+  auxiliary_diagnostics: may support bounded descriptive or theoretical claims but do not upgrade evidence class
+  calibration: ranking diagnostics must not be represented as calibrated correctness probabilities
+  hardware: SIL evidence must not be represented as HIL, flight, physical safety, or operational readiness
+  manuscript_independent: true
+traceability:
+  canonical_roots:
+  - configs/
+  - results/
+  - tables/
+  - figures/
+  - src/
+  - PROVENANCE.md
+  private_manuscript_material: excluded
+  editorial_history: excluded
+  latex_anchor_references: prohibited
+  note: Claim evidence is resolved from public artifact paths and registered evidence families rather than document-layout
+    labels or editorial history.
+registered_scope:
+  family_range: E01-E28
+  scope_authority: configs/evidence_registry.json
+  auxiliary_public_diagnostics:
+    support_scaling:
+      class: theoretical + descriptive microbenchmark
+      artifacts:
+      - tables/table_support_scaling.csv
+      - figures/fig_support_scaling.pdf
+      - results/diagnostic_extensions/support_scaling
+    continuous_control:
+      class: supplemental non-confirmatory
+      artifacts:
+      - configs/continuous_control/CONTINUOUS_CONTROL_PROTOCOL.yaml
+      - configs/continuous_control/CONTINUOUS_CONTROL_PROTOCOL_SHA256.txt
+      - results/continuous_control/analysis/condition_summary.csv
+      - results/continuous_control/analysis/S1_supplemental_controller_contrasts.csv
+      - results/continuous_control/analysis/S2_supplemental_support_contrasts.csv
+claims:
+- claim_id: C01_exact_recurrence_benefit
+  claim: Count gating improves over the development-selected DQN on selected recurrent compact tasks, but not universally.
+  evidence_families:
+  - E03
+  - E07
+  primary_artifacts:
+  - tables/table_principal_comparisons.csv
+  - results/confirmatory_extended_compact
+  - results/adaptive_gate_compact_validation
+  supporting_artifacts: []
+  inference: confirmatory
+  boundary: Improvement is task-specific and does not establish universal controller superiority.
+  status: PASS
+- claim_id: C02_heldout_support_failure
+  claim: Held-out exact-state support shift can make count gating harmful by delegating to unsupported neural extrapolation.
+  evidence_families:
+  - E04
+  primary_artifacts:
+  - results/support_abstention_replication
+  - tables/table_principal_comparisons.csv
+  supporting_artifacts: []
+  inference: confirmatory boundary + independent replication
+  boundary: The failure concerns exact-state support under held-out support shift and is not a generic claim about all memory-neural
+    hybrids.
+  status: PASS
+- claim_id: C03_support_abstention
+  claim: Support abstention repairs the replicated FourRooms failure but is not a universal improvement.
+  evidence_families:
+  - E04
+  primary_artifacts:
+  - results/support_abstention_replication
+  - tables/table_principal_comparisons.csv
+  supporting_artifacts: []
+  inference: independent replication
+  boundary: Repair is restricted to the replicated failure condition and does not imply superiority across tasks.
+  status: PASS
+- claim_id: C04_approximate_support
+  claim: kNN and feature-distance support improve over exact count gating in the application shift, while remaining below
+    strong non-neural comparators.
+  evidence_families:
+  - E06
+  - E10
+  primary_artifacts:
+  - tables/table_approx_support.csv
+  - results/approx_support
+  - tables/table_principal_comparisons.csv
+  supporting_artifacts:
+  - figures/fig_approx_support.pdf
+  inference: confirmatory
+  boundary: Approximate support remains representation-dependent and is not a universal performance or safety signal.
+  status: PASS
+- claim_id: C05_dqn_robustness
+  claim: Double DQN and Dueling Double DQN do not materially alter the application conclusion.
+  evidence_families:
+  - E02
+  - E09
+  primary_artifacts:
+  - tables/table_strong_baselines.csv
+  - results/strong_baselines
+  - tables/table_principal_comparisons.csv
+  supporting_artifacts:
+  - figures/fig_strong_baselines.pdf
+  inference: independent evaluation
+  boundary: This comparison concerns matched value-based neural baselines and does not exhaust modern RL algorithm classes.
+  status: PASS
+- claim_id: C06_relative_reliability_targeted
+  claim: Relative reliability is useful in the targeted stale-memory shift.
+  evidence_families:
+  - E16
+  primary_artifacts:
+  - tables/table_fuzzy_reliability_shift.csv
+  - results/fuzzy_reliability_shift_confirmatory
+  supporting_artifacts:
+  - figures/fig_fuzzy_reliability_shift.pdf
+  inference: mechanism-targeted confirmatory
+  boundary: The positive result is mechanism-targeted and does not establish general superiority of relative-reliability gating.
+  status: PASS
+- claim_id: C07_relative_reliability_replication
+  claim: The targeted relative-reliability gain does not generalize across three independently locked shift generators.
+  evidence_families:
+  - E18
+  - E19
+  - E20
+  primary_artifacts:
+  - tables/table_independent_shift_replication.csv
+  - results/diagnostic_extensions/final_shifts
+  supporting_artifacts:
+  - figures/fig_independent_shift_replication.pdf
+  inference: independent replication
+  boundary: Generator-specific positive, null, and negative results are retained without pooled universal-ranking claims.
+  status: PASS
+- claim_id: C08_fuzzy_not_necessary
+  claim: The same-input crisp mapping prevents a claim that fuzzy defuzzification is necessary for the observed relative-reliability
+    effect.
+  evidence_families:
+  - E16
+  - E17
+  - E18
+  - E19
+  - E20
+  primary_artifacts:
+  - tables/table_fuzzy_reliability_shift.csv
+  - tables/table_independent_shift_replication.csv
+  - results/diagnostic_extensions/fuzzy_crisp_development
+  - results/diagnostic_extensions/final_shifts
+  supporting_artifacts:
+  - figures/fig_fuzzy_reliability_shift.pdf
+  - figures/fig_independent_shift_replication.pdf
+  inference: matched-input falsification
+  boundary: The supported contribution is the relative-reliability signal; fuzzy inference is not uniquely necessary.
+  status: PASS
+- claim_id: C09_support_estimator_transfer
+  claim: The selected raw-normalized support estimator improves over exact counting across the three independent support-final
+    generators, without establishing a universally superior representation.
+  evidence_families:
+  - E22
+  - E23
+  primary_artifacts:
+  - tables/table_support_final.csv
+  - results/diagnostic_extensions/support_development
+  - results/diagnostic_extensions/support_final
+  supporting_artifacts:
+  - figures/fig_support_final.pdf
+  - tables/table_support_scaling.csv
+  inference: independent evaluation after development selection
+  boundary: Development selection and independent final evaluation remain separate; no universally best support representation
+    is claimed.
+  status: PASS
+- claim_id: C10_calibration_boundary
+  claim: Support and relative-reliability scores have ranking evidence but are not calibrated correctness probabilities.
+  evidence_families:
+  - E21
+  - E23
+  primary_artifacts:
+  - tables/table_reliability_calibration_independent.csv
+  - results/diagnostic_extensions/reliability_calibration_independent
+  - results/diagnostic_extensions/support_final
+  supporting_artifacts:
+  - figures/fig_reliability_calibration_independent.pdf
+  - tables/table_support_final.csv
+  - PROVENANCE.md
+  inference: calibration diagnostic
+  boundary: AUROC, ranking, selective-risk, or support-coverage evidence must not be described as calibrated probability of
+    correctness.
+  status: PASS
+- claim_id: C11_complexity_boundary
+  claim: Support estimators have distinct theoretical and measured computational costs; indexed kNN is not uniformly faster
+    at higher dimension.
+  evidence_families:
+  - E22
+  auxiliary_programs:
+  - support_scaling
+  primary_artifacts:
+  - tables/table_support_scaling.csv
+  - results/diagnostic_extensions/support_scaling
+  supporting_artifacts:
+  - figures/fig_support_scaling.pdf
+  - src/hybrid_q/support_estimators.py
+  - tables/table_model_complexity.csv
+  inference: theoretical + descriptive microbenchmark
+  boundary: Machine-dependent latency is descriptive; asymptotic expressions and observed timings are reported separately.
+  status: PASS
+- claim_id: C12_sensorized_sil_boundary
+  claim: Sensorized SIL testing exposes exact-support collapse, partial kNN coverage without waypoint success, and zero success
+    for the tested learned controllers.
+  evidence_families:
+  - E14
+  - E26
+  primary_artifacts:
+  - tables/table_uav_sensorized_validation.csv
+  - tables/table_sensorized_final.csv
+  - results/uav_sensorized_motor_validation
+  - results/diagnostic_extensions/sensorized_final
+  supporting_artifacts:
+  - figures/fig_uav_sensorized_validation.pdf
+  - figures/fig_sensorized_final.pdf
+  inference: locked simulator evidence
+  boundary: Sensorized SIL is a software-in-the-loop failure boundary, not HIL, physical-flight, safety, or deployment evidence.
+  status: PASS
+- claim_id: C13_sensorized_causal_limit
+  claim: The sensorized learned-control failure cannot be assigned to one causal source with the present design.
+  evidence_families:
+  - E24
+  - E25
+  - E26
+  - E28
+  primary_artifacts:
+  - tables/table_sensor_factorial.csv
+  - tables/table_sensorized_final.csv
+  - tables/table_sensor_nondegenerate_feasibility.csv
+  - results/diagnostic_extensions/sensor_factorial_development
+  - results/diagnostic_extensions/temporal_interface_development
+  - results/diagnostic_extensions/sensorized_final
+  - results/diagnostic_extensions/sensor_nondegenerate_development/feasibility
+  supporting_artifacts:
+  - figures/fig_sensor_factorial.pdf
+  - figures/fig_sensorized_final.pdf
+  inference: negative boundary / causal limitation
+  boundary: The design identifies interacting failure boundaries but does not identify a single causal mechanism for learned-control
+    failure.
+  status: PASS
+- claim_id: C14_continuous_control_transfer
+  claim: Replay-neighborhood support transfers to SAC, CrossQ, and TQC observations in two MuJoCo domains.
+  evidence_families: []
+  auxiliary_programs:
+  - continuous_control
+  primary_artifacts:
+  - configs/continuous_control/CONTINUOUS_CONTROL_PROTOCOL.yaml
+  - results/continuous_control/analysis/condition_summary.csv
+  supporting_artifacts:
+  - results/continuous_control/analysis/S1_supplemental_controller_contrasts.csv
+  - results/continuous_control/analysis/audit.json
+  inference: supplemental non-confirmatory
+  boundary: This block demonstrates a supplemental diagnostic transfer and is not evidence of universal controller ranking.
+  status: PASS
+- claim_id: C15_shift_specific_support
+  claim: Observation delay consistently lowers replay-support coverage, whereas reduced actuation authority does not produce
+    a consistent support decrease.
+  evidence_families: []
+  auxiliary_programs:
+  - continuous_control
+  primary_artifacts:
+  - results/continuous_control/analysis/S2_supplemental_support_contrasts.csv
+  - results/continuous_control/analysis/condition_summary.csv
+  supporting_artifacts:
+  - configs/continuous_control/CONTINUOUS_CONTROL_PROTOCOL.yaml
+  - results/continuous_control/analysis/audit.json
+  inference: supplemental non-confirmatory
+  boundary: The pattern is shift-specific and does not make replay support a generic degradation or safety signal.
+  status: PASS
+- claim_id: C16_hardware_boundary
+  claim: The highest physical evidence level is sensorized SIL; hardware readiness, HIL validity, flight safety, and operational
+    readiness are not established.
+  evidence_families:
+  - E13
+  - E14
+  - E26
+  - E27
+  - E28
+  primary_artifacts:
+  - tables/table_uav_pybullet_validation.csv
+  - tables/table_uav_sensorized_validation.csv
+  - tables/table_sensorized_final.csv
+  - tables/table_safety_traces.csv
+  - tables/table_sensor_nondegenerate_feasibility.csv
+  supporting_artifacts:
+  - figures/fig_uav_pybullet_validation.pdf
+  - figures/fig_uav_sensorized_validation.pdf
+  - figures/fig_sensorized_final.pdf
+  - figures/fig_safety_traces.pdf
+  - PROVENANCE.md
+  inference: scope boundary
+  boundary: No artifact in this release constitutes HIL, physical-flight, certified safety, or operational-readiness evidence.
+  status: PASS

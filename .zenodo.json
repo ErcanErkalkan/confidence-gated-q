@@ -1,0 +1,26 @@
+{
+  "title": "Support-Boundary and Relative-Reliability Diagnostics for Hybrid Memory–Neural Reinforcement Learning: Reproducibility Artifact",
+  "description": "Independent reproducibility artifact containing source code, experiment configurations, registered seed specifications, raw and aggregated results, support-boundary and relative-reliability diagnostics, sensorized software-in-the-loop evidence, a supplemental SAC–CrossQ–TQC continuous-control benchmark, analysis tables and figures, protocol locks, and computational integrity records. Manuscript, supplementary manuscript files, reviewer correspondence, and journal-submission materials are intentionally excluded from this public artifact. The evidence does not establish hardware-in-the-loop validity, physical-flight safety, calibrated correctness confidence, or universal reinforcement-learning superiority.",
+  "upload_type": "software",
+  "version": "1.0.0",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Erkalkan, Ercan",
+      "affiliation": "Vocational School of Technical Sciences, Department of Electronics and Automation, Artificial Intelligence Operator Program, Marmara University",
+      "orcid": "0000-0001-9259-7112"
+    }
+  ],
+  "keywords": [
+    "reinforcement learning",
+    "support boundary",
+    "support shift",
+    "relative estimator reliability",
+    "fuzzy arbitration",
+    "support abstention",
+    "continuous control",
+    "software-in-the-loop",
+    "negative results",
+    "reproducibility"
+  ]
+}

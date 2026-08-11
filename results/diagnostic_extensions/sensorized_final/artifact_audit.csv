@@ -1,0 +1,10 @@
+check,status,detail
+summary_rows,PASS,observed=10 expected=10
+planned_rows,PASS,observed=8 expected=8
+paired_seed_count,PASS,every contrast has 30 pairs
+episode_trace_rows,PASS,observed=2400 expected=2400
+trace_shards,PASS,observed=300 expected=300
+trace_metadata_complete,PASS,every shard has complete v2 outcomes
+holm_finite,PASS,report Holm values finite
+table_exists,PASS,tables/table_sensorized_final.csv
+figure_exists,PASS,figures/fig_sensorized_final.pdf

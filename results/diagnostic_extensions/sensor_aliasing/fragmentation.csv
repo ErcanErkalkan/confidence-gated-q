@@ -1,0 +1,5 @@
+environment,agent,seed,phase,similar_latent_pair_count,different_exact_key_pair_count,fragmentation_rate,latent_similarity_radius,status,reason_if_unavailable
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,15000,eval,508,508,1.0,0.1,available,
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,15001,eval,547,547,1.0,0.1,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15000,eval,508,508,1.0,0.1,available,
+Crazyflie-sensorized-aliasing-smoke,knn_support,15001,eval,547,547,1.0,0.1,available,

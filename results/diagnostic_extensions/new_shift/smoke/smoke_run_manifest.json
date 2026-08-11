@@ -1,0 +1,77 @@
+{
+  "status": "PASS",
+  "protocol_composite_sha256": "f7ee51fb5aa2bd3348b2c9e1757795c634008b2dc320ea5ac4eab90715656a15",
+  "development_smoke_only": true,
+  "final_results_inspected": false,
+  "mechanisms": [
+    {
+      "mechanism_id": "transition_dynamics_shift",
+      "config": "configs/reviewer1_remaining/smoke/transition_dynamics_shift.yaml",
+      "raw_file": "results/reviewer1_remaining/new_shift/smoke/transition_dynamics_shift/raw.csv",
+      "seeds": [
+        11000,
+        11001
+      ],
+      "agents": [
+        "count_gated_tau_20",
+        "relative_reliability_fuzzy",
+        "same_input_crisp"
+      ],
+      "completed_runs": 6,
+      "training_steps_per_run": 12020,
+      "evaluation_checkpoints": [
+        6000,
+        12000,
+        12020
+      ],
+      "final_seed_rows": 0,
+      "status": "PASS"
+    },
+    {
+      "mechanism_id": "observation_shift",
+      "config": "configs/reviewer1_remaining/smoke/observation_shift.yaml",
+      "raw_file": "results/reviewer1_remaining/new_shift/smoke/observation_shift/raw.csv",
+      "seeds": [
+        11010,
+        11011
+      ],
+      "agents": [
+        "count_gated_tau_20",
+        "relative_reliability_fuzzy",
+        "same_input_crisp"
+      ],
+      "completed_runs": 6,
+      "training_steps_per_run": 12020,
+      "evaluation_checkpoints": [
+        6000,
+        12000,
+        12020
+      ],
+      "final_seed_rows": 0,
+      "status": "PASS"
+    },
+    {
+      "mechanism_id": "localized_multistep_reward_or_policy_shift",
+      "config": "configs/reviewer1_remaining/smoke/localized_reward_shift.yaml",
+      "raw_file": "results/reviewer1_remaining/new_shift/smoke/localized_reward_shift/raw.csv",
+      "seeds": [
+        11020,
+        11021
+      ],
+      "agents": [
+        "count_gated_tau_20",
+        "relative_reliability_fuzzy",
+        "same_input_crisp"
+      ],
+      "completed_runs": 6,
+      "training_steps_per_run": 12020,
+      "evaluation_checkpoints": [
+        6000,
+        12000,
+        12020
+      ],
+      "final_seed_rows": 0,
+      "status": "PASS"
+    }
+  ]
+}

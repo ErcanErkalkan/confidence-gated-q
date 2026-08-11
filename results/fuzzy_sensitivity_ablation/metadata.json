@@ -1,0 +1,261 @@
+{
+  "created_utc": "2026-06-08T16:19:46Z",
+  "platform": "Linux-4.4.0-x86_64-with-glibc2.41",
+  "python": "3.13.5",
+  "gymnasium": "fallback-local",
+  "numpy": "2.3.5",
+  "torch": "2.10.0+cpu",
+  "torch_threads": 1,
+  "cpu_count": 56,
+  "processor": "",
+  "config_sha256": "d35786c40bd836eb47fee4120fd590f7a1f81256f49e29ea104fe2e997e79378",
+  "config_file": "configs/fuzzy_sensitivity_ablation.json",
+  "git_commit_hash": "unknown",
+  "package_version": "1.4.0",
+  "environment_observations": [
+    {
+      "name": "ApplicationNavigation-deployment-goal-shift",
+      "requested_id": "ApplicationNavigationSupportShift-v0",
+      "resolved_id": "ApplicationNavigationSupportShift-v0",
+      "representation": "native_gymnasium_observation"
+    }
+  ],
+  "packages": {
+    "gymnasium": null,
+    "minigrid": null,
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8",
+    "torch": "2.10.0+cpu"
+  },
+  "config": {
+    "experiment_name": "asoc_fuzzy_sensitivity_ablation",
+    "output_dir": "results/fuzzy_sensitivity_ablation",
+    "runtime": {
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "workers": 1
+    },
+    "seeds": [
+      980,
+      981
+    ],
+    "evaluation": {
+      "interval_steps": 50,
+      "episodes": 2
+    },
+    "analysis": {
+      "primary_metric": "return_auc",
+      "analysis_status": "completed_dependency_free_fuzzy_parameter_smoke_ablation",
+      "factors": [
+        "fuzzy_tau_support",
+        "fuzzy_uncertainty_scale_kappa",
+        "fuzzy_membership_shape",
+        "fuzzy_consequents",
+        "zero_support_behavior"
+      ],
+      "planned_contrasts": [
+        {
+          "name": "tau_5_vs_tau_20",
+          "left": "fuzzy_tau_5",
+          "right": "fuzzy_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "tau_80_vs_tau_20",
+          "left": "fuzzy_tau_80",
+          "right": "fuzzy_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "kappa_025_vs_kappa_1",
+          "left": "fuzzy_kappa_025",
+          "right": "fuzzy_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "kappa_4_vs_kappa_1",
+          "left": "fuzzy_kappa_4",
+          "right": "fuzzy_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "shoulder_conservative_vs_triangular_default",
+          "left": "fuzzy_shoulder_conservative",
+          "right": "fuzzy_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "zero_support_abstain_vs_zero_support_neural",
+          "left": "fuzzy_zero_support_abstain",
+          "right": "fuzzy_tau_20",
+          "metric": "return_auc"
+        }
+      ],
+      "validation_scope": "dependency-free two-seed smoke ablation; not a replacement for the full 30-seed confirmatory parameter study"
+    },
+    "envs": [
+      {
+        "name": "ApplicationNavigation-deployment-goal-shift",
+        "id": "ApplicationNavigationSupportShift-v0",
+        "kwargs": {
+          "goal_split": "train",
+          "slip_probability": 0.05,
+          "max_steps": 120
+        },
+        "eval_kwargs": {
+          "goal_split": "deployment"
+        },
+        "training_steps": 100,
+        "max_steps": 40,
+        "success_mode": "positive_terminal"
+      }
+    ],
+    "agents": [
+      {
+        "name": "fuzzy_tau_20",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "fuzzy_tau_support": 20,
+          "fuzzy_uncertainty_scale": 1.0,
+          "fuzzy_abstain_zero_support": false,
+          "epsilon_decay_steps": 800
+        }
+      },
+      {
+        "name": "fuzzy_tau_5",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "fuzzy_tau_support": 5,
+          "fuzzy_uncertainty_scale": 1.0,
+          "fuzzy_abstain_zero_support": false,
+          "epsilon_decay_steps": 800
+        }
+      },
+      {
+        "name": "fuzzy_tau_80",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "fuzzy_tau_support": 80,
+          "fuzzy_uncertainty_scale": 1.0,
+          "fuzzy_abstain_zero_support": false,
+          "epsilon_decay_steps": 800
+        }
+      },
+      {
+        "name": "fuzzy_kappa_025",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "fuzzy_tau_support": 20,
+          "fuzzy_uncertainty_scale": 0.25,
+          "fuzzy_abstain_zero_support": false,
+          "epsilon_decay_steps": 800
+        }
+      },
+      {
+        "name": "fuzzy_kappa_4",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "fuzzy_tau_support": 20,
+          "fuzzy_uncertainty_scale": 4.0,
+          "fuzzy_abstain_zero_support": false,
+          "epsilon_decay_steps": 800
+        }
+      },
+      {
+        "name": "fuzzy_shoulder_conservative",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "fuzzy_tau_support": 20,
+          "fuzzy_uncertainty_scale": 1.0,
+          "fuzzy_membership_shape": "shoulder",
+          "fuzzy_consequents": [
+            0.0,
+            0.2,
+            0.55,
+            0.65,
+            0.9
+          ],
+          "fuzzy_abstain_zero_support": false,
+          "epsilon_decay_steps": 800
+        }
+      },
+      {
+        "name": "fuzzy_zero_support_abstain",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 32,
+          "fuzzy_tau_support": 20,
+          "fuzzy_uncertainty_scale": 1.0,
+          "fuzzy_abstain_zero_support": true,
+          "fuzzy_abstain_threshold": 0.0,
+          "abstain_action": 4,
+          "epsilon_decay_steps": 800
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,289 @@
+experiment_name: support_final_independent_observation_shift
+output_dir: results/diagnostic_extensions/support_final/execution/independent_observation_shift
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 6
+seeds: []
+evaluation:
+  interval_steps: 1000
+  episodes: 20
+analysis:
+  evidence_class: replication
+  analysis_status: locked_support_estimator_final_replication
+  environment_key: independent_observation_shift
+  primary_metric: normalized_return_auc
+  primary_window_first: 12000
+  primary_window_last: 16000
+  report_level_holm_family: support_final.independent_observation_shift
+  global_sensitivity_scope: three_primary_replication_rows_across_environments
+  no_early_stopping: true
+  planned_contrasts:
+  - name: raw_normalized_s1_vs_exact_count_gate
+    left: raw_normalized_s1
+    right: exact_count_gate
+    metric: normalized_return_auc
+    status: primary_replication
+  - name: tolerance_knn_executed_vs_exact_count_gate
+    left: tolerance_knn_executed
+    right: exact_count_gate
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: gaussian_affinity_executed_vs_exact_count_gate
+    left: gaussian_affinity_executed
+    right: exact_count_gate
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: mahalanobis_s1_vs_exact_count_gate
+    left: mahalanobis_s1
+    right: exact_count_gate
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: frozen_embedding_s1_vs_exact_count_gate
+    left: frozen_embedding_s1
+    right: exact_count_gate
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: gaussian_density_s3_vs_exact_count_gate
+    left: gaussian_density_s3
+    right: exact_count_gate
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: raw_normalized_s1_vs_gaussian_affinity_executed
+    left: raw_normalized_s1
+    right: gaussian_affinity_executed
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: mahalanobis_s1_vs_raw_normalized_s1
+    left: mahalanobis_s1
+    right: raw_normalized_s1
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: frozen_embedding_s1_vs_raw_normalized_s1
+    left: frozen_embedding_s1
+    right: raw_normalized_s1
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: gaussian_density_s3_vs_raw_normalized_s1
+    left: gaussian_density_s3
+    right: raw_normalized_s1
+    metric: normalized_return_auc
+    status: secondary_replication
+  - name: raw_normalized_s1_vs_tabular
+    left: raw_normalized_s1
+    right: tabular
+    metric: normalized_return_auc
+    status: reference_replication
+  - name: raw_normalized_s1_vs_dqn
+    left: raw_normalized_s1
+    right: dqn
+    metric: normalized_return_auc
+    status: reference_replication
+  protocol_file: configs/diagnostic_extensions/support_final/protocol_lock.yaml
+  protocol_sha256: 4638c80f0b53b1712ed74f391741958c8a7bafe8309599b3c942e5130f8c1396
+envs:
+- name: support-final-observation-shift
+  id: ObservationShift-v0
+  mechanism_class: locked_independent_observation_shift
+  seeds:
+  - 14030
+  - 14031
+  - 14032
+  - 14033
+  - 14034
+  - 14035
+  - 14036
+  - 14037
+  - 14038
+  - 14039
+  - 14040
+  - 14041
+  - 14042
+  - 14043
+  - 14044
+  - 14045
+  - 14046
+  - 14047
+  - 14048
+  - 14049
+  - 14050
+  - 14051
+  - 14052
+  - 14053
+  - 14054
+  - 14055
+  - 14056
+  - 14057
+  - 14058
+  - 14059
+  kwargs:
+    size: 9
+    goal_split: all
+    max_steps: 160
+    shift_after: 12000
+    slip_probability: 0.1
+    pre_shift_sensor_gain: 1.0
+    post_shift_sensor_gain: 0.85
+  training_steps: 16000
+  max_steps: 160
+  success_mode: positive_terminal
+  severity_id: observation_gain_085
+agents:
+- name: tabular
+  kind: tabular
+  params:
+    tabular_learning_rate: 0.2
+    epsilon_decay_steps: 16000
+- name: dqn
+  kind: dqn
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 16000
+- name: exact_count_gate
+  kind: support_estimator_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 16000
+    tabular_learning_rate: 0.2
+    approximate_support_k: 1
+    approximate_support_bandwidth: 1.0
+    approximate_support_tau: 20.0
+    support_estimator_type: exact_count
+    support_representation_type: raw_state
+    support_index_type: brute_force
+    support_covariance_regularization: 0.0001
+- name: tolerance_knn_executed
+  kind: support_estimator_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 16000
+    tabular_learning_rate: 0.2
+    approximate_support_k: 5
+    approximate_support_bandwidth: 0.18
+    approximate_support_tau: 2.0
+    support_estimator_type: tolerance_knn
+    support_representation_type: raw_state
+    support_index_type: brute_force
+    support_covariance_regularization: 0.0001
+- name: gaussian_affinity_executed
+  kind: support_estimator_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 16000
+    tabular_learning_rate: 0.2
+    approximate_support_k: 5
+    approximate_support_bandwidth: 0.25
+    approximate_support_tau: 2.0
+    support_estimator_type: gaussian_affinity
+    support_representation_type: raw_state
+    support_index_type: brute_force
+    support_covariance_regularization: 0.0001
+- name: raw_normalized_s1
+  kind: support_estimator_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 16000
+    tabular_learning_rate: 0.2
+    approximate_support_k: 3
+    approximate_support_bandwidth: 0.25
+    approximate_support_tau: 1.0
+    support_estimator_type: gaussian_affinity
+    support_representation_type: raw_state
+    support_index_type: brute_force
+    support_covariance_regularization: 0.0001
+- name: mahalanobis_s1
+  kind: support_estimator_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 16000
+    tabular_learning_rate: 0.2
+    approximate_support_k: 3
+    approximate_support_bandwidth: 0.25
+    approximate_support_tau: 1.0
+    support_estimator_type: regularized_mahalanobis
+    support_representation_type: raw_state
+    support_index_type: brute_force
+    support_covariance_regularization: 0.0001
+- name: frozen_embedding_s1
+  kind: support_estimator_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 16000
+    tabular_learning_rate: 0.2
+    approximate_support_k: 3
+    approximate_support_bandwidth: 0.25
+    approximate_support_tau: 1.0
+    support_estimator_type: gaussian_affinity
+    support_representation_type: frozen_dqn_penultimate
+    support_embedding_freeze_step: 4000
+    support_index_type: brute_force
+    support_covariance_regularization: 0.0001
+- name: gaussian_density_s3
+  kind: support_estimator_gate
+  params:
+    double_dqn: false
+    learning_rate: 0.0003
+    batch_size: 32
+    replay_capacity: 100000
+    replay_warmup: 512
+    train_frequency: 16
+    target_update_interval: 500
+    hidden_size: 128
+    epsilon_decay_steps: 16000
+    tabular_learning_rate: 0.2
+    approximate_support_k: 7
+    approximate_support_bandwidth: 1.0
+    approximate_support_tau: 8.0
+    support_estimator_type: regularized_gaussian_density
+    support_representation_type: raw_state
+    support_index_type: brute_force
+    support_covariance_regularization: 0.01

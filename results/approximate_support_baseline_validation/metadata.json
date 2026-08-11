@@ -1,0 +1,158 @@
+{
+  "created_utc": "2026-06-08T16:18:22Z",
+  "platform": "Linux-4.4.0-x86_64-with-glibc2.41",
+  "python": "3.13.5",
+  "gymnasium": "fallback-local",
+  "numpy": "2.3.5",
+  "torch": "2.10.0+cpu",
+  "torch_threads": 1,
+  "cpu_count": 56,
+  "processor": "",
+  "config_sha256": "98afac01dbfa0085a87d57d4afd157cb73e7a4cc3ac60a4095b4b8e3008eaf89",
+  "config_file": "configs/approximate_support_baseline_validation.json",
+  "git_commit_hash": "unknown",
+  "package_version": "1.4.0",
+  "environment_observations": [
+    {
+      "name": "ApplicationNavigation-deployment-goal-shift",
+      "requested_id": "ApplicationNavigationSupportShift-v0",
+      "resolved_id": "ApplicationNavigationSupportShift-v0",
+      "representation": "native_gymnasium_observation"
+    }
+  ],
+  "packages": {
+    "gymnasium": null,
+    "minigrid": null,
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8",
+    "torch": "2.10.0+cpu"
+  },
+  "config": {
+    "experiment_name": "asoc_approximate_support_baseline_validation",
+    "output_dir": "results/approximate_support_baseline_validation",
+    "runtime": {
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "workers": 1
+    },
+    "seeds": [
+      900,
+      901,
+      902
+    ],
+    "evaluation": {
+      "interval_steps": 200,
+      "episodes": 3
+    },
+    "analysis": {
+      "primary_metric": "return_auc",
+      "analysis_status": "completed_dependency_free_approximate_support_smoke_validation",
+      "planned_contrasts": [
+        {
+          "name": "approx_vs_exact_count",
+          "left": "approx_count_gated_k5",
+          "right": "count_gated_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "approx_vs_support_abstain",
+          "left": "approx_count_gated_k5",
+          "right": "support_abstain_tau_20",
+          "metric": "return_auc"
+        },
+        {
+          "name": "approx_vs_tabular",
+          "left": "approx_count_gated_k5",
+          "right": "tabular",
+          "metric": "return_auc"
+        }
+      ],
+      "validation_scope": "dependency-free smoke validation; not a replacement for the full 30-seed confirmatory experiments"
+    },
+    "envs": [
+      {
+        "name": "ApplicationNavigation-deployment-goal-shift",
+        "id": "ApplicationNavigationSupportShift-v0",
+        "kwargs": {
+          "goal_split": "train",
+          "slip_probability": 0.05,
+          "max_steps": 120
+        },
+        "eval_kwargs": {
+          "goal_split": "deployment"
+        },
+        "training_steps": 600,
+        "max_steps": 80,
+        "success_mode": "positive_terminal"
+      }
+    ],
+    "agents": [
+      {
+        "name": "tabular",
+        "kind": "tabular",
+        "params": {
+          "tabular_learning_rate": 0.2,
+          "epsilon_decay_steps": 800,
+          "batch_size": 16,
+          "hidden_size": 64
+        }
+      },
+      {
+        "name": "count_gated_tau_20",
+        "kind": "count_gated",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 64,
+          "tau": 20,
+          "epsilon_decay_steps": 800
+        }
+      },
+      {
+        "name": "support_abstain_tau_20",
+        "kind": "support_abstain_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 64,
+          "tau": 20,
+          "abstain_action": 4,
+          "epsilon_decay_steps": 800
+        }
+      },
+      {
+        "name": "approx_count_gated_k5",
+        "kind": "approx_count_gated",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 16,
+          "replay_capacity": 100000,
+          "replay_warmup": 999999,
+          "train_frequency": 999999,
+          "target_update_interval": 500,
+          "hidden_size": 64,
+          "approximate_support_k": 5,
+          "approximate_support_bandwidth": 0.25,
+          "approximate_support_tau": 2.0,
+          "epsilon_decay_steps": 800
+        }
+      }
+    ]
+  }
+}

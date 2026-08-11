@@ -1,0 +1,5 @@
+environment,agent,metric,n_seeds,minimum,maximum,median,mad,skew,excess_kurtosis,catastrophic_low_outliers,catastrophic_high_outliers,heavy_tail_flag
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,return_auc,2,-0.9524489349889336,-0.6686129911616444,-0.810530963075289,0.14191797191364458,0.0,0.0,0,0,False
+Crazyflie-sensorized-aliasing-smoke,fuzzy_reliability,mean_return,2,-0.8811950764851645,-0.6456320503074675,-0.7634135633963159,0.11778151308884849,0.0,0.0,0,0,False
+Crazyflie-sensorized-aliasing-smoke,knn_support,return_auc,2,-0.9524489349889336,-0.6686129911616444,-0.810530963075289,0.14191797191364458,0.0,0.0,0,0,False
+Crazyflie-sensorized-aliasing-smoke,knn_support,mean_return,2,-0.8811950764851645,-0.6456320503074675,-0.7634135633963159,0.11778151308884849,0.0,0.0,0,0,False

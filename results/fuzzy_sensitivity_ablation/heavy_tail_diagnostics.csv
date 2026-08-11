@@ -1,0 +1,15 @@
+environment,agent,metric,n_seeds,minimum,maximum,median,mad,skew,excess_kurtosis,catastrophic_low_outliers,catastrophic_high_outliers,heavy_tail_flag
+ApplicationNavigation-deployment-goal-shift,fuzzy_kappa_025,return_auc,2,-2.9850000000000008,-2.165,-2.575,0.41000000000000036,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_kappa_025,mean_return,2,-9.31,-5.17,-7.24,2.0700000000000003,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_kappa_4,return_auc,2,-2.9850000000000008,-2.165,-2.575,0.41000000000000036,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_kappa_4,mean_return,2,-9.31,-5.17,-7.24,2.0700000000000003,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_shoulder_conservative,return_auc,2,-2.9850000000000008,-2.165,-2.575,0.41000000000000036,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_shoulder_conservative,mean_return,2,-9.31,-5.17,-7.24,2.0700000000000003,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_tau_20,return_auc,2,-2.9850000000000008,-2.165,-2.575,0.41000000000000036,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_tau_20,mean_return,2,-9.31,-5.17,-7.24,2.0700000000000003,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_tau_5,return_auc,2,-2.9850000000000008,-2.165,-2.575,0.41000000000000036,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_tau_5,mean_return,2,-9.31,-5.17,-7.24,2.0700000000000003,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_tau_80,return_auc,2,-2.9850000000000008,-2.165,-2.575,0.41000000000000036,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_tau_80,mean_return,2,-9.31,-5.17,-7.24,2.0700000000000003,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_zero_support_abstain,return_auc,2,-0.8575000000000004,-0.8000000000000004,-0.8287500000000003,0.028749999999999998,0.0,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,fuzzy_zero_support_abstain,mean_return,2,-0.8000000000000004,-0.8000000000000004,-0.8000000000000004,0.0,0.0,0.0,0,0,False

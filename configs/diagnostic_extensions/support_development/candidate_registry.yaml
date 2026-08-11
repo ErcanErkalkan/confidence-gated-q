@@ -1,0 +1,221 @@
+schema_version: 1
+registry_id: matched_support_estimator_development
+status: locked_before_development_outcomes
+created_at: '2026-08-04T12:00:00+03:00'
+evidence_class: development
+purpose: Select support estimators with equal family candidate counts and exactly
+  matched experimental budgets, without accessing reserved final seeds.
+seed_lock:
+  registry_file: configs/diagnostic_extensions/seed_registry.yaml
+  registry_key: support_estimator_development
+  development_seeds:
+  - 13000
+  - 13001
+  - 13002
+  - 13003
+  - 13004
+  allowed_range: 13000-13099
+  final_registry_key: support_estimator_final
+  prohibited_final_range: 14000-14099
+  other_final_ranges_also_prohibited: true
+selection_rule:
+  locked_before_outcomes: true
+  primary_metric: return_auc
+  direction: higher_is_better
+  environment_score: mean_seed_return_auc
+  environment_rank: descending_average_rank_for_exact_ties
+  ordered_criteria:
+  - lowest_mean_environment_rank
+  - lowest_worst_environment_rank
+  - lower_failure_probability
+  - lower_query_latency
+  - lexical_candidate_id
+  p_values_used: false
+  final_results_used: false
+matched_budget:
+  family_count: 5
+  candidate_count_per_family: 4
+  total_candidate_count: 20
+  training_steps_per_agent_seed: 16000
+  checkpoint_first: 1000
+  checkpoint_last: 16000
+  checkpoint_interval: 1000
+  expected_checkpoint_count: 16
+  evaluation_episodes_per_checkpoint: 10
+  seeds_per_environment: 5
+  environments_per_candidate: 2
+  completed_runs_per_candidate: 10
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 6
+primary_metric:
+  name: return_auc
+  definition: For each candidate-environment-seed, average finite undiscounted evaluation
+    returns at every checkpoint from 1000 through 16000, integrate checkpoint means
+    by the trapezoidal rule, and divide by the 15000-step checkpoint-axis span. This
+    is time-axis normalization, not min-max reward scaling.
+environments:
+- environment_key: application_goal_shift
+  environment_name: ApplicationNavigation-support-estimator-development
+  environment_id: ApplicationNavigationSupportShift-v0
+  mechanism_class: application_goal_shift
+  development_seeds:
+  - 13000
+  - 13001
+  - 13002
+  - 13003
+  - 13004
+  kwargs:
+    goal_split: train
+    slip_probability: 0.05
+    max_steps: 120
+  eval_kwargs:
+    goal_split: deployment
+  max_steps: 120
+  success_mode: positive_terminal
+- environment_key: locked_transition_dynamics_shift
+  environment_name: transition-dynamics-support-estimator-development
+  environment_id: TransitionDynamicsShift-v0
+  mechanism_class: locked_independent_transition_dynamics_shift
+  lock_source: configs/diagnostic_extensions/INDEPENDENT_SHIFT_PROTOCOL.yaml
+  severity_selection_source: configs/diagnostic_extensions/selected_shift_severities.yaml
+  severity_id: transition_slip_035
+  development_seeds:
+  - 13000
+  - 13001
+  - 13002
+  - 13003
+  - 13004
+  kwargs:
+    size: 9
+    goal_split: all
+    max_steps: 160
+    shift_after: 12000
+    pre_shift_slip_probability: 0.05
+    post_shift_slip_probability: 0.35
+  max_steps: 160
+  success_mode: positive_terminal
+fractional_design:
+  design_type: predeclared_four_slot_matched_fractional_grid
+  note: All five families receive the same four (k, h, tau) slots. Slot order is deliberately
+    non-monotone in tau. Natural extra parameters are fixed or varied in predeclared
+    columns; no family receives additional trials.
+  slots:
+  - slot_id: s1
+    k: 3
+    h: 0.25
+    tau_approx: 1.0
+    regularization: 0.0001
+    requested_index: brute_force
+    embedding_freeze_step: 4000
+  - slot_id: s2
+    k: 5
+    h: 0.5
+    tau_approx: 4.0
+    regularization: 0.001
+    requested_index: auto
+    embedding_freeze_step: 8000
+  - slot_id: s3
+    k: 7
+    h: 1.0
+    tau_approx: 8.0
+    regularization: 0.01
+    requested_index: brute_force
+    embedding_freeze_step: 12000
+  - slot_id: s4
+    k: 9
+    h: 2.0
+    tau_approx: 2.0
+    regularization: 0.1
+    requested_index: auto
+    embedding_freeze_step: 6000
+families:
+- family_id: raw_normalized
+  estimator_type: gaussian_affinity
+  representation: raw_state
+  representation_definition: environment_native_normalized_coordinate_vector
+  natural_extra_parameter: requested_index
+  candidates:
+  - candidate_id: raw_normalized_s1
+    slot_id: s1
+  - candidate_id: raw_normalized_s2
+    slot_id: s2
+  - candidate_id: raw_normalized_s3
+    slot_id: s3
+  - candidate_id: raw_normalized_s4
+    slot_id: s4
+- family_id: zscore
+  estimator_type: zscore_knn
+  representation: zscore_normalized_raw_state
+  scale_epsilon: 1.0e-08
+  natural_extra_parameter: requested_index
+  candidates:
+  - candidate_id: zscore_s1
+    slot_id: s1
+  - candidate_id: zscore_s2
+    slot_id: s2
+  - candidate_id: zscore_s3
+    slot_id: s3
+  - candidate_id: zscore_s4
+    slot_id: s4
+- family_id: mahalanobis
+  estimator_type: regularized_mahalanobis
+  representation: raw_state
+  natural_extra_parameter: covariance_regularization
+  effective_index: brute_force_metric_preserving
+  candidates:
+  - candidate_id: mahalanobis_s1
+    slot_id: s1
+  - candidate_id: mahalanobis_s2
+    slot_id: s2
+  - candidate_id: mahalanobis_s3
+    slot_id: s3
+  - candidate_id: mahalanobis_s4
+    slot_id: s4
+- family_id: frozen_embedding
+  estimator_type: gaussian_affinity
+  representation: frozen_dqn_penultimate
+  natural_extra_parameter: embedding_freeze_step
+  candidates:
+  - candidate_id: frozen_embedding_s1
+    slot_id: s1
+  - candidate_id: frozen_embedding_s2
+    slot_id: s2
+  - candidate_id: frozen_embedding_s3
+    slot_id: s3
+  - candidate_id: frozen_embedding_s4
+    slot_id: s4
+- family_id: gaussian_density
+  estimator_type: regularized_gaussian_density
+  representation: raw_state
+  natural_extra_parameter: covariance_regularization
+  effective_index: brute_force_density_preserving
+  k_semantics: declared_matched_slot_but_density_uses_all_stored_keys
+  candidates:
+  - candidate_id: gaussian_density_s1
+    slot_id: s1
+  - candidate_id: gaussian_density_s2
+    slot_id: s2
+  - candidate_id: gaussian_density_s3
+    slot_id: s3
+  - candidate_id: gaussian_density_s4
+    slot_id: s4
+sensitivity_lock:
+  dimensions:
+  - k
+  - h
+  - tau_approx
+  - representation
+  aggregation: descriptive_mean_across_candidate_environment_seed_rows
+  within_representation_rows: true
+  uncertainty: seed_level_standard_error_descriptive
+  caveat: The four-slot fractional grid changes multiple hyperparameters together;
+    marginal sensitivity is descriptive and must not be interpreted as an isolated
+    causal hyperparameter effect.
+latency_lock:
+  source: evaluation_only_support_query_latency
+  unit: seconds_per_query
+  candidate_statistic: median_finite_query_latency
+  cpu_threads: 1
+  includes: support_estimator_query_and_index_work
+  excludes: network_action_selection_outside_support_query

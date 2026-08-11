@@ -1,0 +1,694 @@
+{
+  "created_utc": "2026-08-04T05:44:23Z",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.3",
+  "gymnasium": "1.3.0",
+  "numpy": "2.4.3",
+  "torch": "2.11.0+cpu",
+  "torch_threads": 1,
+  "cpu_count": 12,
+  "processor": "Intel64 Family 6 Model 165 Stepping 3, GenuineIntel",
+  "config_sha256": "0f91e88613a94ce7e61a340ff3106e2c261ae0748c5baa2f41f349e45c273487",
+  "config_file": "configs/reviewer1_remaining/support_development/matched_candidates.yaml",
+  "git_commit_hash": "e273c8ef07f45e6b8d788fcd9200e3cdb8a2c2d8",
+  "package_version": "1.8.0",
+  "source_snapshot_sha256": "742ca77d888656ad8bef598c19c64970034574038d720df6054167dd41c2715c",
+  "execution_inputs_clean": true,
+  "python_version": "3.14.3",
+  "torch_version": "2.11.0+cpu",
+  "numpy_version": "2.4.3",
+  "gymnasium_version": "1.3.0",
+  "minigrid_version": "3.1.0",
+  "gym_pybullet_drones_version": "not-installed",
+  "pybullet_version": "not-installed",
+  "execution_input_manifest": [
+    {
+      "path": "configs/reviewer1_remaining/support_development/matched_candidates.yaml",
+      "sha256": "51dfd90f7bca485a83d00f5418ddae26b7f8f61b2a13cb6de56fb6252dcf6f63"
+    },
+    {
+      "path": "environment.yml",
+      "sha256": "4ca257a4375903f38b34ec6241115a84f7fdafcf8101211100c8718de3130606"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "e83d65a89357584578e6fd8787bdffbd608723431ba9506a35ca785a3fef9dfa"
+    },
+    {
+      "path": "requirements-tested-uav.txt",
+      "sha256": "611abb69b71e7bf25e22c621c14c02817e9ac8204bb6da2598afbc02346d3962"
+    },
+    {
+      "path": "requirements-tested.txt",
+      "sha256": "bb17a2fe24a0003ac7c2e3435e89efd97b1cc388ff61585267e8ce52c2079648"
+    },
+    {
+      "path": "requirements-uav.txt",
+      "sha256": "6a9eee394010b09a3c02a3445ed4126d0a36f7d76c6788066afd509f5593719b"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "8cdd8425bdb43dfc0fff2c7a672015f3c90a5a1a96774c56f976692777890a2f"
+    },
+    {
+      "path": "src/hybrid_q/__init__.py",
+      "sha256": "83b2d0f76e3519720748f3bc50fe37bd92af6a04337404191738f8576902eeb9"
+    },
+    {
+      "path": "src/hybrid_q/agents.py",
+      "sha256": "206b3b43d20e091f06cb4c60f4bb27912cf4e8d3c9901876e226c6d65c3e01fd"
+    },
+    {
+      "path": "src/hybrid_q/calibration.py",
+      "sha256": "f0d1f5870d628c909cef035bb988e4eef167f37385b7aac1d11e94b2340994ff"
+    },
+    {
+      "path": "src/hybrid_q/cli.py",
+      "sha256": "f80a74e36e0e881b036e1d46243951b727450be88cf28cf569943a4e0790ad37"
+    },
+    {
+      "path": "src/hybrid_q/complexity.py",
+      "sha256": "443b61d92efc17c41ace640b3cafe75b5ba4ba97bf8c92ad09b03b929397be65"
+    },
+    {
+      "path": "src/hybrid_q/config.py",
+      "sha256": "6099cd2466bb035fc23867978134d9d491cea1c9479a82370e6e77dd810d553d"
+    },
+    {
+      "path": "src/hybrid_q/encoding.py",
+      "sha256": "afc2aea4c3ecd7f77d5ae42278f508043cf61c884c65200e3d6eb926fabf9770"
+    },
+    {
+      "path": "src/hybrid_q/envs.py",
+      "sha256": "6040bfe92e0055599935a9ce7be2d3878f9c8efc582df4b4937ee22026c12355"
+    },
+    {
+      "path": "src/hybrid_q/experiment.py",
+      "sha256": "410065edbbe80f1d89ba9519b80a696709b167b62f047cd99f2cfb0d44f2d720"
+    },
+    {
+      "path": "src/hybrid_q/gym_compat.py",
+      "sha256": "d6ebbdf96974e3ffcd20e08f5dc173d466e236d36cfdbef4d0ce9f60dbef6942"
+    },
+    {
+      "path": "src/hybrid_q/mappings.py",
+      "sha256": "687ac56d6628b5aadfe8e3c98a11cc1da10161ee8822e6e1480e56fcc7482531"
+    },
+    {
+      "path": "src/hybrid_q/provenance.py",
+      "sha256": "52e4f8c2640eabfab987284f8da84b78963aa826eac14cf74957a2ca02f00036"
+    },
+    {
+      "path": "src/hybrid_q/statistics.py",
+      "sha256": "b04af7b2c69bb320df0bfdb2275f8ac2ce8802e1eff3c857889b5817b7f3289e"
+    },
+    {
+      "path": "src/hybrid_q/support_estimators.py",
+      "sha256": "9b6cdceab2d4955f6f884f4e468643976da0c63e179aec02570e1065c05e9ce4"
+    }
+  ],
+  "environment_observations": [
+    {
+      "name": "ApplicationNavigation-support-estimator-development",
+      "requested_id": "ApplicationNavigationSupportShift-v0",
+      "resolved_id": "ApplicationNavigationSupportShift-v0",
+      "representation": "native_gymnasium_observation"
+    },
+    {
+      "name": "Reviewer1-transition-dynamics-support-estimator-development",
+      "requested_id": "Reviewer1TransitionDynamicsShift-v0",
+      "resolved_id": "Reviewer1TransitionDynamicsShift-v0",
+      "representation": "native_gymnasium_observation"
+    }
+  ],
+  "packages": {
+    "gymnasium": "1.3.0",
+    "minigrid": "3.1.0",
+    "gym-pybullet-drones": null,
+    "pybullet": null,
+    "numpy": "2.4.3",
+    "pandas": "3.0.1",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.8",
+    "torch": "2.11.0"
+  },
+  "config": {
+    "experiment_name": "reviewer1_support_estimator_matched_development",
+    "output_dir": "results/reviewer1_remaining/support_development/execution",
+    "runtime": {
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "workers": 6
+    },
+    "seeds": [],
+    "evaluation": {
+      "interval_steps": 1000,
+      "episodes": 10
+    },
+    "analysis": {
+      "evidence_class": "development",
+      "analysis_status": "locked_matched_support_estimator_development",
+      "primary_metric": "return_auc",
+      "candidate_registry": "project_admin/reviewer1_remaining/SUPPORT_ESTIMATOR_CANDIDATES.yaml",
+      "selection_rule": "mean_rank_then_worst_rank_then_failure_then_latency_then_id",
+      "final_seed_ranges_prohibited": [
+        "12000-12099",
+        "14000-14099",
+        "16000-16099"
+      ],
+      "planned_contrasts": []
+    },
+    "envs": [
+      {
+        "name": "ApplicationNavigation-support-estimator-development",
+        "id": "ApplicationNavigationSupportShift-v0",
+        "seeds": [
+          13000,
+          13001,
+          13002,
+          13003,
+          13004
+        ],
+        "kwargs": {
+          "goal_split": "train",
+          "slip_probability": 0.05,
+          "max_steps": 120
+        },
+        "eval_kwargs": {
+          "goal_split": "deployment"
+        },
+        "training_steps": 16000,
+        "max_steps": 120,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "Reviewer1-transition-dynamics-support-estimator-development",
+        "id": "Reviewer1TransitionDynamicsShift-v0",
+        "seeds": [
+          13000,
+          13001,
+          13002,
+          13003,
+          13004
+        ],
+        "kwargs": {
+          "size": 9,
+          "goal_split": "all",
+          "max_steps": 160,
+          "shift_after": 12000,
+          "pre_shift_slip_probability": 0.05,
+          "post_shift_slip_probability": 0.35
+        },
+        "training_steps": 16000,
+        "max_steps": 160,
+        "success_mode": "positive_terminal"
+      }
+    ],
+    "agents": [
+      {
+        "name": "raw_normalized_s1",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 3,
+          "approximate_support_bandwidth": 0.25,
+          "approximate_support_tau": 1.0,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.0001
+        }
+      },
+      {
+        "name": "raw_normalized_s2",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 5,
+          "approximate_support_bandwidth": 0.5,
+          "approximate_support_tau": 4.0,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "raw_state",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.001
+        }
+      },
+      {
+        "name": "raw_normalized_s3",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 7,
+          "approximate_support_bandwidth": 1.0,
+          "approximate_support_tau": 8.0,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.01
+        }
+      },
+      {
+        "name": "raw_normalized_s4",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 9,
+          "approximate_support_bandwidth": 2.0,
+          "approximate_support_tau": 2.0,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "raw_state",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.1
+        }
+      },
+      {
+        "name": "zscore_s1",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 3,
+          "approximate_support_bandwidth": 0.25,
+          "approximate_support_tau": 1.0,
+          "support_estimator_type": "zscore_knn",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.0001
+        }
+      },
+      {
+        "name": "zscore_s2",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 5,
+          "approximate_support_bandwidth": 0.5,
+          "approximate_support_tau": 4.0,
+          "support_estimator_type": "zscore_knn",
+          "support_representation_type": "raw_state",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.001
+        }
+      },
+      {
+        "name": "zscore_s3",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 7,
+          "approximate_support_bandwidth": 1.0,
+          "approximate_support_tau": 8.0,
+          "support_estimator_type": "zscore_knn",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.01
+        }
+      },
+      {
+        "name": "zscore_s4",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 9,
+          "approximate_support_bandwidth": 2.0,
+          "approximate_support_tau": 2.0,
+          "support_estimator_type": "zscore_knn",
+          "support_representation_type": "raw_state",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.1
+        }
+      },
+      {
+        "name": "mahalanobis_s1",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 3,
+          "approximate_support_bandwidth": 0.25,
+          "approximate_support_tau": 1.0,
+          "support_estimator_type": "regularized_mahalanobis",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.0001
+        }
+      },
+      {
+        "name": "mahalanobis_s2",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 5,
+          "approximate_support_bandwidth": 0.5,
+          "approximate_support_tau": 4.0,
+          "support_estimator_type": "regularized_mahalanobis",
+          "support_representation_type": "raw_state",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.001
+        }
+      },
+      {
+        "name": "mahalanobis_s3",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 7,
+          "approximate_support_bandwidth": 1.0,
+          "approximate_support_tau": 8.0,
+          "support_estimator_type": "regularized_mahalanobis",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.01
+        }
+      },
+      {
+        "name": "mahalanobis_s4",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 9,
+          "approximate_support_bandwidth": 2.0,
+          "approximate_support_tau": 2.0,
+          "support_estimator_type": "regularized_mahalanobis",
+          "support_representation_type": "raw_state",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.1
+        }
+      },
+      {
+        "name": "frozen_embedding_s1",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 3,
+          "approximate_support_bandwidth": 0.25,
+          "approximate_support_tau": 1.0,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "frozen_dqn_penultimate",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.0001,
+          "support_embedding_freeze_step": 4000
+        }
+      },
+      {
+        "name": "frozen_embedding_s2",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 5,
+          "approximate_support_bandwidth": 0.5,
+          "approximate_support_tau": 4.0,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "frozen_dqn_penultimate",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.001,
+          "support_embedding_freeze_step": 8000
+        }
+      },
+      {
+        "name": "frozen_embedding_s3",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 7,
+          "approximate_support_bandwidth": 1.0,
+          "approximate_support_tau": 8.0,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "frozen_dqn_penultimate",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.01,
+          "support_embedding_freeze_step": 12000
+        }
+      },
+      {
+        "name": "frozen_embedding_s4",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 9,
+          "approximate_support_bandwidth": 2.0,
+          "approximate_support_tau": 2.0,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "frozen_dqn_penultimate",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.1,
+          "support_embedding_freeze_step": 6000
+        }
+      },
+      {
+        "name": "gaussian_density_s1",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 3,
+          "approximate_support_bandwidth": 0.25,
+          "approximate_support_tau": 1.0,
+          "support_estimator_type": "regularized_gaussian_density",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.0001
+        }
+      },
+      {
+        "name": "gaussian_density_s2",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 5,
+          "approximate_support_bandwidth": 0.5,
+          "approximate_support_tau": 4.0,
+          "support_estimator_type": "regularized_gaussian_density",
+          "support_representation_type": "raw_state",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.001
+        }
+      },
+      {
+        "name": "gaussian_density_s3",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 7,
+          "approximate_support_bandwidth": 1.0,
+          "approximate_support_tau": 8.0,
+          "support_estimator_type": "regularized_gaussian_density",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.01
+        }
+      },
+      {
+        "name": "gaussian_density_s4",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "epsilon_decay_steps": 16000,
+          "approximate_support_k": 9,
+          "approximate_support_bandwidth": 2.0,
+          "approximate_support_tau": 2.0,
+          "support_estimator_type": "regularized_gaussian_density",
+          "support_representation_type": "raw_state",
+          "support_index_type": "auto",
+          "support_scale_epsilon": 1e-08,
+          "support_covariance_regularization": 0.1
+        }
+      }
+    ]
+  }
+}

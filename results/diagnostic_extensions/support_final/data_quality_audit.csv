@@ -1,0 +1,7 @@
+check_name,status,severity_if_failed,evidence,analytical_risk
+execution_coverage,PASS,critical,810/810 runs,none_detected
+seed_metric_grain_unique,PASS,critical,rows=810 expected=810,none_detected
+interaction_budget_match,PASS,critical,rows=27 failures=0,none_detected
+finite_primary_outcomes,PASS,critical,normalized_return_auc finite for every environment-agent-seed,none_detected
+support_score_completeness,PASS,high,required only for seven support-estimator agents,none_detected
+no_seed_exclusions,PASS,critical,all locked seeds retained,none_detected

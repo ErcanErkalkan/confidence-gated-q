@@ -1,0 +1,160 @@
+experiment_name: temporal_interface_development
+output_dir: results/diagnostic_extensions/temporal_interface_development
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 4
+seeds: [15004, 15005]
+evaluation:
+  interval_steps: 120
+  episodes: 3
+analysis:
+  analysis_status: development_diagnostic_not_final_confirmation
+  evidence_class: development_diagnostic
+  final_seed_access: prohibited
+  planned_contrasts: []
+  temporal_candidate_count: 3
+  feed_forward_capacity_control_count: 3
+  selection_scope: temporal_candidates_only
+  selection_rule:
+    - highest_mean_normalized_return_auc
+    - lowest_failure_probability
+    - lowest_inference_time_us_per_decision_mean
+    - lexical_candidate_id
+  comparison_limits:
+    - interaction_and_evaluation_budgets_are_matched
+    - gradient_compute_and_parameter_counts_are_not_identical
+    - matched_interface_conditions_share_one_ctrlaviary_plant
+    - historical_environment_implementations_are_not_claimed_compute_identical
+envs:
+  - &base_env
+    name: architecture_sensorized_low_level
+    id: SensorizedPyBulletUAVWaypoint-v0
+    kwargs: &base_kwargs
+      target_split: deployment
+      physics: pyb_drag
+      pyb_freq: 240
+      ctrl_freq: 60
+      action_repeat: 1
+      max_steps: 30
+      collective_delta_rpm: 220
+      tilt_radians: 0.10
+      high_level_speed: 0.18
+      goal_tolerance: 0.16
+      state_quantization: 0.05
+      lidar_range: 1.2
+      lidar_noise_std: 0.02
+      vio_position_noise_std: 0.02
+      vio_velocity_noise_std: 0.03
+      imu_attitude_noise_std: 0.008
+      localization_latency_steps: 2
+      localization_dropout_probability: 0.03
+      range_dropout_probability: 0.02
+      sensor_bias_walk_std: 0.0007
+      camera_fov_degrees: 100
+      camera_dropout_probability: 0.05
+      initial_position_jitter: 0.04
+      initial_attitude_jitter: 0.03
+      wind_force_std: 0.002
+      lambda_collision: 1.0
+      lambda_idle: 0.05
+      sensor_noise_enabled: true
+      sensor_latency_enabled: true
+      localization_dropout_enabled: true
+      range_dropout_enabled: true
+      camera_dropout_enabled: true
+      visibility_occlusion_enabled: true
+      observation_mode: sensorized
+      control_interface_mode: low_level
+    eval_kwargs: {}
+    training_steps: 240
+    max_steps: 30
+    success_mode: positive_terminal
+  - <<: *base_env
+    name: architecture_frame_stack
+    frame_stack: 4
+  - <<: *base_env
+    name: architecture_filtered_belief
+    temporal_filter_alpha: 0.35
+  - <<: *base_env
+    name: interface_A_state_low_level
+    kwargs:
+      <<: *base_kwargs
+      observation_mode: state_accessible
+      control_interface_mode: low_level
+  - <<: *base_env
+    name: interface_B_sensorized_high_level
+    kwargs:
+      <<: *base_kwargs
+      observation_mode: sensorized
+      control_interface_mode: high_level
+  - <<: *base_env
+    name: interface_C_state_high_level
+    kwargs:
+      <<: *base_kwargs
+      observation_mode: state_accessible
+      control_interface_mode: high_level
+  - <<: *base_env
+    name: interface_D_sensorized_low_level
+agents:
+  - name: temporal_frame_stack_4
+    kind: dqn
+    applies_to_envs: [architecture_frame_stack]
+    params: &common_agent
+      double_dqn: false
+      learning_rate: 0.0005
+      batch_size: 16
+      replay_capacity: 2000
+      replay_warmup: 32
+      train_frequency: 4
+      target_update_interval: 120
+      hidden_size: 64
+      epsilon_decay_steps: 240
+      frame_stack_size: 4
+  - name: temporal_drqn_seq4
+    kind: drqn
+    applies_to_envs: [architecture_sensorized_low_level]
+    params:
+      <<: *common_agent
+      sequence_length: 4
+      recurrent_hidden_size: 64
+      frame_stack_size: 1
+  - name: temporal_filtered_alpha035
+    kind: dqn
+    applies_to_envs: [architecture_filtered_belief]
+    params:
+      <<: *common_agent
+      temporal_filter_alpha: 0.35
+      frame_stack_size: 1
+  - name: feedforward_capacity_h064
+    kind: dqn
+    applies_to_envs: [architecture_sensorized_low_level]
+    params:
+      <<: *common_agent
+      hidden_size: 64
+      frame_stack_size: 1
+  - name: feedforward_capacity_h096
+    kind: dqn
+    applies_to_envs: [architecture_sensorized_low_level]
+    params:
+      <<: *common_agent
+      hidden_size: 96
+      frame_stack_size: 1
+  - name: feedforward_capacity_h128
+    kind: dqn
+    applies_to_envs: [architecture_sensorized_low_level]
+    params:
+      <<: *common_agent
+      hidden_size: 128
+      frame_stack_size: 1
+  - name: interface_dqn_h064
+    kind: dqn
+    applies_to_envs:
+      - interface_A_state_low_level
+      - interface_B_sensorized_high_level
+      - interface_C_state_high_level
+      - interface_D_sensorized_low_level
+    params:
+      <<: *common_agent
+      hidden_size: 64
+      frame_stack_size: 1

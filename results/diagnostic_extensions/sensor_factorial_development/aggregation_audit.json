@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "evidence_class": "development_diagnostic",
+  "conditions": 8,
+  "agents": 4,
+  "development_seeds": [
+    15002,
+    15003
+  ],
+  "seed_metric_rows": 64,
+  "summary_rows": 32,
+  "budget_rows_passed": 32,
+  "factor_isolation_rows_passed": 8,
+  "manipulation_rows_passed": 8,
+  "final_seed_rows": 0
+}

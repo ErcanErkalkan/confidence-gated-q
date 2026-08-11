@@ -1,0 +1,155 @@
+experiment_name: reliability_calibration_development_fractional
+output_dir: results/diagnostic_extensions/reliability_calibration/development
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+seeds: [10000, 10001, 10002, 10003, 10004]
+evaluation:
+  interval_steps: 250
+  episodes: 82
+analysis:
+  primary_metric: branch_action_auroc_post_shift
+  analysis_status: development_only_not_confirmatory
+  seed_registry_key: reliability_calibration_development
+  final_seed_ranges_prohibited: [12000-12099]
+  calibration_targets:
+    action_correctness: >-
+      Binary target on informative evaluation rows where exactly one branch's
+      greedy action equals the analytic optimal action; 1 means tabular better.
+    value_error: >-
+      Binary target on non-tied evaluation rows with analytic one-step Q*;
+      1 means the tabular branch has lower full-action-vector RMSE.
+  fractional_design:
+    full_cartesian_size: 48
+    executed_size: 24
+    rule: >-
+      Index beta, lambda, and epsilon from zero in their declared order and
+      include a cell iff (beta_index + lambda_index + epsilon_index) mod 2 = 0.
+    rationale: >-
+      This pre-declared half fraction balances every epsilon level at eight
+      cells and every beta and lambda level at six cells, while reducing the
+      development run count by half. Main effects are estimable; higher-order
+      interactions remain partially aliased and are not used for claims.
+    beta: [0.02, 0.05, 0.10, 0.20]
+    lambda: [1, 5, 10, 20]
+    epsilon: [1.0e-8, 1.0e-6, 1.0e-4]
+  selection_rule: >-
+    This step is diagnostic, not a final parameter selection. Rank cells by
+    mean post-shift action-correctness AUROC across both severities, then report
+    value-error AUROC, calibration, selective risk, and delay without promoting
+    the development winner to a confirmatory claim.
+envs:
+  - name: ReliabilityShift-boundary-030-calibration-development
+    id: ReliabilityShiftBandit-v0
+    kwargs:
+      context_count: 41
+      regime: switch
+      shift_after: 2500
+      pre_boundary: 0.5
+      post_boundary: 0.3
+    eval_kwargs:
+      regime: switch
+    training_steps: 4000
+    max_steps: 1
+    success_mode: positive_terminal
+  - name: ReliabilityShift-boundary-020-calibration-development
+    id: ReliabilityShiftBandit-v0
+    kwargs:
+      context_count: 41
+      regime: switch
+      shift_after: 2500
+      pre_boundary: 0.5
+      post_boundary: 0.2
+    eval_kwargs:
+      regime: switch
+    training_steps: 4000
+    max_steps: 1
+    success_mode: positive_terminal
+agents:
+  - name: rel_b002_l1_e1e8
+    kind: reliability_gated
+    params: &common
+      double_dqn: false
+      learning_rate: 0.001
+      tabular_learning_rate: 0.02
+      batch_size: 32
+      replay_capacity: 1000
+      replay_warmup: 128
+      train_frequency: 16
+      target_update_interval: 100
+      hidden_size: 32
+      tau: 20
+      reliability_beta: 0.02
+      reliability_prior_strength: 1
+      reliability_epsilon: 1.0e-8
+      epsilon_decay_steps: 3000
+  - name: rel_b002_l1_e1e4
+    kind: reliability_gated
+    params: {<<: *common, reliability_epsilon: 1.0e-4}
+  - name: rel_b002_l5_e1e6
+    kind: reliability_gated
+    params: {<<: *common, reliability_prior_strength: 5, reliability_epsilon: 1.0e-6}
+  - name: rel_b002_l10_e1e8
+    kind: reliability_gated
+    params: {<<: *common, reliability_prior_strength: 10}
+  - name: rel_b002_l10_e1e4
+    kind: reliability_gated
+    params: {<<: *common, reliability_prior_strength: 10, reliability_epsilon: 1.0e-4}
+  - name: rel_b002_l20_e1e6
+    kind: reliability_gated
+    params: {<<: *common, reliability_prior_strength: 20, reliability_epsilon: 1.0e-6}
+  - name: rel_b005_l1_e1e6
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.05, reliability_epsilon: 1.0e-6}
+  - name: rel_b005_l5_e1e8
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.05, reliability_prior_strength: 5}
+  - name: rel_b005_l5_e1e4
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.05, reliability_prior_strength: 5, reliability_epsilon: 1.0e-4}
+  - name: rel_b005_l10_e1e6
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.05, reliability_prior_strength: 10, reliability_epsilon: 1.0e-6}
+  - name: rel_b005_l20_e1e8
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.05, reliability_prior_strength: 20}
+  - name: rel_b005_l20_e1e4
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.05, reliability_prior_strength: 20, reliability_epsilon: 1.0e-4}
+  - name: rel_b010_l1_e1e8
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.10}
+  - name: rel_b010_l1_e1e4
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.10, reliability_epsilon: 1.0e-4}
+  - name: rel_b010_l5_e1e6
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.10, reliability_prior_strength: 5, reliability_epsilon: 1.0e-6}
+  - name: rel_b010_l10_e1e8
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.10, reliability_prior_strength: 10}
+  - name: rel_b010_l10_e1e4
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.10, reliability_prior_strength: 10, reliability_epsilon: 1.0e-4}
+  - name: rel_b010_l20_e1e6
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.10, reliability_prior_strength: 20, reliability_epsilon: 1.0e-6}
+  - name: rel_b020_l1_e1e6
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.20, reliability_epsilon: 1.0e-6}
+  - name: rel_b020_l5_e1e8
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.20, reliability_prior_strength: 5}
+  - name: rel_b020_l5_e1e4
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.20, reliability_prior_strength: 5, reliability_epsilon: 1.0e-4}
+  - name: rel_b020_l10_e1e6
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.20, reliability_prior_strength: 10, reliability_epsilon: 1.0e-6}
+  - name: rel_b020_l20_e1e8
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.20, reliability_prior_strength: 20}
+  - name: rel_b020_l20_e1e4
+    kind: reliability_gated
+    params: {<<: *common, reliability_beta: 0.20, reliability_prior_strength: 20, reliability_epsilon: 1.0e-4}

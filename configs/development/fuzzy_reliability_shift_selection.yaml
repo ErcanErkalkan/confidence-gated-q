@@ -1,0 +1,98 @@
+experiment_name: fuzzy_reliability_shift_development_selection
+output_dir: results/development/fuzzy_reliability_shift_selection
+runtime:
+  torch_threads: 1
+  torch_interop_threads: 1
+  workers: 8
+  allow_dirty_execution_inputs: true
+seeds: [0, 1, 2, 3, 4]
+evaluation:
+  interval_steps: 500
+  episodes: 200
+analysis:
+  primary_metric: return_auc
+  analysis_status: development_only_not_confirmatory
+  selection_rule: >
+    Select the high-support/low-reliability singleton from {0.10, 0.35, 0.75}
+    by lowest average return-AUC rank across both shift severities; break exact
+    ties by largest pooled paired mean difference from count gating.
+  planned_contrasts:
+    - name: low_10_vs_count
+      left: fuzzy_shift_low_10
+      right: count_gate
+      metric: return_auc
+    - name: low_35_vs_count
+      left: fuzzy_shift_low_35
+      right: count_gate
+      metric: return_auc
+    - name: low_75_vs_count
+      left: fuzzy_shift_low_75
+      right: count_gate
+      metric: return_auc
+envs:
+  - name: ReliabilityShift-boundary-030-development
+    id: ReliabilityShiftBandit-v0
+    kwargs:
+      context_count: 41
+      regime: switch
+      shift_after: 6000
+      pre_boundary: 0.5
+      post_boundary: 0.3
+    eval_kwargs:
+      regime: post
+    training_steps: 8000
+    max_steps: 1
+    success_mode: positive_terminal
+  - name: ReliabilityShift-boundary-020-development
+    id: ReliabilityShiftBandit-v0
+    kwargs:
+      context_count: 41
+      regime: switch
+      shift_after: 6000
+      pre_boundary: 0.5
+      post_boundary: 0.2
+    eval_kwargs:
+      regime: post
+    training_steps: 8000
+    max_steps: 1
+    success_mode: positive_terminal
+agents:
+  - name: count_gate
+    kind: count_gated
+    params: &common
+      double_dqn: false
+      learning_rate: 0.001
+      tabular_learning_rate: 0.02
+      batch_size: 32
+      replay_capacity: 1000
+      replay_warmup: 128
+      train_frequency: 4
+      target_update_interval: 100
+      hidden_size: 64
+      tau: 20
+      fuzzy_tau_support: 20
+      reliability_beta: 0.1
+      reliability_prior_strength: 5
+      fallback_policy: no_hold
+      epsilon_decay_steps: 7000
+  - name: original_fuzzy
+    kind: fuzzy_support_adaptive_gate
+    params:
+      <<: *common
+      fuzzy_uncertainty_scale: 1.0
+      fuzzy_abstain_zero_support: false
+  - name: fuzzy_shift_low_10
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *common
+      fuzzy_reliability_consequents: [0.0, 0.20, 0.70, 0.10, 0.95]
+  - name: fuzzy_shift_low_35
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *common
+      fuzzy_reliability_consequents: [0.0, 0.20, 0.70, 0.35, 0.95]
+  - name: fuzzy_shift_low_75
+    kind: fuzzy_reliability_gate
+    params:
+      <<: *common
+      fuzzy_reliability_consequents: [0.0, 0.35, 0.65, 0.75, 0.95]

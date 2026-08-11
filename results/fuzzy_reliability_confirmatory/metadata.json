@@ -1,0 +1,390 @@
+{
+  "created_utc": "2026-06-12T18:23:51Z",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.3",
+  "gymnasium": "1.3.0",
+  "numpy": "2.4.3",
+  "torch": "2.11.0+cpu",
+  "torch_threads": 1,
+  "cpu_count": 12,
+  "processor": "Intel64 Family 6 Model 165 Stepping 3, GenuineIntel",
+  "config_sha256": "19abe6c983561dd9cfc02cb5e60723bee0227306006cd07cbe3c999d95ba35ec",
+  "config_file": "configs/fuzzy_reliability_confirmatory_30seed.yaml",
+  "git_commit_hash": "ce81c103cc524029aa4bbeda841e350b8f9266ec",
+  "package_version": "1.6.0",
+  "source_snapshot_sha256": "7af78d1b81cf02ec67d6e1eb42eb327951c66f5eead6d51408a3aa242485b0b7",
+  "execution_inputs_clean": true,
+  "python_version": "3.14.3",
+  "torch_version": "2.11.0+cpu",
+  "numpy_version": "2.4.3",
+  "gymnasium_version": "1.3.0",
+  "minigrid_version": "3.1.0",
+  "gym_pybullet_drones_version": "not-installed",
+  "pybullet_version": "not-installed",
+  "execution_input_manifest": [
+    {
+      "path": "configs/fuzzy_reliability_confirmatory_30seed.yaml",
+      "sha256": "5637e8dde1f061d5bb787ac5dcb7ede65a0806f1bc111cea44a22a0763063147"
+    },
+    {
+      "path": "environment.yml",
+      "sha256": "4ca257a4375903f38b34ec6241115a84f7fdafcf8101211100c8718de3130606"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "77714421480a761de4e741222cb63fd1498174214aca7a2cf250bcf064e26136"
+    },
+    {
+      "path": "requirements-tested-uav.txt",
+      "sha256": "611abb69b71e7bf25e22c621c14c02817e9ac8204bb6da2598afbc02346d3962"
+    },
+    {
+      "path": "requirements-tested.txt",
+      "sha256": "bb17a2fe24a0003ac7c2e3435e89efd97b1cc388ff61585267e8ce52c2079648"
+    },
+    {
+      "path": "requirements-uav.txt",
+      "sha256": "6a9eee394010b09a3c02a3445ed4126d0a36f7d76c6788066afd509f5593719b"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "8cdd8425bdb43dfc0fff2c7a672015f3c90a5a1a96774c56f976692777890a2f"
+    },
+    {
+      "path": "src/hybrid_q/__init__.py",
+      "sha256": "56d40a447a486618f08cea38ad5d26895f14a63a5b04f2ada95f95a70514d38d"
+    },
+    {
+      "path": "src/hybrid_q/agents.py",
+      "sha256": "635f8dba2eec6943accb0a2a56ce07065322198bef55284828b110056f916379"
+    },
+    {
+      "path": "src/hybrid_q/cli.py",
+      "sha256": "f80a74e36e0e881b036e1d46243951b727450be88cf28cf569943a4e0790ad37"
+    },
+    {
+      "path": "src/hybrid_q/config.py",
+      "sha256": "6099cd2466bb035fc23867978134d9d491cea1c9479a82370e6e77dd810d553d"
+    },
+    {
+      "path": "src/hybrid_q/encoding.py",
+      "sha256": "afc2aea4c3ecd7f77d5ae42278f508043cf61c884c65200e3d6eb926fabf9770"
+    },
+    {
+      "path": "src/hybrid_q/envs.py",
+      "sha256": "bff23bd66e99a3eb1291f95a0ea2ca128237091ecfcabfe9dac5e93ef74511f0"
+    },
+    {
+      "path": "src/hybrid_q/experiment.py",
+      "sha256": "8e3c5b67b538d065f6fc2bfad730417e5aa31f5e28a3c4c5a1a8c47b0f34a974"
+    },
+    {
+      "path": "src/hybrid_q/gym_compat.py",
+      "sha256": "d6ebbdf96974e3ffcd20e08f5dc173d466e236d36cfdbef4d0ce9f60dbef6942"
+    },
+    {
+      "path": "src/hybrid_q/provenance.py",
+      "sha256": "b950a92a56c99dedf2e5a7578a49d0479742bbbf4f6aca3ffc9ddf7065e5c6c0"
+    },
+    {
+      "path": "src/hybrid_q/statistics.py",
+      "sha256": "07869267739e07f8c9a03ffcd477afff6edf092c44b798d50c72764dd9ffb964"
+    }
+  ],
+  "environment_observations": [
+    {
+      "name": "FrozenLake-4x4-slippery-confirmatory",
+      "requested_id": "FrozenLake-v1",
+      "resolved_id": "FrozenLake-v1",
+      "representation": "native_gymnasium_observation"
+    },
+    {
+      "name": "CliffWalking-confirmatory",
+      "requested_id": "CliffWalking-v1",
+      "resolved_id": "CliffWalking-v1",
+      "representation": "native_gymnasium_observation"
+    },
+    {
+      "name": "FourRooms-9-support-shift-confirmatory",
+      "requested_id": "StructuredFourRooms-v0",
+      "resolved_id": "StructuredFourRooms-v0",
+      "representation": "native_gymnasium_observation"
+    }
+  ],
+  "packages": {
+    "gymnasium": "1.3.0",
+    "minigrid": "3.1.0",
+    "gym-pybullet-drones": null,
+    "pybullet": null,
+    "numpy": "2.4.3",
+    "pandas": "3.0.1",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.8",
+    "torch": "2.11.0"
+  },
+  "config": {
+    "experiment_name": "fuzzy_reliability_gate_independent_confirmatory",
+    "output_dir": "results/fuzzy_reliability_confirmatory",
+    "runtime": {
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "workers": 8
+    },
+    "seeds": [
+      1300,
+      1301,
+      1302,
+      1303,
+      1304,
+      1305,
+      1306,
+      1307,
+      1308,
+      1309,
+      1310,
+      1311,
+      1312,
+      1313,
+      1314,
+      1315,
+      1316,
+      1317,
+      1318,
+      1319,
+      1320,
+      1321,
+      1322,
+      1323,
+      1324,
+      1325,
+      1326,
+      1327,
+      1328,
+      1329
+    ],
+    "evaluation": {
+      "interval_steps": 2000,
+      "episodes": 30
+    },
+    "analysis": {
+      "primary_metric": "return_auc",
+      "analysis_status": "independent_confirmatory_fuzzy_reliability_gate",
+      "development_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "confirmatory_seeds": "1300-1329",
+      "locked_selection": "tau=20 and singleton consequents [0.0, 0.35, 0.65, 0.75, 0.95] were selected before these runs by lowest average environment rank in configs/development/fuzzy_rule_selection.yaml.\n",
+      "planned_contrasts": [
+        {
+          "name": "fuzzy_reliability_vs_count",
+          "left": "fuzzy_reliability_full",
+          "right": "count_gate_tau_20",
+          "metric": "return_auc"
+        }
+      ]
+    },
+    "envs": [
+      {
+        "name": "FrozenLake-4x4-slippery-confirmatory",
+        "id": "FrozenLake-v1",
+        "kwargs": {
+          "map_name": "4x4",
+          "is_slippery": true
+        },
+        "training_steps": 10000,
+        "max_steps": 100,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "CliffWalking-confirmatory",
+        "id": "CliffWalking-v1",
+        "training_steps": 10000,
+        "max_steps": 500,
+        "success_mode": "terminated"
+      },
+      {
+        "name": "FourRooms-9-support-shift-confirmatory",
+        "id": "StructuredFourRooms-v0",
+        "kwargs": {
+          "size": 9,
+          "goal_split": "train",
+          "slip_probability": 0.1,
+          "max_steps": 160
+        },
+        "eval_kwargs": {
+          "goal_split": "test"
+        },
+        "training_steps": 12000,
+        "max_steps": 160,
+        "success_mode": "positive_terminal"
+      }
+    ],
+    "agents": [
+      {
+        "name": "count_gate_tau_20",
+        "kind": "count_gated",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "fuzzy_tau_support": 20,
+          "fuzzy_reliability_consequents": [
+            0.0,
+            0.35,
+            0.65,
+            0.75,
+            0.95
+          ],
+          "fallback_policy": "no_hold",
+          "epsilon_decay_steps": 10000
+        }
+      },
+      {
+        "name": "original_fuzzy",
+        "kind": "fuzzy_support_adaptive_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "fuzzy_tau_support": 20,
+          "fuzzy_reliability_consequents": [
+            0.0,
+            0.35,
+            0.65,
+            0.75,
+            0.95
+          ],
+          "fallback_policy": "no_hold",
+          "epsilon_decay_steps": 10000,
+          "fuzzy_uncertainty_scale": 1.0,
+          "fuzzy_abstain_zero_support": false
+        }
+      },
+      {
+        "name": "fuzzy_reliability_full",
+        "kind": "fuzzy_reliability_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "fuzzy_tau_support": 20,
+          "fuzzy_reliability_consequents": [
+            0.0,
+            0.35,
+            0.65,
+            0.75,
+            0.95
+          ],
+          "fallback_policy": "no_hold",
+          "epsilon_decay_steps": 10000
+        }
+      },
+      {
+        "name": "fuzzy_no_support",
+        "kind": "fuzzy_reliability_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "fuzzy_tau_support": 20,
+          "fuzzy_reliability_consequents": [
+            0.0,
+            0.35,
+            0.65,
+            0.75,
+            0.95
+          ],
+          "fallback_policy": "no_hold",
+          "epsilon_decay_steps": 10000,
+          "fuzzy_risk_ablation_mode": "no_support"
+        }
+      },
+      {
+        "name": "fuzzy_no_reliability",
+        "kind": "fuzzy_reliability_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "fuzzy_tau_support": 20,
+          "fuzzy_reliability_consequents": [
+            0.0,
+            0.35,
+            0.65,
+            0.75,
+            0.95
+          ],
+          "fallback_policy": "no_hold",
+          "epsilon_decay_steps": 10000,
+          "fuzzy_risk_ablation_mode": "no_reliability"
+        }
+      },
+      {
+        "name": "crisp_relative_gate",
+        "kind": "fuzzy_reliability_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0003,
+          "tabular_learning_rate": 0.2,
+          "batch_size": 32,
+          "replay_capacity": 100000,
+          "replay_warmup": 512,
+          "train_frequency": 16,
+          "target_update_interval": 500,
+          "hidden_size": 128,
+          "tau": 20,
+          "fuzzy_tau_support": 20,
+          "fuzzy_reliability_consequents": [
+            0.0,
+            0.35,
+            0.65,
+            0.75,
+            0.95
+          ],
+          "fallback_policy": "no_hold",
+          "epsilon_decay_steps": 10000,
+          "fuzzy_risk_ablation_mode": "crisp_threshold"
+        }
+      }
+    ]
+  }
+}

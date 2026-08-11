@@ -1,0 +1,378 @@
+{
+  "created_utc": "2026-08-05T09:17:37Z",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.13",
+  "gymnasium": "1.2.3",
+  "numpy": "2.4.6",
+  "torch": "2.12.0+cpu",
+  "torch_threads": 1,
+  "cpu_count": 12,
+  "processor": "Intel64 Family 6 Model 165 Stepping 3, GenuineIntel",
+  "config_sha256": "9bbaebfbc87dae158e8fbbf82806efcadc948ac02acbf0be9fabf14fb60c8fec",
+  "config_file": "configs/reviewer1_remaining/safety_traces/matched_rerun.yaml",
+  "git_commit_hash": "e16d2a60018da7893f69ff24eb303977a6d19c8a",
+  "package_version": "1.8.0",
+  "source_snapshot_sha256": "fa7a915bc659cba633f9037a666c3ce9880ff13680f27210aeb9e4f667eb06f0",
+  "execution_inputs_clean": true,
+  "python_version": "3.12.13",
+  "torch_version": "2.12.0+cpu",
+  "numpy_version": "2.4.6",
+  "gymnasium_version": "1.2.3",
+  "minigrid_version": "3.1.0",
+  "gym_pybullet_drones_version": "2.1.0",
+  "pybullet_version": "3.2.7",
+  "execution_input_manifest": [
+    {
+      "path": "configs/reviewer1_remaining/safety_traces/matched_rerun.yaml",
+      "sha256": "e0e5a84b831b1c5b949c87748cffa6eea0da1c62aa7ebeff47a373dd3ca6c66c"
+    },
+    {
+      "path": "environment.yml",
+      "sha256": "4ca257a4375903f38b34ec6241115a84f7fdafcf8101211100c8718de3130606"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "e83d65a89357584578e6fd8787bdffbd608723431ba9506a35ca785a3fef9dfa"
+    },
+    {
+      "path": "requirements-tested-uav.txt",
+      "sha256": "611abb69b71e7bf25e22c621c14c02817e9ac8204bb6da2598afbc02346d3962"
+    },
+    {
+      "path": "requirements-tested.txt",
+      "sha256": "bb17a2fe24a0003ac7c2e3435e89efd97b1cc388ff61585267e8ce52c2079648"
+    },
+    {
+      "path": "requirements-uav.txt",
+      "sha256": "6a9eee394010b09a3c02a3445ed4126d0a36f7d76c6788066afd509f5593719b"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "8cdd8425bdb43dfc0fff2c7a672015f3c90a5a1a96774c56f976692777890a2f"
+    },
+    {
+      "path": "src/hybrid_q/__init__.py",
+      "sha256": "83b2d0f76e3519720748f3bc50fe37bd92af6a04337404191738f8576902eeb9"
+    },
+    {
+      "path": "src/hybrid_q/agents.py",
+      "sha256": "75c2225557beb51168106004baaf32bb665cfbe48bd910dcf31423a1bafe4427"
+    },
+    {
+      "path": "src/hybrid_q/calibration.py",
+      "sha256": "f0d1f5870d628c909cef035bb988e4eef167f37385b7aac1d11e94b2340994ff"
+    },
+    {
+      "path": "src/hybrid_q/cli.py",
+      "sha256": "f80a74e36e0e881b036e1d46243951b727450be88cf28cf569943a4e0790ad37"
+    },
+    {
+      "path": "src/hybrid_q/complexity.py",
+      "sha256": "443b61d92efc17c41ace640b3cafe75b5ba4ba97bf8c92ad09b03b929397be65"
+    },
+    {
+      "path": "src/hybrid_q/config.py",
+      "sha256": "6099cd2466bb035fc23867978134d9d491cea1c9479a82370e6e77dd810d553d"
+    },
+    {
+      "path": "src/hybrid_q/encoding.py",
+      "sha256": "afc2aea4c3ecd7f77d5ae42278f508043cf61c884c65200e3d6eb926fabf9770"
+    },
+    {
+      "path": "src/hybrid_q/envs.py",
+      "sha256": "2b25e4b0d5ee6112868702dc2c320fee8a8df392de7839e0c11f9e78f30a1490"
+    },
+    {
+      "path": "src/hybrid_q/experiment.py",
+      "sha256": "f8ef6b0cd4a62026a5b79a962a97f9118799fb249115c30cf2bb42044c400cb5"
+    },
+    {
+      "path": "src/hybrid_q/gym_compat.py",
+      "sha256": "d6ebbdf96974e3ffcd20e08f5dc173d466e236d36cfdbef4d0ce9f60dbef6942"
+    },
+    {
+      "path": "src/hybrid_q/mappings.py",
+      "sha256": "687ac56d6628b5aadfe8e3c98a11cc1da10161ee8822e6e1480e56fcc7482531"
+    },
+    {
+      "path": "src/hybrid_q/provenance.py",
+      "sha256": "52e4f8c2640eabfab987284f8da84b78963aa826eac14cf74957a2ca02f00036"
+    },
+    {
+      "path": "src/hybrid_q/safety_traces.py",
+      "sha256": "9c5ab63fb1b47644cf6ec076be347378edc8689eb53156fb896880e9b0872c53"
+    },
+    {
+      "path": "src/hybrid_q/statistics.py",
+      "sha256": "b04af7b2c69bb320df0bfdb2275f8ac2ce8802e1eff3c857889b5817b7f3289e"
+    },
+    {
+      "path": "src/hybrid_q/support_estimators.py",
+      "sha256": "3364e72012a3666e5599bbc9df1550610dffba0c289438e6c365c44be10635c4"
+    },
+    {
+      "path": "src/hybrid_q/temporal.py",
+      "sha256": "a95af5fa47813afcf936b3430960caeb58a0d6d7bc0e9102404091d56fe117a1"
+    },
+    {
+      "path": "src/hybrid_q/trace_evidence.py",
+      "sha256": "19107faea90109385d36d87ad70c024d8b3380aa02a0e52de8311644d01404ac"
+    }
+  ],
+  "environment_observations": [
+    {
+      "name": "combined_executed_condition_safety_trace",
+      "requested_id": "SensorizedPyBulletUAVWaypoint-v0",
+      "resolved_id": "SensorizedPyBulletUAVWaypoint-v0",
+      "representation": "native_gymnasium_observation"
+    },
+    {
+      "name": "latency_only_safety_trace",
+      "requested_id": "SensorizedPyBulletUAVWaypoint-v0",
+      "resolved_id": "SensorizedPyBulletUAVWaypoint-v0",
+      "representation": "native_gymnasium_observation"
+    }
+  ],
+  "packages": {
+    "gymnasium": "1.2.3",
+    "minigrid": "3.1.0",
+    "gym-pybullet-drones": "2.1.0",
+    "pybullet": "3.2.7",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "torch": "2.12.0"
+  },
+  "config": {
+    "experiment_name": "reviewer1_safety_trace_rerun",
+    "output_dir": "results/reviewer1_remaining/safety_traces",
+    "runtime": {
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "workers": 4
+    },
+    "trace_logging": {
+      "enabled": true,
+      "phases": [
+        "eval"
+      ],
+      "compression": "gzip",
+      "schema_version": "sensorized_sil_trace_v3"
+    },
+    "seeds": [
+      16030,
+      16031,
+      16032,
+      16033,
+      16034,
+      16035,
+      16036,
+      16037,
+      16038,
+      16039
+    ],
+    "evaluation": {
+      "interval_steps": 120,
+      "episodes": 4
+    },
+    "analysis": {
+      "evidence_class": "descriptive_safety_rerun",
+      "protocol_id": "reviewer1_comment5_safety_trace_rerun",
+      "protocol_sha256": "e1b345fede96a39c18382821d4e459d22da18e3ba2f56cdac6c341153adc7d37",
+      "primary_metric": "trajectory_deviation_rmse_m",
+      "generator_pooling": "prohibited",
+      "inferential_superiority_claims_permitted": false,
+      "practical_readiness_claim": "prohibited"
+    },
+    "envs": [
+      {
+        "name": "combined_executed_condition_safety_trace",
+        "id": "SensorizedPyBulletUAVWaypoint-v0",
+        "kwargs": {
+          "target_split": "deployment",
+          "physics": "pyb_drag",
+          "pyb_freq": 240,
+          "ctrl_freq": 60,
+          "action_repeat": 1,
+          "max_steps": 30,
+          "collective_delta_rpm": 220,
+          "tilt_radians": 0.1,
+          "high_level_speed": 0.18,
+          "goal_tolerance": 0.16,
+          "state_quantization": 0.05,
+          "lidar_range": 1.2,
+          "lidar_noise_std": 0.02,
+          "vio_position_noise_std": 0.02,
+          "vio_velocity_noise_std": 0.03,
+          "imu_attitude_noise_std": 0.008,
+          "localization_latency_steps": 2,
+          "localization_dropout_probability": 0.03,
+          "range_dropout_probability": 0.02,
+          "sensor_bias_walk_std": 0.0007,
+          "camera_fov_degrees": 100,
+          "camera_dropout_probability": 0.05,
+          "initial_position_jitter": 0.04,
+          "initial_attitude_jitter": 0.03,
+          "wind_force_std": 0.002,
+          "lambda_collision": 1.0,
+          "lambda_idle": 0.05,
+          "sensor_noise_enabled": true,
+          "sensor_latency_enabled": true,
+          "localization_dropout_enabled": true,
+          "range_dropout_enabled": true,
+          "camera_dropout_enabled": true,
+          "visibility_occlusion_enabled": true,
+          "observation_mode": "sensorized",
+          "control_interface_mode": "low_level",
+          "perturbation_onset_step": 6,
+          "motor_saturation_threshold_fraction": 0.99,
+          "near_miss_clearance": 0.1,
+          "constraint_clearance": 0.18,
+          "trace_schema_version": "sensorized_sil_trace_v3"
+        },
+        "eval_kwargs": {},
+        "training_steps": 240,
+        "max_steps": 30,
+        "success_mode": "positive_terminal"
+      },
+      {
+        "name": "latency_only_safety_trace",
+        "id": "SensorizedPyBulletUAVWaypoint-v0",
+        "kwargs": {
+          "target_split": "deployment",
+          "physics": "pyb_drag",
+          "pyb_freq": 240,
+          "ctrl_freq": 60,
+          "action_repeat": 1,
+          "max_steps": 30,
+          "collective_delta_rpm": 220,
+          "tilt_radians": 0.1,
+          "high_level_speed": 0.18,
+          "goal_tolerance": 0.16,
+          "state_quantization": 0.05,
+          "lidar_range": 1.2,
+          "lidar_noise_std": 0.02,
+          "vio_position_noise_std": 0.02,
+          "vio_velocity_noise_std": 0.03,
+          "imu_attitude_noise_std": 0.008,
+          "localization_latency_steps": 2,
+          "localization_dropout_probability": 0.03,
+          "range_dropout_probability": 0.02,
+          "sensor_bias_walk_std": 0.0007,
+          "camera_fov_degrees": 100,
+          "camera_dropout_probability": 0.05,
+          "initial_position_jitter": 0.04,
+          "initial_attitude_jitter": 0.03,
+          "wind_force_std": 0.002,
+          "lambda_collision": 1.0,
+          "lambda_idle": 0.05,
+          "sensor_noise_enabled": false,
+          "sensor_latency_enabled": true,
+          "localization_dropout_enabled": false,
+          "range_dropout_enabled": false,
+          "camera_dropout_enabled": false,
+          "visibility_occlusion_enabled": false,
+          "observation_mode": "sensorized",
+          "control_interface_mode": "low_level",
+          "perturbation_onset_step": 6,
+          "motor_saturation_threshold_fraction": 0.99,
+          "near_miss_clearance": 0.1,
+          "constraint_clearance": 0.18,
+          "trace_schema_version": "sensorized_sil_trace_v3"
+        },
+        "eval_kwargs": {},
+        "training_steps": 240,
+        "max_steps": 30,
+        "success_mode": "positive_terminal"
+      }
+    ],
+    "agents": [
+      {
+        "name": "feed_forward_dqn",
+        "kind": "dqn",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0005,
+          "batch_size": 16,
+          "replay_capacity": 2000,
+          "replay_warmup": 32,
+          "train_frequency": 4,
+          "target_update_interval": 120,
+          "hidden_size": 64,
+          "epsilon_decay_steps": 240,
+          "frame_stack_size": 1
+        }
+      },
+      {
+        "name": "selected_temporal_drqn",
+        "kind": "drqn",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0005,
+          "batch_size": 16,
+          "replay_capacity": 2000,
+          "replay_warmup": 32,
+          "train_frequency": 4,
+          "target_update_interval": 120,
+          "hidden_size": 64,
+          "epsilon_decay_steps": 240,
+          "frame_stack_size": 1,
+          "sequence_length": 4,
+          "recurrent_hidden_size": 64
+        }
+      },
+      {
+        "name": "fuzzy_relative_reliability",
+        "kind": "fuzzy_reliability_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0005,
+          "batch_size": 16,
+          "replay_capacity": 2000,
+          "replay_warmup": 32,
+          "train_frequency": 4,
+          "target_update_interval": 120,
+          "hidden_size": 64,
+          "epsilon_decay_steps": 240,
+          "frame_stack_size": 1,
+          "tabular_learning_rate": 0.2,
+          "fuzzy_tau_support": 4,
+          "fuzzy_abstain_zero_support": false,
+          "reliability_beta": 0.05,
+          "reliability_prior_strength": 5,
+          "reliability_epsilon": 1e-08
+        }
+      },
+      {
+        "name": "selected_approximate_support",
+        "kind": "support_estimator_gate",
+        "params": {
+          "double_dqn": false,
+          "learning_rate": 0.0005,
+          "batch_size": 16,
+          "replay_capacity": 2000,
+          "replay_warmup": 32,
+          "train_frequency": 4,
+          "target_update_interval": 120,
+          "hidden_size": 64,
+          "epsilon_decay_steps": 240,
+          "frame_stack_size": 1,
+          "tabular_learning_rate": 0.2,
+          "support_estimator_type": "gaussian_affinity",
+          "support_representation_type": "raw_state",
+          "support_index_type": "brute_force",
+          "approximate_support_k": 3,
+          "approximate_support_bandwidth": 0.25,
+          "approximate_support_tau": 1.0,
+          "support_covariance_regularization": 0.0001
+        }
+      },
+      {
+        "name": "sensorized_controller",
+        "kind": "uav_sensorized_motor_controller",
+        "params": {}
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+environment,agent,metric,n_seeds,minimum,maximum,median,mad,skew,excess_kurtosis,catastrophic_low_outliers,catastrophic_high_outliers,heavy_tail_flag
+ApplicationNavigation-deployment-goal-shift,approx_count_gated_k5,return_auc,3,-13.931666666666665,-1.6525000000000007,-1.921666666666668,0.2691666666666672,-1.7291807864427027,0.0,1,0,True
+ApplicationNavigation-deployment-goal-shift,approx_count_gated_k5,mean_return,3,-18.849999999999998,-1.6000000000000008,-2.1000000000000014,0.5000000000000007,-1.7269986424439543,0.0,1,0,True
+ApplicationNavigation-deployment-goal-shift,count_gated_tau_20,return_auc,3,-14.544999999999995,-1.6525000000000007,-1.921666666666668,0.2691666666666672,-1.7294499769317553,0.0,1,0,True
+ApplicationNavigation-deployment-goal-shift,count_gated_tau_20,mean_return,3,-18.849999999999998,-1.6000000000000008,-2.1000000000000014,0.5000000000000007,-1.7269986424439543,0.0,1,0,True
+ApplicationNavigation-deployment-goal-shift,support_abstain_tau_20,return_auc,3,-1.921666666666668,-1.6525000000000007,-1.7833333333333343,0.13083333333333358,-0.08355168376869435,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,support_abstain_tau_20,mean_return,3,-2.1000000000000014,-1.6000000000000008,-1.6000000000000008,0.0,-1.7320508075688814,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,tabular,return_auc,3,-4.698333333333326,-0.655833333333331,-3.346666666666662,1.3516666666666644,0.9301934874840321,0.0,0,0,False
+ApplicationNavigation-deployment-goal-shift,tabular,mean_return,3,-6.486666666666658,0.46000000000000235,0.12000000000000187,0.34000000000000047,-1.7173750823735108,0.0,1,0,True
