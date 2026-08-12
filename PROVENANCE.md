@@ -2,7 +2,7 @@
 
 ## Scope
 
-This document records the scientific provenance model for `confidence-gated-q`. Provenance is organized by evidence family, protocol state, seed registry, source snapshot, and generated artifact rather than by editorial history.
+This document records the scientific provenance model for the `support-boundary-relative-reliability-artifact` repository. The Python package retains the internal project name `confidence-gated-q` for import and package compatibility. Provenance is organized by evidence family, protocol state, seed registry, source snapshot, and generated artifact rather than by editorial history.
 
 ## Canonical evidence controls
 
@@ -13,7 +13,7 @@ The active scientific scope is defined by:
 - protocol files and protocol SHA manifests under `configs/`;
 - registered seed sets in the corresponding configurations and audit records;
 - raw and aggregated results under `results/`;
-- generated manuscript tables and figures under `paper/generated/` and `paper/figures/`;
+- public derived tables and figures under `tables/` and `figures/`;
 - repository-wide integrity manifests generated from the frozen snapshot.
 
 Historical editorial correspondence and packaging records are intentionally excluded from the scientific release tree.
@@ -47,11 +47,11 @@ The provenance system enforces the following interpretation limits:
 - null and negative results remain part of the evidence record;
 - supplemental continuous-control results do not establish universal controller superiority.
 
-## Frozen-snapshot rule
+## Released-snapshot and post-release-main rule
 
-The final public version must be hashed only after all canonical files are frozen. `MANIFEST.sha256`, `artifact_audit.json`, package metadata, and the version-specific Zenodo DOI must therefore correspond to the same Git commit and file tree.
+The published `v1.0.0` GitHub tag and Zenodo DOI `10.5281/zenodo.21897588` identify the immutable release snapshot at Git commit `29aa392df3670f5ac4062ec831b6b15ca34b88c8`.
 
-The persistent concept DOI for the version series is `10.5281/zenodo.20578927`. A version-specific DOI must not be invented or copied from an earlier snapshot.
+Documentation and identifier corrections made later on `main` do not move or rewrite the `v1.0.0` tag and do not alter the archived Zenodo `v1.0.0` files. Any future version derived from a changed public file tree must regenerate `MANIFEST.sha256`, pass the frozen-release preflight, and receive its own release record before being cited as a new version.
 
 ## Continuous-control execution-cache boundary
 

@@ -9,4 +9,7 @@ authors:
     email: "ercan.erkalkan@marmara.edu.tr"
     orcid: "https://orcid.org/0000-0001-9259-7112"
 version: 1.0.0
+doi: "10.5281/zenodo.21897588"
+repository-code: "https://github.com/ErcanErkalkan/support-boundary-relative-reliability-artifact"
+url: "https://doi.org/10.5281/zenodo.21897588"
 license: MIT

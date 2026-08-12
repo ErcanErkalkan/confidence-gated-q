@@ -6,9 +6,9 @@
     "last_family_id": "E28",
     "repository_snapshot_family_range": "E01-E28",
     "artifact_version": "1.0.0",
-    "repository_state": "pre_publication_clean_artifact",
-    "repository_url": "pending",
-    "zenodo_doi": "pending",
+    "repository_state": "published_v1.0.0",
+    "repository_url": "https://github.com/ErcanErkalkan/support-boundary-relative-reliability-artifact",
+    "zenodo_doi": "10.5281/zenodo.21897588",
     "scope_authority": "configs/evidence_registry.json"
   },
   "run_count_policy": {

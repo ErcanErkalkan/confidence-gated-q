@@ -1,6 +1,6 @@
 # Support-Boundary and Relative-Reliability Diagnostics for Hybrid Memory–Neural Reinforcement Learning
 
-`confidence-gated-q` is an independent public reproducibility artifact for an audited study of support boundaries, estimator-relative reliability, fuzzy and crisp arbitration, fallback behavior, sensorized software-in-the-loop control, and continuous-control transfer diagnostics.
+This repository is the independent public reproducibility artifact for an audited study of support boundaries, estimator-relative reliability, fuzzy and crisp arbitration, fallback behavior, sensorized software-in-the-loop control, and continuous-control transfer diagnostics. The Python package retains the internal project name `confidence-gated-q` for import and package compatibility.
 
 The artifact is organized around one scientific question: under which support and estimator-reliability conditions can hybrid memory–neural control make auditable branch-selection decisions, and where do exact, approximate, fuzzy, crisp, fallback, or replay-support mechanisms fail under shift?
 
@@ -29,7 +29,7 @@ Null and negative results are retained as evidence. Continuous-control results a
 ## Canonical public-artifact layout
 
 ```text
-confidence-gated-q/
+support-boundary-relative-reliability-artifact/
 ├── .gitignore
 ├── README.md
 ├── PROVENANCE.md
@@ -122,7 +122,7 @@ The supplemental continuous-control grid is intentionally kept in its separate E
 python scripts/reproduce_all.py --continuous-control
 ```
 
-To audit the existing pre-publication public tree without rerunning experiments:
+To audit the existing public tree without rerunning experiments:
 
 ```bash
 python scripts/reproduce_all.py --audit-only
@@ -181,8 +181,9 @@ python scripts/aggregate_continuous_control.py
 
 - Artifact version: `1.0.0`
 - ORCID: `0000-0001-9259-7112`
-- Repository URL: pending creation of the new clean repository
-- Zenodo DOI: pending creation of the new independent Zenodo record
+- Repository URL: https://github.com/ErcanErkalkan/support-boundary-relative-reliability-artifact
+- GitHub release: https://github.com/ErcanErkalkan/support-boundary-relative-reliability-artifact/releases/tag/v1.0.0
+- Zenodo DOI: https://doi.org/10.5281/zenodo.21897588
 
 No DOI or repository URL from an earlier public artifact series is reused by this artifact.
 
